@@ -1,0 +1,61 @@
+<?xml version="1.0" ?>
+<openerp>
+	<data>
+		<template id="trainingkp.report_sale_custom_template">
+		<!-- t-call: inherit all the setup for the template -->
+			<t t-call="trainingkp.report_sale_custom_layout"/>
+			<t t-call="report.html_container">
+				<!-- Since docs uses IDs -> must LOOP -->
+				<t t-foreach="docs" t-as="o">
+					<div class="page" style="font-family: 'American Typewriter';">
+						<div class="row">
+							<div class="col-md-12">
+								<table class="banner">
+									<col width="25%"/>
+									<col width="75%"/>
+									<tr></tr>
+									<tr>
+										<td class="td-top-page">
+											<img t-if="o.comapny_id.logo"
+												t-att-src="'date:image/png;base64, %s' % o.company_id.logo"
+												style="max-height:80px;"
+										</td>
+									</tr>
+								</table>
+							</div>
+						</div>
+					</div>
+				</t>
+			</t>
+		</template>
+		<template id="trainingkp.report_sale_custom_template_style"></template>
+		<template id="trainingkp.report_sale_custom_template_layout"></template>
+		
+		<report id="report_sale_custom"
+			string="Sale Custom Report"
+			model="sale.order"
+			report_type="qweb-pdf"
+			menu="True"
+			file="trainingkp.report_sale_custom_template"
+			name="trainingkp.report_sale_custom_template"/> 
+		<record id="trainingkp.custom_paper" model="report.paperformat">
+			<field name="name">Sale Custom Report A4</field>
+			<field name="default" eval="True"/>
+			<field name="format">A4</field>
+			<field name="paper_height">0</field>
+			<field name="page_width">Portrait</field>
+			<field name="orientation">Portrait</field>
+			<field name="margin_top">15</field>
+			<field name="margin_bottom">23</field>
+			<field name="margin_left">7</field>
+			<field name="margin_right">7</field>
+			<field name="header_line" eval="False"/>
+			<field name="header_spacing">20</field>
+			<field name="dpi">90</field>
+		</record>
+		
+		<record id="report_sale_custom" model="ir.actions.report.xml">
+			<field name="paperformat_id" ref="tainingkp.custom_paper"/>
+		</record>
+	</data>
+</openerp>

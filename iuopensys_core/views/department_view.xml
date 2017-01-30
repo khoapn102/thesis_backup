@@ -1,0 +1,80 @@
+<?xml version="1.0" ?>
+<openerp>
+	<data>
+		<!-- Actions -->
+		<act_window id="department_main_action"
+			name="Department List"
+			res_model="department"
+			view_mode="tree,form" />
+			
+		<!-- Tree View -->
+		<record id="department_tree_view" model="ir.ui.view">
+			<field name="name">All Departments</field>
+			<field name="model">department</field>
+			<field name="type">tree</field>
+			<field name="arch" type="xml">
+				<tree string="Department List">
+					<field name="dept_code"/>
+					<field name="name"/>
+					<field name="head_dept_id"/>
+					<field name="dept_office_room"/>
+					<field name="dept_academic_code"/>
+				</tree>
+			</field>
+		</record>
+		
+		<!-- Form View -->
+		<record id="department_form_view" model="ir.ui.view">
+			<field name="name">Department</field>
+			<field name="model">department</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<form>
+					<sheet>
+						<!-- Main Area -->
+						<group colspan="4">
+							<group colspan="4">
+								<group colspan="4">
+									<label for="name" class="oe_edit_only"/>
+								</group>
+								<h1><field name="name" nolabel="1"/></h1>
+							</group>
+							<notebook>
+								<page string="Basic Information">
+									<group colspan="4">
+										<group>
+											<field name="dept_code"/>
+											<field name="dept_academic_code"/>
+											<field name="dept_office_room"/>
+										</group>
+										<group>
+											<field name="head_dept_id"/>
+											<field name="vice_dept_id"/>
+										</group>
+									</group>
+								</page>
+							</notebook>
+						</group>
+					</sheet>
+				</form>
+			</field>
+		</record>
+		
+		<!-- Search View -->
+		<record id="department_search_view" model="ir.ui.view">
+			<field name="name">Department Search View</field>
+			<field name="model">department</field>
+			<field name="type">search</field>
+			<field name="arch" type="xml">
+				<search string="Search">
+					<field name="name"/>
+					<field name="dept_code"/>
+					<field name="head_dept_id"/>
+					<field name="vice_dept_id"/>
+					<field name="dept_academic_code"/>
+				</search>
+			</field>
+		</record>
+		
+	</data>
+</openerp>

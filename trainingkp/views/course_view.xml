@@ -1,0 +1,81 @@
+<?xml version="1.0" ?>
+<openerp>
+	<data>
+		<!-- Action -->
+		<act_window id="course_action"
+			name="Course Action"
+			res_model="course"
+			view_mode="tree,form"/>
+			
+		<!-- Menuitem -->
+		<menuitem id="menu_course"
+			name="Course Menu"
+			sequence="5"
+			parent="hr_menu"
+			action="course_action"/>
+			
+		<!-- Tree View -->
+		<record id="course_tree_view" model="ir.ui.view">
+			<field name="name">course_tree_view</field>
+			<field name="model">course</field>
+			<field name="type">tree</field>
+			<field name="arch" type="xml">
+				<tree string="Course List">
+					<field name="name"/>
+					<field name="courseId"/>
+					<field name="no_crds"/>
+					<field name="lecturer_ids"/>
+					<field name="no_students"/>
+				</tree>
+			</field>
+		</record>
+		
+		<!-- Form View -->
+		<record id="course_form_view" model="ir.ui.view">
+			<field name="name">course_form_view</field>
+			<field name="model">course</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<form string="Course Display Info">
+					<header></header>
+					<sheet>
+						<group string="Course Basic Info" colspan="4">
+							<field name="name"/>					
+							<field name="courseId"/>
+							<field name="no_crds"/>
+							<field name="no_students"/>
+							<!-- <label for="lecturer_ids" colspan="4"
+								name="List of Lecturer" /> -->
+							
+						</group>
+						<group string="List of Lecturer">
+							<field name="lecturer_ids" nolabel="1"/>
+						</group>
+					</sheet>
+				</form>
+			</field>
+		</record>
+
+		<!-- Search View -->
+		<record id="course_search_view" model="ir.ui.view">
+			<field name="name">course_search_view</field>
+			<field name="model">course</field>
+			<field name="type">search</field>
+			<field name="arch" type="xml">
+				<search string="Search">
+					<field name="name"
+						domain="[('name', 'ilike', self)]" />
+					<field name="no_crds"/>
+					<filter name="groupby_nocrds" 
+						string="Group by No. Crds"
+						context="{'group_by':'no_crds'}" />
+					<field name="courseId"/>
+					<field name="no_students"/>
+						<filter string="Courses are Full"
+							domain="[('no_students', '>', 40)]" />
+				</search>
+			</field>
+		</record>
+		
+	</data>
+</openerp>

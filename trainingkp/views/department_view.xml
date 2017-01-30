@@ -1,0 +1,65 @@
+<?xml version="1.0" ?>
+<openerp>
+	<data>
+		<!-- Action -->
+		<act_window id="department_action"
+			name="Department Action"
+			res_model="department"
+			view_mode="tree,form" />
+		
+		<!-- Menu Items -->
+		<menuitem id="menu_department"
+			name="Department Menu"
+			sequence='10'
+			parent="hr_menu"
+			action='department_action' /> <!-- Use Action ID -->
+			
+		<!-- Tree View -->
+		<record id="department_tree_view" model="ir.ui.view">
+			<field name="name">department_tree_view</field>
+			<field name="model">department</field>
+			<field name="type">tree</field>
+			<field name="arch" type="xml">
+				<tree string="Department List">
+					<field name="name"/>
+					<field name="head_dept_id"/>
+					<field name="dept_office_numb"/>
+				</tree>
+			</field>
+		</record>
+		
+		<!-- Form View -->
+		<record id="department_form_view" model="ir.ui.view">
+			<field name="name">department_form_view</field>
+			<field name="model">department</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<form string="Dept Display Info">
+					<sheet>
+						<group string="Department Basic Info" colspan="4">
+							<field name="name"/>
+							<field name="head_dept_id"/>
+							<field name="dept_office_numb"/>
+						</group>
+					</sheet>
+				</form>
+			</field>
+		</record>
+		
+		<!-- Search View -->
+		<record id="deparment_search_view" model="ir.ui.view">
+			<field name="name">department_search_view</field>
+			<field name="model">department</field>
+			<field name="type">search</field>
+			<field name="arch" type="xml">
+				<search string="Search">
+					<field name="name" 
+						domain="[('name', 'ilike', self)]"/>
+					<field name="dept_office_numb"
+						domain="[('dept_office_numb', 'ilike', self)]"/>
+				</search>
+			</field>
+		</record>
+		
+	</data>
+</openerp>

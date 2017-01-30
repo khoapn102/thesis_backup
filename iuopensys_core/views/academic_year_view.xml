@@ -1,0 +1,88 @@
+<?xml version="1.0" ?>
+<openerp>
+	<data>
+		<!-- Action -->
+		<record model="ir.actions.act_window" id="academic_year_main_action">
+			<field name="name">All Academic Years</field>
+			<field name="res_model">academic.year</field>
+			<field name="view_mode">tree,form</field>
+		</record>
+		
+		<!-- Tree View -->
+		<record id="academic_year_tree_view" model="ir.ui.view">
+			<field name="name">All Academic Years</field>
+			<field name="model">academic.year</field>
+			<field name="type=">tree</field>
+			<field name="arch" type="xml">
+				<tree string="List of Academic Years">
+					<field name="name"/>
+					<field name="year_batch"/>
+					<field name="class_code"/>
+					<field name="department_id"/>
+					<field name="lecturer_id"/>
+					<field name="start_date"/>
+					<field name="end_date"/>
+				</tree>
+			</field>
+		</record>
+		
+		<!-- Form View -->
+		<record id="academic_year_form_view" model="ir.ui.view">
+			<field name="name">Academic Year</field>
+			<field name="model">academic.year</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<form>
+					<sheet>
+						<div class="oe_title">
+							<label for="name" class="oe_edit_only" string="Academic Year" on_change="_produce_name"/>
+							<h1>
+								<field name="name"/>
+							</h1>
+						</div>
+						<group colspan="4" string="Information">
+							<group>
+								<field name="year_batch"/>
+								<field name="department_id"/>
+								<field name="lecturer_id"/>
+							</group>
+							<group>
+								<field name="class_code"/>
+								<field name="start_date"/>
+								<field name="end_date"/>
+							</group>
+						</group>
+					</sheet>
+				</form>
+			</field>
+		</record>
+		
+		<!-- Search View -->
+		<record id="academic_year_search_view" model="ir.ui.view">
+			<field name="name">Academic Year Search</field>
+			<field name="model">academic.year</field>
+			<field name="type">search</field>
+			<field name="arch" type="xml">
+				<search string="Search">
+					<!-- Search By -->
+					<field name="name"/>
+					<field name="class_code"/>
+					<field name="department_id"/>
+					<field name="lecturer_id"/>
+					
+					<!-- Group By -->
+					<group expand="0" string="Group By">
+						<filter string="Department"
+							context="{'group_by':'department_id'}"/>
+						<filter string="Start Date"
+							context="{'group_by':'start_date'}"/>
+						<filter string="End Date"
+							context="{'group_by':'end_date'}"/>
+						<filter string="Year Batch"
+							context="{'group_by':'year_batch'}"/>
+					</group>
+				</search>
+			</field>
+		</record>
+	</data>
+</openerp>

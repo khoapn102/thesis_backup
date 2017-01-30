@@ -1,0 +1,130 @@
+<?xml version="1.0" ?>
+<openerp>
+	<data>
+		<!-- Action -->
+		<record model="ir.actions.act_window" id="offer_course_main_action">
+			<field name="name">Offer Course List</field>
+			<field name="res_model">offer.course</field>
+			<field name="view_mode">tree,form</field>
+		</record>
+		
+		<!-- Tree View -->
+		<record id="offer_course_main_tree_view" model="ir.ui.view">
+			<field name="name">Offer Course List</field>
+			<field name="model">offer.course</field>
+			<field name="type">tree</field>
+			<field name="arch" type="xml">
+				<tree string="Course List">
+					<field name="name"/>
+					<field name="course_id"/>
+					<field name="course_code"/>
+					<field name="course_group"/>
+					<field name="numb_students"/>
+					<field name="curr_enroll_students"/>
+					<field name="academic_year_id"/>
+					<field name="semester_id"/>
+					<field name="lecturer_id"/>
+				</tree>
+			</field>
+		</record>
+		
+		<!-- Form View -->
+		<record id="offer_course_main_form_view" model="ir.ui.view">
+			<field name="name">Course</field>
+			<field name="model">offer.course</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<form>
+					<sheet>
+						<div class="oe_title">
+                            <label for="name" class="oe_edit_only" string="Course Name"/>
+                            <h1>
+                            	<field name="name" required="1" class="oe_inline"/>
+                            </h1>
+                            <label for="course_code" class="oe_edit_only" string="Course Code"/>
+                            <h2>
+                            	<field name="course_code"/>
+                            </h2>
+                        </div>
+                        <group colspan="4">
+          					<group string="Course Information">
+          						<group>
+          							<field name="course_id"/>
+          							<field name="department_id"/>
+          							<field name="academic_year_id"/>
+          							<field name="semester_id"/>
+          							<field name="is_lab"/>
+          							<field name="lab_type" attrs="{'invisible':[('is_lab', '=', False)]}"/>          							
+          						</group>
+          						<group>
+          							<field name="course_group"/>
+          							<field name="lecturer_id"/>
+          							<field name="assign_room"/>
+          							<field name="numb_students"/>
+          							<field name="curr_enroll_students"/>          							
+          						</group>
+          					</group>          					
+                        </group>
+                        <notebook>
+                        	<page string="Academic Information">
+                        		<group colspan="4">
+                        			<!-- <div>
+                        				<label for="mid_exam_percent"  style="font-weight:bold"/>
+                        				<field name="mid_exam_percent" class="oe_inline"/>(%%)
+                        				<br/><br/>
+                        				<label for="final_exam_percent"  style="font-weight:bold"/> 
+                        				<field name="final_exam_percent" class="oe_inline"/>(%%)
+                        			</div> -->
+                        			<group col="22">
+                        				<field name="mid_exam_percent" class="oe_inline"/><label string="(%)" colspan="20"/>
+                        			</group>
+                        			<group col="22">
+                        				<field name="final_exam_percent" class="oe_inline"/><label string="(%)" colspan="20"/>
+                        			</group>
+                        		</group>
+                        	</page>
+       						<page string="Student List">
+       							<group colspan="4">
+       								<field name="student_course_ids" nolabel="1">
+       									<tree>
+       										<field name="studentId"/>
+       										<field name="student_lname"/>
+       										<field name="student_fname"/>
+       										<field name="student_class_code"/>      										       										
+       										<field name="mid_score"/>
+       										<field name="final_score"/>
+       										<field name="course_gpa"/>       										
+       									</tree>
+       								</field>
+       							</group>
+       						</page>       						
+       					</notebook>	
+					</sheet>
+				</form>
+			</field>
+		</record>
+		
+		<!-- Search View -->
+		<record id="offer_course_main_search_view" model="ir.ui.view">
+			<field name="name">Search</field>
+			<field name="model">offer.course</field>
+			<field name="type">search</field>
+			<field name="arch" type="xml">
+				<search string="Search">
+					<!-- Search By -->
+					<field name="name"/>
+					<field name="course_code"/>
+					<field name="course_id"/>
+					<field name="course_group"/>
+					<field name="department_id"/>
+					<field name="academic_year_id"/>
+					<field name="lecturer_id"/>
+					
+					<!-- Group By -->
+					
+				</search>
+			</field>
+		</record>
+		
+	</data>
+</openerp>

@@ -1,0 +1,48 @@
+<?xml version="1.0" ?>
+<openerp>
+	<data>
+		<act_window id="gpa_classify_action"
+			name="Gpa Classification"
+			res_model="gpa.classify"
+			view_mode="tree,form"/>
+		<menuitem id="GPA Menu"
+			name="GPA Menu"
+			sequence="100"
+			parent="school_menu"
+			action="gpa_classify_action"
+			/>
+			
+		<!-- Tree View -->
+		<record id="gpa_classify_tree_view" model="ir.ui.view">
+			<field name="name">gpa_classify_tree_view</field>
+			<field name="model">gpa.classify</field>
+			<field name="type">tree</field>
+			<field name="arch" type="xml">
+				<tree>
+					<field name="score_start"/>
+					<field name="score_end"/>
+					<field name="catez"/>
+				</tree>
+			</field>
+		</record>
+		
+		<!-- Form View -->
+		<!-- <record id="gpa_classify_form_view" mode="ir.ui.view">
+			<field name="name">gpa_classify_form_view</field>
+			<field name="model">gpa.classify</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<form>
+					<sheet>
+						<group string="GPA Classifcation" colspan="4" col="2">
+							<field name="score_start"/>
+							<field name="score_end"/>
+							<field name="catez"/>
+						</group>
+					</sheet>
+				</form>
+			</field>
+		</record> -->
+		
+	</data>
+</openerp>

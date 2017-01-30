@@ -1,0 +1,65 @@
+<?xml version="1.0" ?>
+<openerp>
+	<data>
+		<!-- University Tab -->
+		<menuitem id="university_root_menu"
+			name="University Management"
+			sequence="0"/>
+		
+		<!-- Department Section -->
+		<menuitem id="department_core_menu"
+			name="Department"
+			sequence="1"
+			parent="university_root_menu"/>
+		
+		<menuitem id="department_main_menu"
+			name="Departments"
+			sequence="0"
+			parent="department_core_menu"
+			action="department_main_action"/>
+			
+		<!-- Major Section -->
+		<menuitem id="major_core_menu"
+			name="Major"
+			sequence="1"
+			parent="university_root_menu"/>
+		
+		<menuitem id="major_main_menu"
+			name="Majors"
+			sequence="0"
+			parent="major_core_menu"
+			action="major_main_action"/>
+		
+		<!-- Faculty Section -->	
+		<menuitem id="faculty_core_menu"
+			name="Faculty"
+			sequence="2"
+			parent="university_root_menu"/>
+		
+		<menuitem id="lecturer_main_menu"
+			name="Lecturers"
+			sequence="0"
+			parent="faculty_core_menu"
+			action="lecturer_main_action"/>
+		
+		<!-- <menuitem id="faculty_main_menu"
+			name="Faculties"
+			sequence="1"
+			parent="faculty_core_menu"
+			action="faculty_main_action"/> -->
+			
+		<!-- Academic Section -->
+		<menuitem id="academic_core_menu"
+			name="Academic"
+			sequence="0"
+			parent="university_root_menu"/>
+			
+		<!-- Academic Year (Class) Section -->
+		<menuitem id="academic_year_main_menu"
+			name="Academic Years"
+			sequence="0"
+			parent="academic_core_menu"
+			action="academic_year_main_action"/>
+		
+	</data>
+</openerp>

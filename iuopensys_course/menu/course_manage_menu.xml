@@ -1,0 +1,38 @@
+<?xml version="1.0" ?>
+<openerp>
+	<data>
+	
+		<!-- Semester Section -->
+		<menuitem id="semester_main_menu"
+			name="Semesters"
+			sequence="1"
+			parent="iuopensys_core.academic_core_menu"
+			action="semester_main_action"/>
+			
+		<!-- Course Section -->	
+		<menuitem id="course_core_menu"
+			name="Course Management"
+			sequence="2"
+			parent="iuopensys_core.academic_core_menu"/>
+			
+		<menuitem id="course_main_menu"
+			name="Courses"
+			sequence="0"
+			parent="course_core_menu"
+			action="course_main_action"/>
+			
+		<menuitem id="offer_course_main_menu"
+			name="Offering Courses"
+			sequence="1"
+			parent="course_core_menu"
+			action="offer_course_main_action"/>
+			
+		<!-- Student Course Relationship -->
+		<menuitem id="student_course_main_menu"
+			name="Student Registration"
+			sequence="3"
+			parent="iuopensys_core.academic_core_menu"
+			action="student_course_main_action"/>
+			
+	</data>
+</openerp>

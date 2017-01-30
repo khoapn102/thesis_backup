@@ -1,0 +1,97 @@
+<?xml version="1.0" ?>
+<openerp>
+	<data>
+	
+		<act_window id="lecturer_action" 
+			name="Lecturer Action"
+			res_model="lecturer"
+			view_mode="tree,form"
+		/>
+		
+		<menuitem id="menu_lecturer"
+			name="Lecturer Menu"
+			sequence="10"
+			parent="hr_menu"
+			action="lecturer_action"			
+		/>
+		
+		<!-- Tree View -->
+		<record id="lecturer_tree_view" model="ir.ui.view">
+			<field name="name">lecturer_tree_view</field>
+			<field name="model">lecturer</field>
+			<field name="type">tree</field>
+			<field name="arch" type="xml">
+				<tree string="Lecturer List">
+					<field name="name"/>
+					<field name="lecturerId"/>
+					<field name="id_number"/>
+					<field name="gender"/>
+					<field name="phone"/>
+					<field name="department_id"/>				
+				</tree>
+			</field>
+		</record>
+		 
+		
+		<!-- Form View -->
+		<record id="lecturer_form_view" model="ir.ui.view">
+			<field name="name">lecturer_form_view</field>
+			<field name="model">lecturer</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<form string="Lecturer Display Info">
+					<header></header>
+					<sheet>
+						<!-- Vertial - using Cols -->
+						
+						<group name="group-top" colspan="4" col="4">
+							<group colspan="4">
+								<h1><field name="name" nolabel="1"/></h1>
+							</group>
+							<!-- Horizontal Group -->
+							<group string="Lecturer Basic Info" colspan="2">
+								<field name="lecturerId"/>
+								<field name="id_number"/>
+								<field name="gender"/>
+								<field name="image"/>
+								<field name="date_of_birth"/>
+								<field name="phone"/>
+							</group>
+							<group string="Lecturer Details" colspan="2">
+								<group colspan="4">
+									<label for="address" colspan="4"/>
+									<field name="address" nolabel="1"/>
+								</group>
+								<field name="department_id"/>
+								<field name="head_dept_id"/>
+							</group>
+						</group>
+					</sheet>
+				</form>
+			</field>
+		</record>
+		
+		<!-- Search View -->
+		<record id="lecturer_search_view" model="ir.ui.view">
+			<field name="name">lecturer_search_view</field>
+			<field name="model">lecturer</field>
+			<field name="type">search</field>
+			<field name="arch" type="xml">
+				<search string="Search">
+					<field name="name"
+						domain="[('name', 'ilike', self)]"/>
+					<field name="lecturerId"/>
+					<field name="gender"/>
+					<filter name="groupby_gender" string="Group by Gender"
+						context="{'group_by': 'gender'}"/>
+					<field name="id_number"/>
+					<field name="date_of_birth"/>
+					<field name="phone"/>
+					<field name="address"
+						domain="[('address', 'ilike', self)]"/> 
+				</search>
+			</field>
+		</record>
+		
+	</data>
+</openerp>

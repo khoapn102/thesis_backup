@@ -1,0 +1,83 @@
+<?xml version="1.0" ?>
+<openerp>
+	<data>
+		<!-- Action -->
+		<record model="ir.actions.act_window" id="semester_main_action">
+			<field name="name">Semester List</field>
+			<field name="res_model">semester</field>
+			<field name="view_mode">tree,form</field>
+		</record>
+		
+		<!-- Tree View -->
+		<record id="semester_tree_view" model="ir.ui.view">
+			<field name="name">Semester List</field>
+			<field name="model">semester</field>
+			<field name="type">tree</field>
+			<field name="arch" type="xml">
+				<tree string="List of Semesters">
+					<field name="name"/>
+					<field name="semester_year"/>
+					<field name="semester_code"/>
+					<field name="start_date"/>
+					<field name="end_date"/>
+				</tree>
+			</field>
+		</record>
+		
+		<!-- Form View -->
+		<record id="semester_form_view" model="ir.ui.view">
+			<field name="name">Semester</field>
+			<field name="model">semester</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<form>
+					<sheet>
+						<div class="oe_title">
+							<label for="name" class="oe_edit_only" string="Semester"/>
+							<h1>
+								<field name="name"/>
+							</h1>
+						</div>
+						<group colspan="4" string="Information">
+							<group>
+								<field name="semester_code"/>
+								<field name="semester_year" style="width: 30%%"/>
+							</group>
+							<group>
+								<field name="start_date"/>
+								<field name="end_date"/>
+							</group>
+						</group>
+					</sheet>
+				</form>
+			</field>
+		</record>
+		
+		<!-- Search View -->
+		<record id="semester_search_view" model="ir.ui.view">
+			<field name="name">Semester Search</field>
+			<field name="model">semester</field>
+			<field name="type">search</field>
+			<field name="arch" type="xml">
+				<search string="Search">
+					<!-- Search By -->
+					<field name="name"/>
+					<field name="semester_code"/>
+					<field name="semester_year"/>
+					<field name="start_date"/>
+					<field name="end_date"/>
+					
+					<!-- Group By -->
+					<group expand="0" string="Group By">
+						<filter string="Semester Year"
+							context="{'group_by':'semester_year'}"/>
+						<filter string="Start Date"
+							context="{'group_by':'start_date'}"/>
+						<filter string="End Date"
+							context="{'group_by':'end_date'}"/>
+					</group>
+				</search>
+			</field>
+		</record>
+	</data>
+</openerp>

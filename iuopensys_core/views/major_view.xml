@@ -1,0 +1,83 @@
+<?xml version="1.0" ?>
+<openerp>
+	<data>
+		<!-- Actions -->
+		<act_window id="major_main_action"
+			name="Major List"
+			res_model="major"
+			view_mode="tree,form" />
+			
+		<!-- Tree View -->
+		<record id="major_tree_view" model="ir.ui.view">
+			<field name="name">All Majors</field>
+			<field name="model">major</field>
+			<field name="type">tree</field>
+			<field name="arch" type="xml">
+				<tree string="Major List">
+					<field name="name"/>
+					<field name="major_code"/>
+					<field name="department_id"/>
+					<field name="certified_name"/>
+				</tree>
+			</field>
+		</record>
+		
+		<!-- Form View -->
+		<record id="major_form_view" model="ir.ui.view">
+			<field name="name">Major</field>
+			<field name="model">major</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<form>
+					<sheet>
+						<!-- Main Area -->
+						<group colspan="4">
+							<group colspan="4">
+								<group colspan="4">
+									<label for="name" class="oe_edit_only"/>
+								</group>
+								<h1><field name="name" nolabel="1"/></h1>
+							</group>
+							<notebook>
+								<page string="Basic Information">
+									<group colspan="4">
+										<group>
+											<field name="major_code"/>
+											<field name="department_id"/>
+										</group>
+										<group>
+											<field name="certified_name"/>
+										</group>
+									</group>
+								</page>
+							</notebook>
+						</group>
+					</sheet>
+				</form>
+			</field>
+		</record>
+		
+		<!-- Search View -->
+		<record id="major_search_view" model="ir.ui.view">
+			<field name="name">Major Search View</field>
+			<field name="model">major</field>
+			<field name="type">search</field>
+			<field name="arch" type="xml">
+				<search string="Search">
+					<!-- Search By -->
+					<field name="name"/>
+					<field name="major_code"/>
+					<field name="department_id"/>
+					<field name="certified_name"/>
+					
+					<!-- Group By -->
+					<group expand="0" string="Group By">
+						<filter string="Department"
+							domain="[]" context="{'group_by':'department_id'}"/>
+					</group>
+				</search>
+			</field>
+		</record>
+		
+	</data>
+</openerp>

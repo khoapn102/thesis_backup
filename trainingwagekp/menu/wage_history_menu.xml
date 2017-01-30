@@ -1,0 +1,23 @@
+<?xml version="1.0" ?>
+<openerp>
+	<data>
+		<menuitem id="payroll_wage_history_menu"
+			name="Wage History"
+			sequence="5"
+			parent="hr.menu_hr_reporting"
+			action="payroll_history_action"/>
+		
+		<menuitem id="payroll_wage_history_contract_menu"
+			name="Wage History"
+			sequence="0"
+			parent="hr_contract.hr_menu_contract"
+			action="payroll_history_action"/>
+		
+		<menuitem id="payroll_wage_history_wizard_menu"
+			name="Wage History Wizard"
+			sequence="0"
+			action="payroll_wage_hist_wizard_action"
+			parent="hr.menu_hr_reporting_timesheet"
+		/>
+	</data>
+</openerp>

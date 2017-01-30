@@ -1,0 +1,18 @@
+<?xml version="1.0" ?>
+<openerp>
+	<data>
+		<menuitem id="parent_base_menu" 
+			name="Training HR Menu"
+			sequence="0"
+		/>
+		<menuitem id="hr_menu"
+			name="HR Menu"
+			sequence = "0"
+			parent="parent_base_menu"/>
+			
+		<menuitem id="school_menu"
+			name="School Menu"
+			sequence = "1"
+			parent="parent_base_menu"/>
+	</data>
+</openerp>

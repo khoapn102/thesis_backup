@@ -1,0 +1,122 @@
+<?xml version='1.0' ?>
+<openerp>
+	<data>
+		<!-- Actions -->
+		<!-- <record model="ir.actions.act_window" id="student_action">
+			<field name="name">student_action</field>
+			<field name="res_model">student</field>
+			<field name="view_mode">tree,form</field>
+		</record> -->
+		<act_window id="student_action"
+			name="Student Action"
+			res_model="student"
+			view_mode="tree,form" />
+			
+		<menuitem id="menu_student"
+			name="Student Menu"
+			sequence="10"
+			parent="school_menu"
+			action="student_action" />
+			
+		<!-- Form View -->
+		<record id="student_form_view" model="ir.ui.view">
+			<field name="name">Student Form View</field>
+			<field name="model">student</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<form>
+				<header>
+					<button name="do_recompute" type="object"
+						string="Recompute GPA" class="oe_highlight" />
+				</header>
+					<sheet>
+						<!-- Main Area -->
+						<group colspan="4">
+							<group colspan="4">
+										<h1 style="font-size: 30px;">
+											<field name="name" nolabel="1"/></h1>
+							</group>
+							<notebook>
+								<page string="Student Info">
+									<group colspan="4">
+										<group string="Student Basic Info">
+											<!-- <field name="name"/> -->
+											<field name="studentId"/>
+											<field name="id_number"/>
+											<field name="gender"/>
+											<field name="date_of_birth"/>
+											<field name="phone"/>
+											<field name="curr_gpa"/>
+											<field name="curr_classify"/>
+										</group>
+										<group string="Student Details">
+											<group colspan="4">
+												<label for="address"/>
+												<field name="address" nolabel="1"/>
+											</group>
+											<field name="supervisor_id"/>
+											<field name="image"/>
+										</group>
+									</group>
+									
+								</page>
+								<page string="Transcript">
+									<group string="Transcript" colspan="4">
+										<!-- <label for="transcript_line_ids" 
+											name="My transcript" colspan="4"/>" -->
+										<field name="transcript_line_ids" nolabel="1"/>
+									</group>
+								</page>
+							</notebook>
+						</group>	
+					</sheet>
+				</form>
+			</field>
+		</record>
+		
+		<!-- Tree View -->
+		<record id="student_tree_view" model="ir.ui.view">
+			<field name="name">student_tree_view</field>
+			<field name="model">student</field>
+			<field name="type">tree</field>
+			<field name="arch" type="xml">
+				<tree string="Student List">
+					<field name="name"/>
+					<field name="studentId"/>
+					<field name="id_number"/>
+					<field name="gender"/>
+					<field name="date_of_birth"/>
+					<field name="curr_gpa"/>
+					<field name="curr_classify"/>
+					<field name="supervisor_id"/>
+				</tree>
+			</field>
+		</record>
+		
+		<!-- Search View -->
+		<record id="student_search_view" model="ir.ui.view">
+			<field name="name">student_search_view</field>
+			<field name="model">student</field>
+			<field name="type">search</field>
+			<field name="arch" type="xml">
+				<search string="Search">
+					<field name="name" 
+						domain_filter="[('name', 'ilike', self)]"/>
+					<field name="id_number"
+						domain="[('id_number', 'ilike', self)]"/>
+					<field name="studentId"
+						domain="[('studentId', '=like', self)]"/>
+					<filter name="groupby_sid" string="Group by Sid" 
+							context="{'group_by': 'studentId'}" />
+					<field name="gender"/>
+					<field name="date_of_birth"/>
+					<field name="address"
+						domain="[('address', 'ilike', self)]" />
+					<!-- <field name="curr_gpa"
+						domain="[('curr_gpa','=',self)]"/> -->
+				</search>
+			</field>
+		</record>
+		
+	</data>
+</openerp>

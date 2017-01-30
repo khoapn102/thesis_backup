@@ -1,0 +1,45 @@
+<?xml version="1.0" ?>
+<openerp>
+	<data>
+		<!-- Cant reuse Views for new models -->
+		<!-- Actions -->
+		<!-- <act_window id="inherit_lect_action"
+			name="Inherit Lect Action"
+			res_model="test.inherit.lect"
+			view_mode="tree,form"/>
+			
+		<menuitem id="menu_inherit_lect"
+			name="Inherit Lecturer Menu""
+			sequenc="50"
+			parent="hr_menu"
+			action="inherit_lect_action"/> -->
+		
+		<!-- Inherit Form View -->
+		<record id="inherit_lecturer_form_view" model="ir.ui.view">
+			<field name="name">inherit_lecturer_form_view</field>
+			<field name="model">lecturer</field>
+			<field name="inherit_id" ref="trainingkp.lecturer_form_view"/>
+			<field name="arch" type="xml">
+				<xpath expr="//field[@name='head_dept_id']" position="after">
+					<field name="hobby"/>
+				</xpath>
+				
+				<xpath expr="//group[@name='group-top']" position="after">
+					<notebook>
+						<page string="Contract">
+							<group colspan="4">
+								<field name="contract_type"/>
+								<field name="contract_duration"/>
+								<field name="is_signed"/>
+							</group>
+						</page>
+					</notebook>
+				</xpath>
+				
+			</field>
+		</record>
+		
+		<!-- Inherit Tree View -->
+		
+	</data>
+</openerp>

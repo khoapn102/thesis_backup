@@ -1,0 +1,44 @@
+<?xml version="1.0" ?>
+<openerp>
+	<data>
+		<record model="ir.actions.act_window" id="payroll_wage_hist_wizard_action">
+			<field name="name">Payroll Wage History Wizard</field>
+			<field name="res_model">trobz.payroll.wage.history.report</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">form</field>
+			<field name="target">new</field>
+			<!-- <field name="multi">True</field> -->
+		</record>
+		
+		<!-- Form View -->
+		<record id="payroll_wage_hist_wizard_form_view" model="ir.ui.view">
+			<field name="name">payroll_wage_hist_form_view</field>
+			<field name="model">trobz.payroll.wage.history.report</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<form string="Payroll Wage Report">
+					<sheet>
+						<group string="Payroll Wage to Print" colspan="4">
+							<field name="from_date"/>
+							<field name="to_date"/>
+							<field name="department_id"/>
+							<field name="job_id"/>
+							<field name="employee_ids"/>
+							<field name="order_by"/>
+						</group>
+					</sheet>
+					<footer>
+						<button name="get_print_report"
+							icon="gtk-print"
+							type="object"
+							string="Print"
+							class="oe_highlight"/>
+						<button icon="gtk-cancel" special="cancel" string="Cancel"/>
+					</footer>
+					
+				</form>
+			</field>
+		</record>
+		
+	</data>
+</openerp>

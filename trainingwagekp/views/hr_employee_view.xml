@@ -1,0 +1,24 @@
+<?xml version="1.0" ?>
+<openerp>
+	<data>
+<!-- 		Inherit Form View
+ -->		<record id="hr_employee_inherit_new_form_view" model="ir.ui.view">
+			<field name="name">hr_employee_inherit_new_form_view</field>
+			<field name="model">hr.employee</field>
+			<field name="inherit_id" ref="hr_contract.hr_hr_employee_view_form2" />
+			<field name="arch" type="xml">
+			
+				<xpath expr="//div[@name='button_box']" position="inside">
+					<button name="%(open_payroll_wage_hist_action)d" 
+							type="action"
+							class="oe_stat_button" 
+							icon="fa-floppy-o">
+						<field name="wage_incr_count" widget="statinfo"
+							string="Payroll History"/>
+						</button>
+				</xpath>
+				
+			</field>
+		</record>
+	</data>
+</openerp>

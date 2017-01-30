@@ -1,0 +1,15 @@
+{
+    'name': 'Training Project',
+    'description': 'To Train Module',
+    'author': 'Khoapn',
+    'depends': ['base', 'sale'],
+    'data': ['views/parent_menu.xml',
+             'views/student_view.xml',
+             'views/lecturer_view.xml',
+             'views/department_view.xml',
+             'views/course_view.xml',
+             'views/student_transcript_line_view.xml',
+             'views/gpa_classify_view.xml',
+             'views/res_partner_view.xml',
+             'views/inherit_lect_view.xml'],
+}

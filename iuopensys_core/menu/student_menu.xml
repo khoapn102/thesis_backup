@@ -1,0 +1,21 @@
+<?xml version="1.0" ?>
+<openerp>
+	<data>
+	
+		<menuitem id="student_root_menu"
+			name="Student Management"
+			sequence="2"/>
+			
+		<menuitem id="student_core_menu"
+			name="Student"
+			sequence="0"
+			parent="student_root_menu"/>
+			
+		<menuitem id="student_main_menu"
+			name="Students"
+			sequence="0"
+			parent="student_core_menu"
+			action="student_main_action"/>
+			
+	</data>
+</openerp>

@@ -1,0 +1,140 @@
+<?xml version="1.0" ?>
+<openerp>
+	<data>
+		<!--  Action for Views -->
+		<record model="ir.actions.act_window" id="student_main_action">
+			<field name="name">Student Managment</field>
+			<field name="res_model">student</field>
+			<field name="view_mode">tree,form</field>
+		</record>
+			
+		<!-- Tree View -->
+		<record id="student_main_tree_view" model="ir.ui.view">
+			<field name="name">All Students</field>
+			<field name="model">student</field>
+			<field name="type">tree</field>
+			<field name="arch" type="xml">
+				<tree string="Student List">
+					<field name="studentId"/>
+					<field name="last_name"/>
+					<field name="name"/>
+					<!-- <field name="class_id"/> -->
+					<field name="birthdate"/>
+					<field name="department_id"/>
+					<field name="academic_year_id"/>
+					<field name="student_class_code"/>
+					<field name="major_id"/>
+					<field name="country_id"/>
+				</tree>
+			</field>
+		</record>
+		
+		<!-- Form View -->
+		<record id="student_main_form_view" model="ir.ui.view">
+			<field name="name">Student</field>
+			<field name="model">student</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<form>
+					<header>
+						<button string="Change Password" type="action" name="67" help="Change the user password."/>
+					</header>
+					<sheet>
+						<field name="image" widget="image" class="oe_avatar" options="{&quot;preview_image&quot;: &quot;image_medium&quot;}"/>
+                        <div class="oe_title">
+                            <label for="name" class="oe_edit_only" string="Student Name"/>
+                            <h1>
+                            	<field name="last_name" required="1" class="oe_inline" placeholder="Last Name"/>&#x2063;
+                            	<field name="name" required="1" class="oe_inline" placeholder="First Name"/>
+                            </h1>
+                        </div>
+                        <group colspan="4">
+                        	<group colspan="4" string="Basic Information">
+                        		<group>
+                        			<field name="department_id"/>
+                        			<field name="major_id"/>
+                        			<field name="studentId" placeholder="Student Id..."/>
+                        			<field name="academic_year_id"/>                        			         
+                        		</group>
+                        		<group>
+                        			<field name="student_class_code"/>
+                        			<field name="login"/>
+                        			<field name="password"/>
+                        		</group>
+                        	</group>
+                        	<notebook colspan="4">
+                        		<page string="Personal Information">
+                        			<group colspan="4">
+                        				<group colspan="2" style="width:40%">
+	                        				<field name="gender"/>
+	                        				<field name="birthdate"/>
+	                        				<field name="ethnic"/>
+	                        			</group>
+                        			</group>                        			
+                        		</page>
+                        		<page string="Contact Information">
+                        			<group colspan="4">
+	                        			<group>
+	                        				<label for="street" string="Permanent Address" style="font-weight:bold"/>
+		                                    <div name="div_address">
+		                                        <field name="street"
+		                                            placeholder="Street..." />
+		                                        <field name="street2"/>
+		                                        <div class="address_format">
+		                                            <field name="city"
+		                                                placeholder="City"
+		                                                style="width: 40%%" />	                                                
+		                                            <field name="country_id"
+		                                                class="oe_no_button"
+		                                                placeholder="Country"
+		                                                style="width: 40%%"
+		                                                options='{"no_open": True}' />                                            
+												</div>
+											</div>
+	                        			</group>
+                        				<group>
+                        					<label for="emergency_name" string="Emergency Contact" style="font-weight:bold"/>
+                        					<div name="div_emergency">
+                        						<field name="emergency_name"
+                        							placeholder="Name of contact..."/>
+                        						<field name="emergency_phone"
+                        							placeholder="Phone number"
+                        							style="width: 50%%"/>
+                        					</div>
+                        				</group>
+                        			</group>                        			
+                        		</page>                        		
+                        	</notebook>
+                        </group>
+					</sheet>
+				</form>
+			</field>
+		</record>
+		
+		<!-- Search View -->
+		<record id="student_main_search_view" model="ir.ui.view">
+			<field name="name">Search</field>
+			<field name="model">student</field>
+			<field name="type">search</field>
+			<field name="arch" type="xml">
+				<search string="Search">
+					<!-- Search By -->
+					<field name="studentId"/>
+					<field name="name"/>
+					<field name="last_name"/>
+					<field name="street"/>
+					
+					<!-- Group By -->
+					<group expand="0" string="Group By">
+						<filter string="Major"
+							context="{'group_by':'major_id'}"/>
+						<filter string="Ethnic"
+							context="{'group_by':'ethnic'}"/>
+						<filter string="Department"
+							context="{'group_by':'department_id'}"/>
+					</group>
+				</search>
+			</field>
+		</record>
+	</data>
+</openerp>

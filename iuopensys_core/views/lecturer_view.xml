@@ -1,0 +1,73 @@
+<?xml version="1.0"?>
+<openerp>
+	<data>
+		<!-- Action for Views -->
+		<record model="ir.actions.act_window" id="lecturer_main_action">
+			<field name="name">All Lecturers</field>
+			<field name="res_model">lecturer</field>
+			<field name="view_mode">tree,form</field>
+		</record>
+		
+		<!-- Tree View -->
+		<record id="lecturer_main_tree_view" model="ir.ui.view">
+			<field name="name">All Lecturers</field>
+			<field name="model">lecturer</field>
+			<field name="type">tree</field>
+			<field name="arch" type="xml">
+				<tree string="Lecturer List">
+					<field name="title"/>
+					<field name="name"/>
+					<field name="department_id"/>
+					<field name="email"/>
+				</tree>
+			</field>
+		</record>
+		
+		<!-- Form View -->
+		<record id="lecturer_main_form_view" model="ir.ui.view">
+			<field name="name">Lecturer</field>
+			<field name="model">lecturer</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<form>
+					<header>
+						<button string="Change Password" type="action" name="67" help="Change the user password."/>
+					</header>
+					<sheet>
+						<field name="image" widget="image" class="oe_avatar" options="{&quot;preview_image&quot;: &quot;image_medium&quot;}"/>
+                        <div class="oe_title">
+                            <label for="name" class="oe_edit_only" string="Lecturer Name"/>
+                            <h1>
+                            	<field name="title" required="1" class="oe_inline"/>&#x2063;
+                            	<field name="name" required="1" class="oe_inline" placeholder="Lecturer Name"/>
+                            </h1>
+                            <h2>
+                            	<label for="department_id" class="oe_edit_only" string="Department"/>
+                            	<field name="department_id" style="font-weight:italics"/>
+                            </h2>
+                        </div>
+                        <group colspan="4">
+                        	<group colspan="4" string="Basic Information">
+                        		<group>
+                        			<field name="email"/>
+                        			<field name="phone"/>
+                        		</group>
+                        		<group>
+                        			<field name="position"/>
+                        			<field name="office_room"/>
+                        		</group>
+                        	</group>
+                        	<group colspan="4" string="Access Information">
+                        		<group>
+                        			<field name="login"/>
+                        			<field name="password"/>
+                        		</group>
+                        	</group>
+                        </group>
+					</sheet>
+				</form>
+			</field>
+		</record>
+		
+	</data>
+</openerp>
