@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_academic_year_student,acces.academic.year.student,model_academic_year,group_student,1,0,0,0
+access_department_student,access.department.student,model_department,group_student,1,0,0,0
+access_lecturer_student,access.lecturer.student,model_lecturer,group_student,1,0,0,0
+access_major_student,access.major.student,model_major,group_student,1,0,0,0
+access_student_student,access.student.student,model_student,group_student,1,1,0,0

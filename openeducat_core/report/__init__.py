@@ -19,11 +19,5 @@
 #
 ###############################################################################
 
-from odoo import models, fields
-
-
-class OpCategory(models.Model):
-    _name = 'op.category'
-
-    name = fields.Char('Name', size=256, required=True)
-    code = fields.Char('Code', size=4, required=True)
+from . import report_student_bonafide
+from . import report_student_idcard

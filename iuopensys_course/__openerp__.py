@@ -17,6 +17,7 @@
         'views/offer_course_view.xml',
         'views/student_inherit_view.xml',
         'views/student_course_view.xml',
+        'views/session_view.xml',
         
         # =========================================
         # MENU

@@ -10,8 +10,6 @@
                     <field name="name" />
                     <field name="code" />
                     <field name="type" />
-                    <field name="subject_type" />
-                    <field name="grade_weightage" />
                 </tree>
             </field>
         </record>
@@ -26,8 +24,6 @@
                             <field name="name" />
                             <field name="code" />
                             <field name="type" />
-                            <field name="subject_type" />
-                            <field name="grade_weightage" />
                         </group>
                     </sheet>
                 </form>

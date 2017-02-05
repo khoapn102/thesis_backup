@@ -15,6 +15,7 @@ class StudentCourse(models.Model):
     
     course_code = fields.Char(string='Course Code', related='offer_course_id.course_code')
     course_name = fields.Char(string='Course Name', related='offer_course_id.name')
+    course_credits = fields.Integer(string='Credits', related='offer_course_id.course_id.number_credits')
     
     mid_score = fields.Float(string='Midterm Exam Score', default=0.0)
     final_score = fields.Float(string='Final Exam Score', default=0.0)

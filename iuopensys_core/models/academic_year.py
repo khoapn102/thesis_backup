@@ -13,7 +13,7 @@ class AcademicYear(models.Model):
     _description = 'Academic Year - Class of Student'
     
     name = fields.Char(string='Academic Year', size=128, required=True)
-    year_batch = fields.Char(string='Year Batch', size=10, required=True)
+    year_batch_id = fields.Many2one('year.batch', string='Year Batch', size=10, required=True)
     lecturer_id = fields.Many2one('lecturer', string='Academic Advisor', 
                                   required=True,
                                   domain="[('department_id','=',department_id)]")
@@ -30,17 +30,17 @@ class AcademicYear(models.Model):
 #             record.year_batch = str(datetime.now().year)
 #             print '=========', record.year_batch
 
-    @api.onchange('department_id','year_batch')
+    @api.onchange('department_id','year_batch_id')
     def _produce_name(self):
-        if self.department_id.id and self.year_batch:
-            self.name = self.department_id.dept_academic_code + '-'+ self.year_batch
+        if self.department_id.id and self.year_batch_id:
+            self.name = self.department_id.dept_academic_code + '-'+ (self.year_batch_id.year or "")
     
     @api.multi
     def _get_class_code(self):
         for record in self:
             dept_academic_code = record.department_id.dept_academic_code
             record.class_code = dept_academic_code*2 +\
-                                 str(int(record.year_batch)%100)
+                                 str(int(record.year_batch_id.year or 0)%100)
     
     @api.constrains('start_date', 'end_date')
     def _validate_academic_year_period(self):

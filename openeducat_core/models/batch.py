@@ -19,8 +19,8 @@
 #
 ###############################################################################
 
-from odoo import models, fields, api, _
-from odoo.exceptions import ValidationError
+from openerp import models, fields, api, _
+from openerp.exceptions import ValidationError
 
 
 class OpBatch(models.Model):
@@ -33,15 +33,14 @@ class OpBatch(models.Model):
     end_date = fields.Date('End Date', required=True)
     course_id = fields.Many2one('op.course', 'Course', required=True)
 
-    @api.multi
+    @api.one
     @api.constrains('start_date', 'end_date')
     def check_dates(self):
-        for record in self:
-            start_date = fields.Date.from_string(record.start_date)
-            end_date = fields.Date.from_string(record.end_date)
-            if start_date > end_date:
-                raise ValidationError(_("End Date cannot be set before \
-                Start Date."))
+        start_date = fields.Date.from_string(self.start_date)
+        end_date = fields.Date.from_string(self.end_date)
+        if start_date > end_date:
+            raise ValidationError(_("End Date cannot be set before \
+            Start Date."))
 
     @api.model
     def name_search(self, name, args=None, operator='ilike', limit=100):

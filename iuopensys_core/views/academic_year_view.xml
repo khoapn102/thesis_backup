@@ -16,7 +16,7 @@
 			<field name="arch" type="xml">
 				<tree string="List of Academic Years">
 					<field name="name"/>
-					<field name="year_batch"/>
+					<field name="year_batch_id"/>
 					<field name="class_code"/>
 					<field name="department_id"/>
 					<field name="lecturer_id"/>
@@ -42,7 +42,7 @@
 						</div>
 						<group colspan="4" string="Information">
 							<group>
-								<field name="year_batch"/>
+								<field name="year_batch_id"/>
 								<field name="department_id"/>
 								<field name="lecturer_id"/>
 							</group>
@@ -79,7 +79,7 @@
 						<filter string="End Date"
 							context="{'group_by':'end_date'}"/>
 						<filter string="Year Batch"
-							context="{'group_by':'year_batch'}"/>
+							context="{'group_by':'year_batch_id'}"/>
 					</group>
 				</search>
 			</field>

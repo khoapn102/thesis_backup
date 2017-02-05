@@ -9,10 +9,11 @@
 				<notebook position="inside">
 					<page string="Academic Information">
                			<group colspan="4" id="academic_group">
-               				<field name="student_course_ids" nolabel="1">
+               				<field name="student_course_ids" nolabel="1"  widget="x2many_selectable">
                					<tree>
-               						<field name="course_name"/>
                						<field name="course_code"/>
+               						<field name="course_name"/>
+               						<field name="course_credits"/>               						
                						<field name="mid_score"/>
                						<field name="final_score"/>
                					</tree>

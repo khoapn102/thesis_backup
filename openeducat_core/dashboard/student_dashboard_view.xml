@@ -6,7 +6,7 @@
             <field name="model">board.board</field>
             <field name="arch" type="xml">
                 <form string="Student Dashboard">
-                    <board style="1">
+                    <board style="2-1">
                     </board>
                 </form>
             </field>

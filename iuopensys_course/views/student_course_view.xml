@@ -50,5 +50,24 @@
 			</field>
 		</record>
 		
+		<!-- Search View -->
+		<record id="student_course_search_view" model="ir.ui.view">
+			<field name="name">Student Course</field>
+			<field name="model">student.course</field>
+			<field name="type">search</field>
+			<field name="arch" type="xml">
+				<search>
+					<!-- Search By -->
+					<field name="student_id"/>
+					<field name="offer_course_id"/>
+					<field name="student_fname"/>
+					<field name="student_lname"/>
+					<field name="course_name"/>
+					<field name="course_code"/>
+					
+					<!-- Group By -->
+				</search>
+			</field>
+		</record>
 	</data>
 </openerp>

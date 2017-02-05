@@ -66,27 +66,59 @@
           					</group>          					
                         </group>
                         <notebook>
-                        	<page string="Academic Information">
+                        	<page string="Timing Information">
                         		<group colspan="4">
-                        			<!-- <div>
-                        				<label for="mid_exam_percent"  style="font-weight:bold"/>
-                        				<field name="mid_exam_percent" class="oe_inline"/>(%%)
-                        				<br/><br/>
-                        				<label for="final_exam_percent"  style="font-weight:bold"/> 
-                        				<field name="final_exam_percent" class="oe_inline"/>(%%)
-                        			</div> -->
-                        			<group col="22">
+	                        		<!-- <group>
+	                        			<field name="session_one_id"/>
+	                        			<field name="course_start_date"/>
+	                        			<field name="course_end_date"/>
+	                        			<field name="is_summer"/>	                        			
+	                        		</group>
+                        			<group>                        				
+                        				<field name="session_two_id" attrs="{'invisible':[('is_summer','=',False)]}"/>
+                        				<field name="second_start_date" attrs="{'invisible':[('is_summer','=',False)]}"/>
+                        				<field name="second_end_date" attrs="{'invisible':[('is_summer','=',False)]}"/>
+                        			</group> -->
+                        			<field name="session_ids" widget="x2many_selectable" nolabel="1">
+                        				<tree editable="top">
+                        					<field name="name"/>
+                        					<field name="start_date"/>
+                        					<field name="end_date"/>
+                        					<field name="start_time" widget="float_time"/>
+                        					<field name="duration" widget="float_time"/>
+                        					<field name="is_summer"/>
+                        				</tree>
+                        			</field>
+                        		</group>
+                        	</page>
+                        	<page string="Academic Information">
+                        		<group colspan="4">                        			           
+                        			<!-- <group col="22">
                         				<field name="mid_exam_percent" class="oe_inline"/><label string="(%)" colspan="20"/>
                         			</group>
                         			<group col="22">
                         				<field name="final_exam_percent" class="oe_inline"/><label string="(%)" colspan="20"/>
+                        			</group> -->
+                        			<group>
+                        				<label for="mid_exam_percent"  style="font-weight:bold"/>
+                        				<div>
+                        					<field name="mid_exam_percent" class="oe_inline"/>
+                        					<span> (%)</span>
+                        				</div>
+                        			</group>
+                        			<group>
+                        				<label for="final_exam_percent"  style="font-weight:bold"/>
+                        				<div>                        					
+                        					<field name="final_exam_percent" class="oe_inline"/>
+                        					<span> (%)</span>
+                        				</div>
                         			</group>
                         		</group>
                         	</page>
        						<page string="Student List">
        							<group colspan="4">
-       								<field name="student_course_ids" nolabel="1">
-       									<tree>
+       								<field name="student_course_ids" nolabel="1" widget="x2many_selectable">
+       									<tree editable="top">
        										<field name="studentId"/>
        										<field name="student_lname"/>
        										<field name="student_fname"/>
@@ -119,9 +151,22 @@
 					<field name="department_id"/>
 					<field name="academic_year_id"/>
 					<field name="lecturer_id"/>
+					<field name="assign_room"/>
+					<field name="semester_id"/>
 					
 					<!-- Group By -->
-					
+					<group expand="0" string="Group By">
+						<fitler string="Parent Course"
+							context="{'group_by':'course_id'}"/>
+						<filter string="Department"
+							context="{'group_by':'department_id'}"/>
+						<filter string="Academic Year"
+							context="{'group_by':'academic_year_id'}"/>
+						<filter string="Semester"
+							context="{'group_by':'semester_id'}"/>
+						<filter string="Lab"
+							domain="[('is_lab', '=', True)]" context="{'group_by':'course_id'}"/>
+					</group>					
 				</search>
 			</field>
 		</record>

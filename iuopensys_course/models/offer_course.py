@@ -1,4 +1,6 @@
 from openerp import models, fields, api
+from datetime import datetime
+from dateutil.relativedelta import relativedelta
 
 class OfferCourse(models.Model):
     
@@ -27,6 +29,7 @@ class OfferCourse(models.Model):
                                         default=0)
     
     assign_room = fields.Char(string='Assigned Room')
+    # Notice Lab and PT Theory Class is similar
     is_lab = fields.Boolean(string='Active Lab')
     lab_type = fields.Selection(selection=[('separate', 'Separate'),
                                            ('combine', 'Combine')],
@@ -46,6 +49,17 @@ class OfferCourse(models.Model):
     
     
     # PERIOD, EXAM SCHEDULE and TIME SCHEDULE go here
+    session_ids = fields.One2many('session','offer_course_id',string='Sessions')
+#     course_start_date = fields.Date(string='Course Start Date',
+#                                     default = datetime.now().strftime("%Y-%m-%d"))
+#     course_end_date = fields.Date(string='Course End Date',
+#                                   default=datetime.now() + relativedelta(days=102))
+#     is_summer = fields.Boolean(string='Summer Course')
+#     session_two_id = fields.Many2one('session', string='Second Session')
+#     second_start_date = fields.Date(string='Second Start Date',
+#                                     default = datetime.now().strftime("%Y-%m-%d"))
+#     second_end_date = fields.Date(string='Second End Date',
+#                                   default = datetime.now().strftime("%Y-%m-%d"))
     
     # Overide name_get
     @api.multi

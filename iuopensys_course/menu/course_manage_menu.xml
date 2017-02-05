@@ -8,6 +8,13 @@
 			sequence="1"
 			parent="iuopensys_core.academic_core_menu"
 			action="semester_main_action"/>
+	
+		<!-- Session -->
+		<menuitem id="session_main_menu"
+			name="Sessions"
+			sequence="3"
+			parent="iuopensys_core.academic_core_menu"
+			action="session_main_action"/>
 			
 		<!-- Course Section -->	
 		<menuitem id="course_core_menu"

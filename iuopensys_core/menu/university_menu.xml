@@ -54,11 +54,24 @@
 			sequence="0"
 			parent="university_root_menu"/>
 			
+		<!-- Academic Years Section -->
+		<menuitem id="academic_year_core_menu"
+			name="Academic Years"
+			sequence="0"
+			parent="academic_core_menu"/>
+			
+		<!-- Year Batch -->
+		<menuitem id="year_batch_main_menu"
+			name="Year Batch"
+			sequence="0"
+			parent="academic_year_core_menu"
+			action="year_batch_main_action"/>
+			
 		<!-- Academic Year (Class) Section -->
 		<menuitem id="academic_year_main_menu"
 			name="Academic Years"
-			sequence="0"
-			parent="academic_core_menu"
+			sequence="1"
+			parent="academic_year_core_menu"
 			action="academic_year_main_action"/>
 		
 	</data>

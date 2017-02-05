@@ -17,6 +17,7 @@
 				<tree string="List of Semesters">
 					<field name="name"/>
 					<field name="semester_year"/>
+					<field name="semester_type"/>
 					<field name="semester_code"/>
 					<field name="start_date"/>
 					<field name="end_date"/>
@@ -40,6 +41,7 @@
 						</div>
 						<group colspan="4" string="Information">
 							<group>
+								<field name="semester_type"/>
 								<field name="semester_code"/>
 								<field name="semester_year" style="width: 30%%"/>
 							</group>

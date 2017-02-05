@@ -8,6 +8,8 @@
         # =========================================
         # SECURITY
         # =========================================
+        'security/iuopensys_security.xml',
+        'security/ir.model.access.csv',
         
         # =========================================
         # VIEWS
@@ -16,6 +18,7 @@
         'views/department_view.xml',
         'views/major_view.xml',
         'views/lecturer_view.xml',
+        'views/year_batch_view.xml',
         'views/academic_year_view.xml',
         
         # =========================================
