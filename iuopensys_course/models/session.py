@@ -1,6 +1,7 @@
 from openerp import models, fields, api
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
+from openerp.exceptions import ValidationError
 
 class Session(models.Model):
     
@@ -9,22 +10,53 @@ class Session(models.Model):
     
     name = fields.Char('Session Name', size=16, required=True,
                        default="Session 1")
-    offer_course_id = fields.Many2one('offer.course', string='Course')
+    offer_course_id = fields.Many2one('offer.course', string='Course', ondelete='cascade', required=True)
     start_date = fields.Date(string='Start Date',
                                     default = datetime.now().strftime("%Y-%m-%d"))
     end_date = fields.Date(string='End Date',
                                   default=datetime.now() + relativedelta(days=102))
     start_time = fields.Float(string='Start Time', required=True)
-#     hour = fields.Selection(
-#         [('6', '6'), ('7', '7'), ('8', '8'), ('9', '9'), ('10', '10'),
-#          ('11', '11'), ('12', '12'), ('13', '13'), ('14', '14'), ('15', '15'),
-#          ('16', '16'), ('17', '17'),], 'Starting Hour', required=True,
-#                             default='8')
-#     minute = fields.Selection(
-#         [('00', '00'), ('15', '15'), ('30', '30'), ('45', '45')], 'Minute',
-#         required=True, default='00')
+    end_time = fields.Float(string='End Time', required=True)
     duration = fields.Float('Duration', required=True)
     is_summer = fields.Boolean(string='Summer Session')
+    
+    
+    def _get_datetime(self, date, time):
+        time_res = '{0:02.0f}:{1:02.0f}:00'.format(*divmod(time * 60, 60))
+        print '+++++', date
+        temp_res = str(date) + ' ' + time_res
+        res = datetime.strptime(temp_res, '%Y-%m-%d %H:%M:%S')
+        print '++++++', res 
+        return res.strftime('%Y-%m-%d %H:%M:%S')
+
+#     @api.onchange('start_time')
+#     def _onchange_start_time(self):
+#         print '-------', self.temp
+#         self.temp = self._get_datetime(self.start_date, self.start_time)
+        
+    @api.onchange('end_time')
+    def _onchange_start_end_time(self):
+        self.duration = self.end_time - self.start_time
+        
+    @api.constrains('start_time','end_time')
+    def _check_start_end_time(self):
+        for record in self:
+            if record.duration <= 0:
+                raise ValidationError('End time must be greater than Start time !')
+            
+#     @api.model
+#     def create(self, vals):
+#         curr_session = super(Session,self).create(vals)
+#         start_datetime = self._get_datetime(curr_session.start_date,curr_session.start_time)
+#         end_datetime = self._get_datetime(curr_session.end_date,curr_session.end_time)
+#         new_vals = {'name': curr_session.offer_course_id.name,
+#                     'start_datetime': start_datetime,
+#                     'duration': curr_session.duration,                        
+#                     }
+#         print '+++++', new_vals
+#         self.env['calendar.event'].create(new_vals)
+#         return curr_session
+        
 #     display_hour = fields.Char(string='Recording Hour',
 #                                 compute='_get_display_hour')
 #     display_duration = fields.Char(string='Recording Duration',
@@ -35,14 +67,3 @@ class Session(models.Model):
 #         for record in self:
 #             record.display_hour = record.hour + ':' + record.minute
 #             
-#     @api.multi
-#     def _get_display_duration(self):
-#         for record in self:
-#             hr = int(record.duration)
-#             minute = int((record.duration - hr)*60)
-#             if hr:
-#                 record.display_duration = str(hr) + ' hours and ' +\
-#                                              str(minute) + ' minutes'
-#             else:
-#                 record.display_duration = str(minute) + ' minutes'
-    

@@ -11,7 +11,7 @@ class YearBatch(models.Model):
     year_code = fields.Char(string='Year Code', compute='_generate_year_code')
     academic_year_ids = fields.One2many('academic.year','year_batch_id', string='Academic Years')
 
-    _sql_constraints = [('year','unique(year)','There is existing Year Batch !')]
+    _sql_constraints = [('year_unique','unique(year)','There is existing Year Batch !')]
     
     @api.multi
     def _generate_name(self):

@@ -1,0 +1,13 @@
+<?xml version="1.0" ?>
+<openerp>
+	<data>
+		<!-- Sequence for IT Student -->		
+		<record id="seq_it_code" model="ir.sequence">
+			<field name="name">IT Student Code</field>
+			<field name="code">student.it</field>
+			<field name="padding">3</field>
+		</record>
+		
+		<!-- Sequence for BA Student -->
+	</data>
+</openerp>

@@ -6,14 +6,15 @@ from dateutil.relativedelta import relativedelta
 class AcademicYear(models.Model):
     
     """
-        Lecturer-Student relation
+        Academic Year (Class of Student)
     """
     
     _name = 'academic.year'
     _description = 'Academic Year - Class of Student'
     
     name = fields.Char(string='Academic Year', size=128, required=True)
-    year_batch_id = fields.Many2one('year.batch', string='Year Batch', size=10, required=True)
+    year_batch_id = fields.Many2one('year.batch', string='Year Batch', size=10, required=True,
+                                    ondelete="cascade")
     lecturer_id = fields.Many2one('lecturer', string='Academic Advisor', 
                                   required=True,
                                   domain="[('department_id','=',department_id)]")
@@ -23,12 +24,6 @@ class AcademicYear(models.Model):
                              default=datetime.now().strftime("%Y-%m-%d"))
     end_date = fields.Date(string='Ending Date', required=True,
                            default=datetime.now() + relativedelta(years=4))
-    
-#     @api.multi
-#     def _get_year_batch(self):
-#         for record in self:
-#             record.year_batch = str(datetime.now().year)
-#             print '=========', record.year_batch
 
     @api.onchange('department_id','year_batch_id')
     def _produce_name(self):
@@ -51,18 +46,13 @@ class AcademicYear(models.Model):
             if diff < 0:
                 raise ValidationError('End Date must be larger than Start Date')
             
-            
-            
-#     academic_year_line_ids = fields.One2many()
-#     
-# class AcademicYearLine(models.Model):
-#     
-#     _name = 'academic.year.line'
-#     _description = 'Intake Year for each Majors'
-#     
-#     academic_year_id = fields.Many2one('academic.year', string='Academic Year')
-#     name = fields.Char(string='Academic')
-    
-    
-    
+    @api.model
+    def create(self, vals):
+        curr_year = super(AcademicYear,self).create(vals)
+        dept_code = 'student.'
+        dept_code += str(curr_year.department_id.dept_academic_code).lower()
+        seq_id = self.env['ir.sequence'].search([('code','=',dept_code)])
+        if seq_id:
+            seq_id.write({'number_next_actual': 1,})
+        return curr_year
     

@@ -50,16 +50,17 @@
                         </div>
                         <group colspan="4">
                         	<group colspan="4" string="Basic Information">
-                        		<group>
+                        		<group>                        			
                         			<field name="department_id"/>
                         			<field name="major_id"/>
-                        			<field name="studentId" placeholder="Student Id..."/>
-                        			<field name="academic_year_id"/>                        			         
+                        			<field name="academic_year_id"/>
+                        			<field name="studentId" placeholder="Student Id..."/>                        			                        			         
                         		</group>
                         		<group>
                         			<field name="student_class_code"/>
                         			<field name="login"/>
                         			<field name="password"/>
+                        			<field name="student_sequence" invisible="1"/>
                         		</group>
                         	</group>
                         	<notebook colspan="4">
@@ -74,6 +75,17 @@
                         		</page>
                         		<page string="Contact Information">
                         			<group colspan="4">
+                        				<group>
+                        					<field name="email"/>
+                        					<label for="emergency_name" string="Emergency Contact" style="font-weight:bold"/>
+                        					<div name="div_emergency">
+                        						<field name="emergency_name"
+                        							placeholder="Name of contact..."/>
+                        						<field name="emergency_phone"
+                        							placeholder="Phone number"
+                        							style="width: 50%%"/>
+                        					</div>
+                        				</group>
 	                        			<group>
 	                        				<label for="street" string="Permanent Address" style="font-weight:bold"/>
 		                                    <div name="div_address">
@@ -91,17 +103,7 @@
 		                                                options='{"no_open": True}' />                                            
 												</div>
 											</div>
-	                        			</group>
-                        				<group>
-                        					<label for="emergency_name" string="Emergency Contact" style="font-weight:bold"/>
-                        					<div name="div_emergency">
-                        						<field name="emergency_name"
-                        							placeholder="Name of contact..."/>
-                        						<field name="emergency_phone"
-                        							placeholder="Phone number"
-                        							style="width: 50%%"/>
-                        					</div>
-                        				</group>
+	                        			</group>                        				
                         			</group>                        			
                         		</page>                        		
                         	</notebook>

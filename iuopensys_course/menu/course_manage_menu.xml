@@ -34,12 +34,36 @@
 			parent="course_core_menu"
 			action="offer_course_main_action"/>
 			
-		<!-- Student Course Relationship -->
+		<!-- Course Registration Config Section -->
+		<menuitem id="course_registration_core_menu"
+			name="Registration"
+			sequence="1"
+			parent="iuopensys_core.university_root_menu"/>
+		
+		<menuitem id="course_registration_main_menu"
+			name="Course Registration"
+			sequence="0"
+			parent="course_registration_core_menu"
+			action="course_registration_main_action"/>
+			
+		<!-- Student Course Registration -->
 		<menuitem id="student_course_main_menu"
-			name="Student Registration"
+			name="Student Registrations"
 			sequence="3"
-			parent="iuopensys_core.academic_core_menu"
+			parent="course_registration_core_menu"
 			action="student_course_main_action"/>
 			
+		<!-- Registration Form -->
+		<menuitem id="student_registration_core_menu"
+			name="Enrollment"
+			sequence="1"
+			parent="iuopensys_core.student_root_menu"/>
+			
+		<menuitem id="student_registration_main_menu"
+			name="Student Registration"
+			sequence="0"
+			parent="student_registration_core_menu"
+			action="student_registration_main_action"/>
+						
 	</data>
 </openerp>

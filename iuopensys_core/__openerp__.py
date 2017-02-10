@@ -12,8 +12,13 @@
         'security/ir.model.access.csv',
         
         # =========================================
-        # VIEWS
+        # SEQUENCE CODE
+        # ========================================= 
+        'data/student_code_sequence.xml',
+        
         # =========================================
+        # VIEWS
+        # =========================================        
         'views/student_view.xml',
         'views/department_view.xml',
         'views/major_view.xml',

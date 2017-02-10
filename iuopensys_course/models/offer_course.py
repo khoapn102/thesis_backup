@@ -8,7 +8,7 @@ class OfferCourse(models.Model):
     _description = 'Offered Course in Semester'
     
     name = fields.Char(string='Course Name')
-    course_id = fields.Many2one('course', string='Parent Course')
+    course_id = fields.Many2one('course', string='Parent Course', ondelete='cascade')
     course_code = fields.Char(string='Course Code', size=10,
                               compute='_generate_course_code')
     course_group = fields.Selection(selection=[('grp1', 'Group 1'),
@@ -21,7 +21,8 @@ class OfferCourse(models.Model):
                                     string='Course Group',
                                     help='Group of Courses')
     department_id = fields.Many2one('department', string='Department',
-                                    related='course_id.department_id')
+                                    related='course_id.department_id',
+                                    store=True)
     numb_students = fields.Integer(string='Number of Students',
                                    help='Maximum number of students for each offered course')
     # Compute here
@@ -30,6 +31,7 @@ class OfferCourse(models.Model):
     
     assign_room = fields.Char(string='Assigned Room')
     # Notice Lab and PT Theory Class is similar
+    has_lab = fields.Boolean(string='Requires Lab', default=False)
     is_lab = fields.Boolean(string='Active Lab')
     lab_type = fields.Selection(selection=[('separate', 'Separate'),
                                            ('combine', 'Combine')],
@@ -96,3 +98,25 @@ class OfferCourse(models.Model):
         for record in self:
             record.course_code = record.department_id.dept_academic_code +\
                                  record._generate_str_id(record.id) + 'IU'
+                                 
+#     def _get_datetime(self, date, time):
+#         time_res = '{0:02.0f}:{1:02.0f}:00'.format(*divmod(time * 60, 60))
+#         date = str(date) + ' ' + time_res
+# #         res = datetime.strptime(date, '%Y-%m-%d %H:%M:%S')   
+# #         return res
+#         return date     
+    
+#     @api.model
+#     def create(self, vals):
+#         curr_course = super(OfferCourse, self).create(vals)
+#         if curr_course.session_ids:
+#             for session in curr_course.session_ids:
+#                 new_vals = {'name': curr_course.name,
+#                             'start_datetime': self._get_datetime(session.start_date,session.start_time),
+#                             'duration': session.duration,                        
+#                             }
+#                 self.env['calendar.event'].create(new_vals)
+#         return curr_course
+        
+        
+        

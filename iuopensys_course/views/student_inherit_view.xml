@@ -20,7 +20,10 @@
                				</field>
                			</group>
                		</page>
-				</notebook> 
+				</notebook>
+				<xpath expr="//field[@name='student_class_code']" position="after">
+					<field name="year_batch_id"/>
+				</xpath>
 			</field>
 		</record>
 	</data>

@@ -18,6 +18,7 @@
 					<field name="start_date"/>
 					<field name="end_date"/>
 					<field name="start_time" widget="float_time"/>
+					<field name="end_time" widget="float_time"/>
 					<field name="duration" widget="float_time"/>
 				</tree>
 			</field>
@@ -42,12 +43,12 @@
                         			<field name="offer_course_id"/>
                         			<field name="start_date"/>
                         			<field name="end_date"/>
-                        			
+                        			<field name="is_summer"/>
                         		</group>
                         		<group>
                         			<field name="start_time" widget="float_time"/>
-                        			<field name="duration" widget="float_time"/>
-                        			<field name="is_summer"/>
+                        			<field name="end_time" widget="float_time"/>
+                        			<field name="duration" widget="float_time"/>                        			                     			
                         		</group>
                         	</group>
                         </group>

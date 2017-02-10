@@ -62,7 +62,7 @@
 			
 		<!-- Year Batch -->
 		<menuitem id="year_batch_main_menu"
-			name="Year Batch"
+			name="Year Batches"
 			sequence="0"
 			parent="academic_year_core_menu"
 			action="year_batch_main_action"/>

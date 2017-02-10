@@ -1,0 +1,71 @@
+<?xml version="1.0" ?>
+<openerp>
+	<data>
+		<record model="ir.actions.act_window" id="course_registration_main_action">
+			<field name="name">Course Registration</field>
+			<field name="res_model">course.registration</field>
+			<field name="view_mode">tree,form</field>
+		</record>
+		
+		<record id="course_registration_tree_view" model="ir.ui.view">
+			<field name="name">Registration</field>
+			<field name="model">course.registration</field>
+			<field name="type">tree</field>
+			<field name="arch" type="xml">
+				<tree>
+					<field name="name"/>
+					<field name="reg_semester_id"/>
+					<field name="year_batch_id"/>
+					<field name="start_datetime"/>
+					<field name="end_datetime"/>
+				</tree>
+			</field>
+		</record>
+		
+		<record id="course_registration_form_view" model="ir.ui.view">
+			<field name="name">Registration</field>
+			<field name="model">course.registration</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<form>
+					<sheet>
+						<div class="oe_title">
+                            <label for="name" class="oe_edit_only" string="Name"/>
+                            <h1>
+                            	<field name="name" class="oe_inline" style="width:90%%"/>
+                            </h1>
+                        </div>
+                        <group string="Basic Information">
+                        	<group>
+                        		<field name="reg_semester_id"/>
+                        		<field name="year_batch_id"/>
+                        	</group>
+                        	<group>
+                        		<field name="start_datetime"/>
+                        		<field name="end_datetime"/>
+                        	</group>
+                        </group>
+                        <!-- <group string="Course List">
+                        	<field name="offer_course_ids" nolabel="1" context="{'semester_id':reg_semester_id}"/>
+                        	<field name="offer_course_ids" nolabel="1" domain="[('semester_id','=',reg_semester_id)]" options="{'no_create':True}"/>
+                        </group> -->
+					</sheet>
+				</form>
+			</field>
+		</record>
+		
+		<!-- Search View -->
+		<!-- <record id="" model="ir.ui.view">
+			<field name="name"></field>
+			<field name="model"></field>
+			<field name="type">search</field>
+			<field name="arch" type="xml">
+				<search>
+					Search By
+					
+					Group By
+				</search>
+			</field>
+		</record> -->
+	</data>
+</openerp>
