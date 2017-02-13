@@ -8,7 +8,8 @@ class Course(models.Model):
     name = fields.Char(string='Course Name', size=128)
     department_id = fields.Many2one('department', string='Department', required=True)
     number_credits = fields.Integer(string='Number of Credits', required=True)
-    prereq_course_id = fields.Many2one('course', string='Prerequisite Course')
+    prereq_course_id = fields.Many2one('course', string='Prerequisite Course',
+                                       domain="[('department_id','=',department_id)]")
     course_type = fields.Selection(selection=[('compulsory', 'Compulsory'),
                                               ('elective', 'Elective')],
                                    string='Course Type',

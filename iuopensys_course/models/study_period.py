@@ -54,7 +54,7 @@ class StudyPeriod(models.Model):
 #         print '++++++', utc_dt 
         return utc_dt.strftime('%Y-%m-%d %H:%M:%S')
          
-    @api.onchange('end_time')
+    @api.onchange('start_time','end_time')
     def _onchange_start_end_time(self):
         self.duration = self.end_time - self.start_time
         

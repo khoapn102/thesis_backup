@@ -17,7 +17,7 @@ class OfferCourse(models.Model):
                                                ('grp3', 'Group 3'),
                                                ('grp4', 'Group 4'),
                                                ('grp5', 'Group 5'),],
-                                    string='Course Group', help='Group of Courses')
+                                    string='Group', help='Group of Courses')
     department_id = fields.Many2one('department', string='Department',
                                     related='course_id.department_id',
                                     store=True)
@@ -55,7 +55,8 @@ class OfferCourse(models.Model):
     study_session_ids = fields.One2many('study.period','offer_course_id',string='Periods',
                                         domain=[('is_exam','=',False)])
     exam_session_ids = fields.One2many('study.period', 'offer_course_id', string='Examination',
-                                       domain=[('is_exam','=',True)])                                       
+                                       domain=[('is_exam','=',True)])
+                                          
     
     
     @api.multi
