@@ -9,12 +9,15 @@ class CourseRegistration(models.Model):
     _description = 'Course Registration Configuration'
     
     # Default functions Here
-        
+    def _default_reg_semester_id(self):
+        res = self.env['semester'].search([],limit=1,order='id desc')
+        return res and res[0] or False
+    
     # Fields
     name = fields.Char(string='Name', default='Registration for Batch ')
     # Courses reference this one
     reg_semester_id = fields.Many2one('semester', string='Semester',
-                                default=lambda self: self.env['semester'].search([],limit=1,order='id desc')[0])
+                                default=_default_reg_semester_id)
     year_batch_id = fields.Many2one('year.batch', string='Student Batch')
     start_datetime = fields.Datetime(string='Start at',
                                      default=lambda self: datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
@@ -33,8 +36,9 @@ class CourseRegistration(models.Model):
             start = datetime.strptime(record.start_datetime,format)
             end = datetime.strptime(record.end_datetime,format)
             diff = int((end-start).seconds)
-            if diff < 3600:
-                raise ValidationError('End time must be at least 1 hour away from Start time !')
+            print '======', diff
+            if diff == 0:
+                raise ValidationError('End time must be different from Start time !')
         
 #     @api.onchange('reg_semester_id')
 #     def _onchange_reg_semester_id(self):

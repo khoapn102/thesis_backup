@@ -1,15 +1,15 @@
 <?xml version="1.0" ?>
 <openerp>
 	<data>
-		<record model="ir.actions.act_window" id="session_main_action">
-			<field name="name">Session List</field>
-			<field name="res_model">session</field>
+		<record model="ir.actions.act_window" id="study_period_main_action">
+			<field name="name">Schedules</field>
+			<field name="res_model">study.period</field>
 			<field name="view_mode">tree,form</field>
 		</record>
 		
-		<record id="session_main_tree_view" model="ir.ui.view">
-			<field name="name">Session List</field>
-			<field name="model">session</field>
+		<record id="study_period_main_tree_view" model="ir.ui.view">
+			<field name="name">Study Periods</field>
+			<field name="model">study.period</field>
 			<field name="type">tree</field>
 			<field name="arch" type="xml">
 				<tree>
@@ -20,13 +20,15 @@
 					<field name="start_time" widget="float_time"/>
 					<field name="end_time" widget="float_time"/>
 					<field name="duration" widget="float_time"/>
+					<field name="is_summer"/>
+					<field name="is_exam"/>
 				</tree>
 			</field>
 		</record>
 		
-		<record id="session_main_form_view" model="ir.ui.view">
-			<field name="name">Session</field>
-			<field name="model">session</field>
+		<record id="study_period_main_form_view" model="ir.ui.view">
+			<field name="name">Period</field>
+			<field name="model">study.period</field>
 			<field name="type">form</field>
 			<field name="arch" type="xml">
 				<form>
@@ -45,10 +47,13 @@
                         			<field name="end_date"/>
                         			<field name="is_summer"/>
                         		</group>
-                        		<group>
+                        		<group>                        			
                         			<field name="start_time" widget="float_time"/>
                         			<field name="end_time" widget="float_time"/>
-                        			<field name="duration" widget="float_time"/>                        			                     			
+                        			<field name="duration" widget="float_time"/>
+                        			<field name="is_exam"/>
+                        			<!-- <field name="start_datetime" invisible="1"/>
+                        			<field name="end_datetime" invisible="1"/> -->
                         		</group>
                         	</group>
                         </group>
@@ -56,6 +61,17 @@
 				</form>
 			</field>
 		</record>
+		
+		<!-- Calendar View -->
+		<!-- <record id="calendar_study_period" model="ir.ui.view">
+			<field name="model">study.period</field>
+			<field name="arch" type="xml">
+				<calendar date_start="start_datetime" date_stop="end_datetime" color="offer_course_id">
+					<field name="name"/>
+					<field name="offer_course_id"/>
+				</calendar>
+			</field>
+		</record> -->
 		
 		<!-- Search View -->
 		<!-- <record id="" model="ir.ui.view">

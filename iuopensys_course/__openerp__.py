@@ -3,7 +3,7 @@
     'version': '0.1',
     'author': 'Khoa Phan',
     'category': 'University Management',
-    'depends': ['base', 'iuopensys_core'],
+    'depends': ['base', 'iuopensys_core','calendar'],
     'data': [
         # =========================================
         # SECURITY
@@ -17,7 +17,7 @@
         'views/offer_course_view.xml',
         'views/student_inherit_view.xml',
         'views/student_course_view.xml',
-        'views/session_view.xml',
+        'views/study_period_view.xml',
         'views/course_registration_view.xml',
         'views/student_registration_view.xml',
         

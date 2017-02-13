@@ -33,7 +33,7 @@
                             	<field name="name" class="oe_inline"/>
                             </h1>                            
                         </div>
-                        <group colspan="4">
+                        <group colspan="4" string="Basic Information">
                         	<group>
                         		<field name="year" style="width:40%%"/>
                         	</group>

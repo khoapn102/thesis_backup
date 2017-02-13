@@ -7,6 +7,7 @@ class OfferCourse(models.Model):
     _name = 'offer.course'
     _description = 'Offered Course in Semester'
     
+    # Course Info
     name = fields.Char(string='Course Name')
     course_id = fields.Many2one('course', string='Parent Course', ondelete='cascade')
     course_code = fields.Char(string='Course Code', size=10,
@@ -15,21 +16,20 @@ class OfferCourse(models.Model):
                                                ('grp2', 'Group 2'),
                                                ('grp3', 'Group 3'),
                                                ('grp4', 'Group 4'),
-                                               ('grp5', 'Group 5'),
-                                               ('grp6', 'Group 6'),
-                                               ('grp7', 'Group 7')],
-                                    string='Course Group',
-                                    help='Group of Courses')
+                                               ('grp5', 'Group 5'),],
+                                    string='Course Group', help='Group of Courses')
     department_id = fields.Many2one('department', string='Department',
                                     related='course_id.department_id',
                                     store=True)
     numb_students = fields.Integer(string='Number of Students',
                                    help='Maximum number of students for each offered course')
     # Compute here
-    curr_enroll_students = fields.Integer(string='Current Number of Students',
+    curr_enroll_students = fields.Integer(string='Current Students',
                                         default=0)
     
     assign_room = fields.Char(string='Assigned Room')
+    number_credits = fields.Integer('Credits', related='course_id.number_credits')
+    dept_academic_code = fields.Char('Department', related='department_id.dept_academic_code')
     # Notice Lab and PT Theory Class is similar
     has_lab = fields.Boolean(string='Requires Lab', default=False)
     is_lab = fields.Boolean(string='Active Lab')
@@ -51,19 +51,13 @@ class OfferCourse(models.Model):
     
     
     # PERIOD, EXAM SCHEDULE and TIME SCHEDULE go here
-    session_ids = fields.One2many('session','offer_course_id',string='Sessions')
-#     course_start_date = fields.Date(string='Course Start Date',
-#                                     default = datetime.now().strftime("%Y-%m-%d"))
-#     course_end_date = fields.Date(string='Course End Date',
-#                                   default=datetime.now() + relativedelta(days=102))
-#     is_summer = fields.Boolean(string='Summer Course')
-#     session_two_id = fields.Many2one('session', string='Second Session')
-#     second_start_date = fields.Date(string='Second Start Date',
-#                                     default = datetime.now().strftime("%Y-%m-%d"))
-#     second_end_date = fields.Date(string='Second End Date',
-#                                   default = datetime.now().strftime("%Y-%m-%d"))
+#     calendar_event_ids = fields.One2many('calendar.event', 'offer_course_id', string='Session')
+    study_session_ids = fields.One2many('study.period','offer_course_id',string='Periods',
+                                        domain=[('is_exam','=',False)])
+    exam_session_ids = fields.One2many('study.period', 'offer_course_id', string='Examination',
+                                       domain=[('is_exam','=',True)])                                       
     
-    # Overide name_get
+    
     @api.multi
     def name_get(self):
         res = super(OfferCourse,self).name_get()
@@ -99,24 +93,27 @@ class OfferCourse(models.Model):
             record.course_code = record.department_id.dept_academic_code +\
                                  record._generate_str_id(record.id) + 'IU'
                                  
-#     def _get_datetime(self, date, time):
-#         time_res = '{0:02.0f}:{1:02.0f}:00'.format(*divmod(time * 60, 60))
-#         date = str(date) + ' ' + time_res
-# #         res = datetime.strptime(date, '%Y-%m-%d %H:%M:%S')   
-# #         return res
-#         return date     
-    
 #     @api.model
 #     def create(self, vals):
+#         """
+#         1. When course is created, it will be assigned with study schedule
+#         2. After schedule is assigned, the module will automatically
+#         create calendar event that fit the schedule.
+#         """
 #         curr_course = super(OfferCourse, self).create(vals)
-#         if curr_course.session_ids:
-#             for session in curr_course.session_ids:
-#                 new_vals = {'name': curr_course.name,
-#                             'start_datetime': self._get_datetime(session.start_date,session.start_time),
-#                             'duration': session.duration,                        
+#         print '+++++++', curr_course.study_period_ids
+#         if curr_course.study_period_ids:
+#             for session in curr_course.study_period_ids:
+#                 event_name = curr_course.name + '-' + session.name
+#                 print '------', session.start_date, ' ', session.start_datetime
+#                 new_vals = {'name': event_name,
+#                             'start_datetime': session.start_datetime,
+#                             'start': session.start_datetime,
+#                             'stop': session.end_datetime,
+#                             'duration': session.duration,                                          
 #                             }
-#                 self.env['calendar.event'].create(new_vals)
+#                 print '+++++', new_vals
+# #                 self.env['calendar.event'].create(new_vals)
 #         return curr_course
-        
         
         

@@ -14,7 +14,4 @@ class Course(models.Model):
                                    string='Course Type',
                                    help='Type of a Course: Compulsory or Elective')
     offer_course_ids = fields.One2many('offer.course', 'course_id', 'Offering Courses')
-    
-    #Period_id (for scheduling)
-    
-    
+              

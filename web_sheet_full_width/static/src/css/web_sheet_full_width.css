@@ -25,3 +25,8 @@
 .openerp .oe_record_thread {
     margin-right: 293px;
 }
+@media (min-width: 992px) {
+  .modal-lg {
+    width: 80%;
+  }
+}

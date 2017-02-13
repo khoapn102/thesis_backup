@@ -9,5 +9,10 @@
 		</record>
 		
 		<!-- Sequence for BA Student -->
+		<record id="seq_ba_code" model="ir.sequence">
+			<field name="name">BA Student Code</field>
+			<field name="code">student.ba</field>
+			<field name="padding">3</field>
+		</record>
 	</data>
 </openerp>

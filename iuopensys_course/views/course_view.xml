@@ -52,9 +52,9 @@
                         </group>
                         <notebook>
        						<page string="Offering Courses">
-       							<group colspan="4">
+       							<div>
        								<field name="offer_course_ids" nolabel="1" context="{'default_course_id':active_id}"/>
-       							</group>
+       							</div>
        						</page>
        					</notebook>	
 					</sheet>

@@ -4,11 +4,12 @@ class CalendarEvent(models.Model):
     
     _inherit = 'calendar.event'
     
-    offer_course_id = fields.Many2one('offer.course', string='Course')
-    
+    study_period_id = fields.Many2one('study.period', string='Study Period', ondelete='cascade')
     
 #     @api.onchange('offer_course_id')
-#     def _onchange_offer_course(self):
-#         if self.offer_course_id:
-#             self.
+#     def _onchange_offer_course_id(self):
+#         for record in self:
+#             if record.offer_course_id:
+#                 record.name = record.offer_course_id.name + ' - ' + record.session_name
+
     
