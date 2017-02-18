@@ -23,6 +23,8 @@ class CourseRegistration(models.Model):
                                      default=lambda self: datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
     end_datetime = fields.Datetime(string='End at',
                                    default=lambda self: datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
+    max_credits = fields.Integer(string='Maximum Credits', default=24)
+    min_credits = fields.Integer(string='Minimum Credits', default=12)
         
     @api.onchange('year_batch_id')
     def _onchange_year_batch_id(self):
@@ -40,11 +42,6 @@ class CourseRegistration(models.Model):
             if diff == 0:
                 raise ValidationError('End time must be different from Start time !')
         
-#     @api.onchange('reg_semester_id')
-#     def _onchange_reg_semester_id(self):
-#         course_ids = self.env['offer.course'].search([('semester_id','=',self.reg_semester_id.id)])
-#         self.offer_course_ids = course_ids
-
     @api.model
     def create(self, vals):
         curr_reg = super(CourseRegistration,self).create(vals)
@@ -57,6 +54,7 @@ class CourseRegistration(models.Model):
                         'is_created':True}
             self.env['student.registration'].create(new_vals)
         return curr_reg
+    
         
               
     

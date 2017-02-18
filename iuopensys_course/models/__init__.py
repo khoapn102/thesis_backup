@@ -7,3 +7,4 @@ import student_course
 import course_registration
 import student_registration
 import calendar_event
+import course_tuition

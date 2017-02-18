@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+        <template id="assets_backend" name="iuopensys_course_stylesheet" inherit_id="web.assets_backend">
+            <xpath expr="." position="inside">
+                <link rel="stylesheet" href="/iuopensys_course/static/src/css/iuopensys_course_stylesheet.css"/>
+            </xpath>
+        </template>
+    </data>
+</openerp>

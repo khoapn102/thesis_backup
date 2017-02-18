@@ -23,10 +23,13 @@
 					<field name="course_group"/>
 					<field name="number_credits"/>
 					<field name="numb_students"/>
-					<field name="curr_enroll_students"/>
+					<field name="avail_students"/>
 					<field name="academic_year_id"/>
-					<field name="semester_id" invisible="1"/>
-					<field name="lecturer_id"/>
+					<field name="semester_id" invisible="1"/>					
+					<field name="display_study_daytime"/>
+					<field name="display_room"/>
+					<field name="display_lecturer"/>
+					<field name="display_course_period"/>
 				</tree>
 			</field>
 		</record>
@@ -56,7 +59,11 @@
           							<field name="department_id"/>
           							<field name="academic_year_id"/>
           							<field name="semester_id"/>
-          							<field name="is_lab"/>
+          							<field name="lab_sect_display" invisible="1"/>
+          							<field name="has_lab" attrs="{'invisible':[('lab_sect_display','=',True),('is_lab','=',True)]}"/>
+          							<field name="is_lab" 
+          								attrs="{'invisible':[('lab_sect_display','=',False)]}"/>
+          							<field name="theory_course_id" attrs="{'invisible':[('is_lab','=',False)]}"/>
           							<field name="lab_type" attrs="{'invisible':[('is_lab', '=', False)]}"/>          							
           						</group>
           						<group>
@@ -64,7 +71,13 @@
           							<field name="lecturer_id"/>
           							<field name="assign_room"/>
           							<field name="numb_students"/>
-          							<field name="curr_enroll_students"/>          							
+          							<field name="avail_students"/>
+          							<field name="tuition_id"/>
+          							<field name="display_study_daytime" invisible="1"/>
+          							<field name="display_lecturer" invisible="1"/>
+          							<field name="display_room" invisible="1"/>
+          							<field name="display_course_period" invisible="1"/>
+          							<field name="crs_tuition" invisible="1"/>
           						</group>
           					</group>          					
                         </group>
@@ -83,7 +96,7 @@
                         				<field name="second_end_date" attrs="{'invisible':[('is_summer','=',False)]}"/>
                         			</group> -->
                         			<field name="study_session_ids" nolabel="1" context="{'default_offer_course_id':active_id}">
-                        				<tree editable="top">
+                        				<tree editable="bottom">
                         					<field name="name"/>
                         					<field name="offer_course_id" invisible="1"/>
                         					<field name="start_date"/>
@@ -94,6 +107,13 @@
                         					<field name="is_summer"/>
                         				</tree>
                         			</field>
+                        		</div>
+                        	</page>
+                        	<page string="Lab Schedule">
+                        		<div>
+                        			<field name="lab_course_ids" nolabel="1" 
+                        				context="{'default_theory_course_id':active_id,'default_is_lab':True,'default_lab_sect_display':True,'default_has_lab':False}"
+                        				attrs="{'invisible':[('has_lab','=',False)]}"/>                        				
                         		</div>
                         	</page>
                         	<page string="Exam Schedule">
@@ -177,7 +197,7 @@
 					<field name="semester_id"/>
 					
 					<!-- Group By -->
-					<group expand="0" string="Group By">
+					<group expand="1" string="Group By">
 						<fitler string="Parent Course"
 							context="{'group_by':'course_id'}"/>
 						<filter string="Department"

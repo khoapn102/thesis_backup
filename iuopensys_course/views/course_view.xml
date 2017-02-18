@@ -20,6 +20,7 @@
 					<field name="prereq_course_id"/>
 					<field name="department_id"/>
 					<field name="course_type"/>
+					<field name="crs_lang"/>
 				</tree>
 			</field>
 		</record>
@@ -41,12 +42,14 @@
                         <group colspan="4">
           					<group string="Course Information">
           						<group>
-          							<field name="department_id" style="width:50%%"/>
-          							<field name="number_credits" style="width:50%%"/>
+          							<field name="department_id" style="width:60%%"/>
+          							<field name="number_credits" style="width:40%%"/>
+          							<field name="crs_lang"/>
           						</group>
           						<group>
           							<field name="prereq_course_id" style="width:50%%"/>
           							<field name="course_type" style="width:50%%"/>
+          							<field name="tuition_id" style="width:50%%"/>
           						</group>
           					</group>          					
                         </group>

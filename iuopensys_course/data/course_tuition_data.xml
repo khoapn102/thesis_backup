@@ -1,0 +1,19 @@
+<?xml version="1.0" ?>
+<openerp>
+	<data>
+		<record id="course_tuition_usd" model="course.tuition">
+			<field name="name">Credit Cost (English course)</field>
+			<field name="currency">usd</field>
+			<field name="credit_cost">58.0</field>
+			<field name="usd_to_vnd_rate">22795.0</field>
+			<field name="vnd_to_usd_rate"></field>
+		</record>
+		<record id="course_tuition_vnd" model="course.tuition">
+			<field name="name">Credit Cost (Vietnamese course)</field>
+			<field name="currency">vnd</field>
+			<field name="credit_cost">50000</field>
+			<field name="usd_to_vnd_rate"></field>
+			<field name="vnd_to_usd_rate">0.04387</field>
+		</record>
+	</data>
+</openerp>

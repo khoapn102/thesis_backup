@@ -64,6 +64,13 @@
 			sequence="0"
 			parent="student_registration_core_menu"
 			action="student_registration_main_action"/>
+		
+		<!-- Course Tuition -->
+		<menuitem id="course_tuition_main_menu"
+			name="Course Tuition"
+			sequence="4"
+			parent="course_registration_core_menu"
+			action="course_tuition_main_action"/>			
 						
 	</data>
 </openerp>

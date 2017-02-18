@@ -1,0 +1,10 @@
+.my_class th[data-id='display_study_daytime']{
+	width: 16%;
+}
+.my_class th[data-id='display_lecturer']{
+	width: 7%;
+}
+.my_class th[data-id='display_course_period']{
+	width: 15%;
+	font-weight: bold;
+}

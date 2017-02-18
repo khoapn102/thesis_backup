@@ -14,5 +14,10 @@ class Course(models.Model):
                                               ('elective', 'Elective')],
                                    string='Course Type',
                                    help='Type of a Course: Compulsory or Elective')
+    crs_lang = fields.Selection(selection=[('eng', 'English'),
+                                           ('vn', 'Vietnamese')],
+                                default='eng',
+                                string='Course Language')
+    tuition_id = fields.Many2one('course.tuition', string='Credit Cost')
     offer_course_ids = fields.One2many('offer.course', 'course_id', 'Offering Courses')
               

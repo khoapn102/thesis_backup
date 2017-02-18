@@ -38,6 +38,9 @@ class StudyPeriod(models.Model):
             if record.duration <= 0:
                 raise ValidationError('End time must be greater than Start time !')            
         
+    def _get_time(self, time):
+        return '{0:02.0f}:{1:02.0f}'.format(*divmod(time * 60, 60))
+    
     def _get_datetime(self, date, time):
         if self._context is None:
             self._context = {}
@@ -69,7 +72,7 @@ class StudyPeriod(models.Model):
     @api.model
     def create(self, vals):
         curr_period = super(StudyPeriod,self).create(vals)
-        print '-------', self._context   
+#         print '-------', self._context   
         start_dt = curr_period._get_datetime(curr_period.start_date, curr_period.start_time)
         end_dt = curr_period._get_datetime(curr_period.start_date, curr_period.end_time)
         event_name = curr_period.offer_course_id.name + '-' + curr_period.name
@@ -80,7 +83,7 @@ class StudyPeriod(models.Model):
                     'duration': curr_period.duration,
                     'study_period_id': curr_period.id,                                          
                     }
-        print '+++++', new_vals
+#         print '+++++', new_vals
         self.env['calendar.event'].create(new_vals)
         return curr_period
             

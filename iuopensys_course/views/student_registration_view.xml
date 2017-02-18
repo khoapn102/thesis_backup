@@ -34,7 +34,7 @@
 					</header>
 					<sheet>
 						<div class="oe_title">
-                            <label for="name" class="oe_edit_only" string="Name"/>
+                            <!-- <label for="name" class="oe_edit_only" string="Name"/> -->
                             <h1>
                             	<field name="name" class="oe_inline" nolabel="1" style="width:90%%"/>
                             </h1>
@@ -42,14 +42,36 @@
                         <group>
                         	<group>
                         		<field name="is_created" invisible="1"/>
-                        		<field name="crs_reg_id" attrs="{'readonly':[('is_created','=',True)]}"/>
-                        		<field name="student_id" attrs="{'readonly':[('is_created','=',True)]}"/>
-                        		<field name="semester_id" attrs="{'readonly':[('is_created','=',True)]}"/>           
+                        		<field name="crs_reg_id" attrs="{'readonly':[('is_created','=',True)]}" invisible="1"/>
+                        		<field name="student_id" attrs="{'readonly':[('is_created','=',True)]}"/>                        		                        		 
                         	</group>                        	
+                        	<group>
+                        		<field name="semester_id" attrs="{'readonly':[('is_created','=',True)]}"/>
+                        	</group>
                         </group>
                         <group string="Register Information">
-                       		<field name="offer_course_ids" nolabel="1" options="{'no_create':True}" domain="[('semester_id','=',semester_id)]"/>
-                       	</group>
+                       		<field name="offer_course_ids" nolabel="1" options="{'no_create':True}" 
+                       			domain="[('semester_id','=',semester_id),('has_lab','=',False)]">
+                       			<tree>
+                       				<field name="course_code" string="Crs Code"/>
+									<field name="name"/>
+									<field name="course_id" invisible="1"/>
+									<field name="department_id" invisible="1"/>
+									<field name="dept_academic_code" string="Dept."/>					
+									<field name="course_group" string="T. Grp"/>
+									<field name="number_credits" string="Credits" sum="Total Credits: "/>
+									<field name="numb_students" string="Size"/>
+									<field name="avail_students" string="Avail."/>
+									<field name="academic_year_id" string="Class"/>
+									<field name="semester_id" invisible="1"/>					
+									<field name="display_study_daytime"/>
+									<field name="display_room"/>
+									<field name="display_lecturer"/>
+									<field name="display_course_period"/>
+									<field name="crs_tuition" sum="Total Tuition"/>
+                       			</tree>	
+                       		</field>                       		
+                       	</group>                       	                       	
 					</sheet>
 				</form>
 			</field>

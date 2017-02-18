@@ -5,10 +5,10 @@ from dateutil.relativedelta import relativedelta
 class OfferCourse(models.Model):
     
     _name = 'offer.course'
-    _description = 'Offered Course in Semester'
+    _description = 'Offered Course in Semester'    
     
     # Course Info
-    name = fields.Char(string='Course Name')
+    name = fields.Char(string='Title')
     course_id = fields.Many2one('course', string='Parent Course', ondelete='cascade')
     course_code = fields.Char(string='Course Code', size=10,
                               compute='_generate_course_code')
@@ -21,25 +21,33 @@ class OfferCourse(models.Model):
     department_id = fields.Many2one('department', string='Department',
                                     related='course_id.department_id',
                                     store=True)
-    numb_students = fields.Integer(string='Number of Students',
+    numb_students = fields.Integer(string='Size',
                                    help='Maximum number of students for each offered course')
     # Compute here
     curr_enroll_students = fields.Integer(string='Current Students',
                                         default=0)
+    avail_students = fields.Integer(string='Available', compute='_get_avail_students')
     
     assign_room = fields.Char(string='Assigned Room')
     number_credits = fields.Integer('Credits', related='course_id.number_credits')
-    dept_academic_code = fields.Char('Department', related='department_id.dept_academic_code')
+    dept_academic_code = fields.Char('Department Code', related='department_id.dept_academic_code')
+    
     # Notice Lab and PT Theory Class is similar
+    lab_sect_display = fields.Boolean('Display Lab Section', default=False)
     has_lab = fields.Boolean(string='Requires Lab', default=False)
     is_lab = fields.Boolean(string='Active Lab')
     lab_type = fields.Selection(selection=[('separate', 'Separate'),
                                            ('combine', 'Combine')],
                                 string='Lab Type',
                                 help='Determine if the lab is grouped with theory class or is separated')
-    academic_year_id = fields.Many2one('academic.year', string='Class')
+    theory_course_id = fields.Many2one('offer.course', string='Theory Course')
+    lab_course_ids = fields.One2many('offer.course', 'theory_course_id', string='Lab Courses')
+        
+    # Other Info
+    academic_year_id = fields.Many2one('academic.year', string='Class',
+                                       domain="[('department_id','=',department_id)]")
     semester_id = fields.Many2one('semester', string='Semester')
-    lecturer_id = fields.Many2one('lecturer', string='Lecturer')
+    lecturer_id = fields.Many2one('lecturer', string='Instructor')
     
     # Student List
     student_course_ids = fields.One2many('student.course', 'offer_course_id',
@@ -49,16 +57,29 @@ class OfferCourse(models.Model):
     mid_exam_percent = fields.Integer(string='Midterm Exam Percentage', default=0)
     final_exam_percent = fields.Integer(string='Final Exam Percentage', default=0)
     
-    
     # PERIOD, EXAM SCHEDULE and TIME SCHEDULE go here
 #     calendar_event_ids = fields.One2many('calendar.event', 'offer_course_id', string='Session')
     study_session_ids = fields.One2many('study.period','offer_course_id',string='Periods',
                                         domain=[('is_exam','=',False)])
     exam_session_ids = fields.One2many('study.period', 'offer_course_id', string='Examination',
                                        domain=[('is_exam','=',True)])
+    
+    display_study_daytime = fields.Text(string='Day(s) and Time(s)', compute='_get_display_details')
+    display_course_period = fields.Text(string='Period(s)', compute='_get_display_details')
+    display_lecturer = fields.Text(string='Instructor(s)', compute='_get_display_details')
+    display_room = fields.Text(string='Room(s)', compute='_get_display_details')
+    
+    # Tuition
+    tuition_id = fields.Many2one('course.tuition', string='Credit Cost',
+                                 related='course_id.tuition_id')
+    
+    crs_tuition = fields.Float('Cost', compute='_get_course_tuition')
+    
+    @api.depends('tuition_id', 'number_credits')
+    def _get_course_tuition(self):
+        for record in self:
+            record.crs_tuition = (record.tuition_id.credit_cost * record.number_credits) or 0.0           
                                           
-    
-    
     @api.multi
     def name_get(self):
         res = super(OfferCourse,self).name_get()
@@ -71,13 +92,22 @@ class OfferCourse(models.Model):
             data.append((record.id, val))
         return data
     
-    # If the course is lab, other attributes will be changed
-    @api.onchange('is_lab')
-    def _onchange_is_lab(self):
+    @api.onchange('course_id','theory_course_id')
+    def _onchange_course_id(self):
+        if self.course_id or self.theory_course_id:
+            self.name = self.course_id.name or self.theory_course_id.name
+        # For Lab course only
+#         if self.is_lab and self.theory_course_id:
+#             if not self.course_id:
+#                 self.course_id = self.theory_course_id.course_id
+#             if not self.academic_year_id:
+#                 self.academic_year_id = self.theory_course_id.academic_year_id
+#             if not self.semester_id:
+#                 self.semester_id = self.theory_course_id.semester_id
         if self.is_lab:
-            self.name += ' Lab'
-        else:
-            self.name = self.course_id.name            
+            self.course_id = self.theory_course_id.course_id
+            self.academic_year_id = self.theory_course_id.academic_year_id
+            self.semester_id = self.theory_course_id.semester_id               
     
     # Unique Course Code
     def _generate_str_id(self, id):
@@ -93,6 +123,79 @@ class OfferCourse(models.Model):
         for record in self:
             record.course_code = record.department_id.dept_academic_code +\
                                  record._generate_str_id(record.id) + 'IU'
+    
+    @api.depends('numb_students', 'student_course_ids')
+    def _get_avail_students(self):
+        for record in self:
+            if record.student_course_ids:
+                record.avail_students = record.numb_students - len(record.student_course_ids)
+            else:
+                record.avail_students = record.numb_students
+                                
+    @api.depends('theory_course_id','study_session_ids')
+    def _get_display_details(self):     
+        for record in self:
+            temp = ''
+            temp_lect = ''
+            temp_room = ''
+            temp_date = ''
+            day = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Satday', 'Sunday']
+            # Lab course record
+            if record.is_lab: 
+                # Get Theory days first
+                if record.theory_course_id:                    
+                    temp = record.theory_course_id.display_study_daytime or ''
+                    temp_lect = record.theory_course_id.display_lecturer or ''
+                    temp_room = record.theory_course_id.display_room or '' 
+                    temp_date = record.theory_course_id.display_course_period or ' '                      
+                # Get Lab days        
+                if record.study_session_ids:
+                    for session in record.study_session_ids:
+                        start_d = datetime.strptime(session.start_date, '%Y-%m-%d')
+                        end_d = datetime.strptime(session.end_date, '%Y-%m-%d')
+                        end_d = datetime.strftime(end_d, '%d/%m/%y')
+                        temp_date += datetime.strftime(start_d,'%d/%m/%y')
+                        temp_date += ' - ' + end_d + ' [**]\n'                      
+                        day_indx = start_d.weekday()
+                        temp += day[day_indx] + '\t| '
+                        start_t = session._get_time(session.start_time)
+                        end_t = session._get_time(session.end_time)
+                        temp += start_t + '-' + end_t + ' [**]' +'\n'                    
+                if record.lecturer_id:
+                    temp_lect += (record.lecturer_id.name + '\n') or ''
+                if record.assign_room:
+                    temp_room += (record.assign_room + '\n') or ''
+                
+            # Lecture Course record
+            else:         
+                if record.study_session_ids:
+                    for session in record.study_session_ids:
+                        start_d = datetime.strptime(session.start_date, '%Y-%m-%d')
+                        end_d = datetime.strptime(session.end_date, '%Y-%m-%d')
+                        end_d = datetime.strftime(end_d, '%d/%m/%y')
+                        temp_date += datetime.strftime(start_d,'%d/%m/%y')
+                        temp_date += ' - ' + end_d + '\n'                      
+                        day_indx = start_d.weekday()
+                        temp += day[day_indx] + '\t| '
+                        start_t = session._get_time(session.start_time)
+                        end_t = session._get_time(session.end_time)
+                        temp += start_t + '-' + end_t + '\n'
+#                     if len(record.study_session_ids):
+#                         temp += '\n'
+                if record.lecturer_id:
+                    temp_lect = record.lecturer_id.name + '\n\n'
+                if record.assign_room:
+                    temp_room = record.assign_room + '\n\n'
+                    
+            record.display_study_daytime = temp or ''
+            record.display_lecturer = temp_lect or ''
+            record.display_room = temp_room or ''
+            record.display_course_period = temp_date or ''
+                    
+#     @api.multi
+#     def write(self, vals):
+#         for record in self:
+#             print '=======', vals
                                  
 #     @api.model
 #     def create(self, vals):

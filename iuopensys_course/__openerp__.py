@@ -6,6 +6,11 @@
     'depends': ['base', 'iuopensys_core','calendar'],
     'data': [
         # =========================================
+        # DATA
+        # =========================================
+        'data/course_tuition_data.xml',
+             
+        # =========================================
         # SECURITY
         # =========================================
         
@@ -20,6 +25,7 @@
         'views/study_period_view.xml',
         'views/course_registration_view.xml',
         'views/student_registration_view.xml',
+        'views/course_tuition_view.xml',
         
         # =========================================
         # MENU
@@ -31,8 +37,9 @@
         # =========================================
         
         # =========================================
-        # REPORTS
+        # REPORTS and CUSTOM ASSETS
         # =========================================
         
-             ],             
+        'views/web_custom_assets.xml',
+        ],
 }
