@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<openerp>
+	<data>
+		<record id="default_study_period_time_start_morning" model="ir.config_parameter">
+			<field name="key">iuopensys_course.time_start_morning</field>
+			<field name="value">8.0</field>
+		</record>
+		<record id="default_study_period_time_start_afternoon" model="ir.config_parameter">
+			<field name="key">iuopensys_course.time_start_afternoon</field>
+			<field name="value">13.0</field>
+		</record>
+		<record id="default_study_period_length" model="ir.config_parameter">
+			<field name="key">iuopensys_course.period_length</field>
+			<field name="value">0.75</field>
+		</record>
+	</data>
+</openerp>

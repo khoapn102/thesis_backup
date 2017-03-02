@@ -61,10 +61,14 @@
                         		<field name="end_datetime" invisible="1"/>
                         	</group>
                         </group>
+                        <div>
+                        	<label for="ext_note" string="NOTE:"/>
+                        	<field name="ext_note" nolabel="1"/>
+                        </div>
                         <group string="Register Information">
                        		<field name="offer_course_ids" nolabel="1" options="{'no_create':True}" 
                        			domain="[('semester_id','=',semester_id),('has_lab','=',False)]">
-                       			<tree colors="red:avail_students==0">
+                       			<tree colors="red:avail_students==0" edit="false">
                        				<field name="course_code" string="Crs Code"/>
 									<field name="name"/>
 									<field name="course_id" invisible="1"/>

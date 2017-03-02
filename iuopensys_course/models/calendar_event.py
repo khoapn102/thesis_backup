@@ -5,6 +5,7 @@ class CalendarEvent(models.Model):
     _inherit = 'calendar.event'
     
     study_period_id = fields.Many2one('study.period', string='Study Period', ondelete='cascade')
+    offer_course_id = fields.Many2one('Course', related='study_period_id.offer_course_id')
     
 #     @api.onchange('offer_course_id')
 #     def _onchange_offer_course_id(self):

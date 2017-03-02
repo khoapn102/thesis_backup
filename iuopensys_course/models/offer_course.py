@@ -1,6 +1,7 @@
 from openerp import models, fields, api
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
+from openerp.exceptions import ValidationError, Warning
 
 class OfferCourse(models.Model):
     
@@ -74,6 +75,25 @@ class OfferCourse(models.Model):
                                  related='course_id.tuition_id')
     
     crs_tuition = fields.Float('Cost', compute='_get_course_tuition')
+    
+    @api.constrains('study_session_ids')
+    def _check_overlap_study_session(self):
+        for record in self:
+            if record.study_session_ids:
+                session_lst = []
+                for session in record.study_session_ids:
+                    # Temp ('Char', float, float)
+                    temp = (session.crs_day, session.start_time, session.end_time)
+                    if not any(session.crs_day in item for item in session_lst):
+                        session_lst.append(temp)
+                    else:
+                        temp_lst = [(item[1],item[2]) for item in session_lst if item[0] == session.crs_day]
+                        temp_lst.append((session.start_time, session.end_time))
+#                         print '+++++', temp_lst
+                        overlap_res = [[x,y] for x in temp_lst for y in temp_lst if x is not y and x[1] >= y[0] and x[0] <= y[0]]
+                        if len(overlap_res) > 0:
+                            raise ValidationError('Each session\'s date & time must be different.')
+                        
     
     @api.depends('tuition_id', 'number_credits')
     def _get_course_tuition(self):

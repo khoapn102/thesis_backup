@@ -38,7 +38,6 @@ class CourseRegistration(models.Model):
             start = datetime.strptime(record.start_datetime,format)
             end = datetime.strptime(record.end_datetime,format)
             diff = int((end-start).seconds)
-            print '======', diff
             if diff == 0:
                 raise ValidationError('End time must be different from Start time !')
         

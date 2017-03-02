@@ -14,14 +14,21 @@
 			<field name="arch" type="xml">
 				<tree>
 					<field name="offer_course_id"/>
-					<field name="name"/>					
+					<field name="name"/>
+					<field name="crs_day"/>										
 					<field name="start_date"/>
 					<field name="end_date"/>
+					<field name="study_period_start"/>
+					<field name="amount_period"/>
 					<field name="start_time" widget="float_time"/>
 					<field name="end_time" widget="float_time"/>
 					<field name="duration" widget="float_time"/>
+					<field name="is_recurrency"/>
 					<field name="is_summer"/>
 					<field name="is_exam"/>
+					<field name="time_start_morning" invisible="1"/>
+					<field name="time_start_afternoon" invisible="1"/>
+					<field name="default_period_length" invisible="1"/>
 				</tree>
 			</field>
 		</record>
@@ -43,16 +50,24 @@
                         	<group string="Basic Information">
                         		<group>
                         			<field name="offer_course_id"/>
-                        			<field name="start_date"/>
+                        			<field name="crs_day"/>
+                        			<field name="start_date"/>                        			
                         			<field name="end_date"/>
-                        			<field name="is_summer"/>
-                        		</group>
-                        		<group>                        			
-                        			<field name="start_time" widget="float_time"/>
-                        			<field name="end_time" widget="float_time"/>
-                        			<field name="duration" widget="float_time"/>
+                        			<field name="is_recurrency"/>
                         			<field name="is_exam"/>
                         			<field name="exam_type" attrs="{'invisible': [('is_exam','=',False)]}"/>
+                        			<field name="time_start_morning" invisible="1"/>
+                        			<field name="time_start_afternoon" invisible="1"/>
+									<field name="default_period_length" invisible="1"/>                      			
+                        		</group>
+                        		<group>
+                        			<field name="study_period_start"/>
+                        			<field name="amount_period"/>                     			
+                        			<field name="start_time" widget="float_time"/>
+                        			<field name="end_time" widget="float_time"/>
+                        			<field name="duration" widget="float_time"/>                    			
+                        			<field name="is_summer"/>
+                        			
                         		</group>
                         	</group>
                         </group>

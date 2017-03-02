@@ -5,9 +5,8 @@ class StudentCourse(models.Model):
     _name = 'student.course'
     _description = 'Registered Course of Student'
     
-    offer_course_id = fields.Many2one('offer.course', string='Offer Course')
-    student_id = fields.Many2one('student', string='Student')
-    
+    offer_course_id = fields.Many2one('offer.course', string='Offer Course', ondelete="cascade")
+    student_id = fields.Many2one('student', string='Student', ondelete="cascade")    
     studentId = fields.Char(string='Student ID', related='student_id.studentId')
     student_lname = fields.Char(string='Last Name', related='student_id.last_name')
     student_fname = fields.Char(string='First Name', related='student_id.name')

@@ -9,6 +9,7 @@
         # DATA
         # =========================================
         'data/course_tuition_data.xml',
+        'data/study_period_data.xml',
              
         # =========================================
         # SECURITY
