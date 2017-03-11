@@ -1,20 +1,104 @@
 <?xml version="1.0" ?>
 <openerp>
-	<data>
+	<data>		
+		<!-- Student Tuition for Staff -->
+		<record model="ir.actions.act_window" id="student_registration_tuition_action">
+			<field name="name">Student Tuition</field>
+			<field name="res_model">student.registration</field>
+			<field name="view_mode">tree,form</field>
+		</record>
+		<record model="ir.actions.act_window.view" id="student_registration_tuition_tree_view">
+			<field name="sequence" eval="1"/>
+			<field name="name">Student Tuition</field>
+			<field name="res_model">student.registration</field>
+			<field name="view_mode">tree</field>
+			<field name="view_id" ref="iuopensys_course.student_tuition_tree_view"/>
+			<field name="act_window_id" ref="student_registration_tuition_action"/>
+		</record>
+		<record model="ir.actions.act_window.view" id="student_registration_tuition_form_view">
+			<field name="sequence" eval="2"/>
+			<field name="name">Student Tuition</field>
+			<field name="res_model">student.registration</field>
+			<field name="view_mode">form</field>
+			<field name="view_id" ref="iuopensys_course.student_tuition_form_view"/>
+			<field name="act_window_id" ref="student_registration_tuition_action"/>
+		</record>
+		<record id="student_tuition_tree_view" model="ir.ui.view">
+			<field name="name">Tuition</field>
+			<field name="model">student.registration</field>
+			<field name="type">tree</field>
+			<field name="arch" type="xml">
+				<tree>
+					<field name="student_id"/>
+					<field name="student_balance"/>
+					<field name="semester_id"/>
+					<field name="total_actual_creds"/>
+					<field name="amount_tuition"/>
+					<field name="amount_paid"/>
+					<field name="amount_leftover"/>					
+					<field name="reg_state"/>					
+				</tree>
+			</field>
+		</record>
+		<record id="student_tuition_form_view" model="ir.ui.view">
+			<field name="name">Student Tuition</field>
+			<field name="model">student.registration</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<form>					
+					<sheet>
+						<group string="Tuition Information">
+                   			<group>
+                   				<field name="student_balance"/>
+                   				<field name="total_creds"/>
+                   				<field name="total_actual_creds"/>
+                   			</group>
+                   			<group>
+                   				<label for="amount_tuition"  style="font-weight:bold"/>
+                   				<div>
+                   					<field name="amount_tuition" class="oe_inline"/>
+                   					<span> USD</span>
+                   				</div>
+                   				<label for="amount_paid"  style="font-weight:bold"/>
+                   				<div>
+                   					<field name="amount_paid" class="oe_inline"/>
+                   					<span> USD</span>
+                   				</div>
+                   				<label for="amount_leftover"  style="font-weight:bold"/>
+                   				<div>
+                   					<field name="amount_leftover" class="oe_inline"/>
+                   					<span> USD</span>
+                   				</div>
+                   				<field name="is_full_paid"/>
+                   			</group>                    			
+                   		</group>					
+					</sheet>
+				</form>
+			</field>
+		</record>
+		
+		<!-- Student Registration for Student -->
 		<record model="ir.actions.act_window" id="student_registration_main_action">
 			<field name="name">Registration Form</field>
 			<field name="res_model">student.registration</field>
 			<field name="view_mode">tree,form</field>
 		</record>
-		
-		<!-- <record model="ir.actions.act_window" id="student_registration_edit_action">
-			<field name="name">Registration Form</field>
+		<record model="ir.actions.act_window.view" id="student_registration_main_tree_view">
+			<field name="sequence" eval="1"/>
+			<field name="name">Student Tuition</field>
+			<field name="res_model">student.registration</field>
+			<field name="view_mode">tree</field>
+			<field name="view_id" ref="iuopensys_course.student_registration_tree_view"/>
+			<field name="act_window_id" ref="student_registration_main_action"/>
+		</record>
+		<record model="ir.actions.act_window.view" id="student_registration_main_form_view">
+			<field name="sequence" eval="2"/>
+			<field name="name">Student Tuition</field>
 			<field name="res_model">student.registration</field>
 			<field name="view_mode">form</field>
-			<field name="view_type">form</field>
-			<field name="view_id" ref="student_registration_form_view"/>
-			<field name="target">inline</field>
-		</record> -->
+			<field name="view_id" ref="iuopensys_course.student_registration_form_view"/>
+			<field name="act_window_id" ref="student_registration_main_action"/>
+		</record>		
 		
 		<record id="student_registration_tree_view" model="ir.ui.view">
 			<field name="name">Registration Form</field>
@@ -39,15 +123,23 @@
 			<field name="arch" type="xml">
 				<form>
 					<header>						
-						<field name="reg_state" widget="statusbar"/>
+						<field name="reg_state" widget="statusbar" clickable="1"/>
 					</header>
 					<sheet>
+						<div class="oe_button_box" name="my_button_box">
+                            <button name="" type="" class="oe_stat_button" icon="fa-star">
+                            	<field string="Credits" name="stat_button_total_creds" widget="statinfo"/>
+                            </button>
+                            <button name="" type="" class="oe_stat_button" icon="fa-dollar">
+                            	<field string="Tuition" name="stat_button_amount_tuition" widget="statinfo"/>
+                            </button>
+                        </div>                        
 						<div class="oe_title">
                             <!-- <label for="name" class="oe_edit_only" string="Name"/> -->
                             <h1>
                             	<field name="name" class="oe_inline" nolabel="1" style="width:90%%"/>
                             </h1>
-                        </div>
+                        </div>                         
                         <group>
                         	<group>
                         		<field name="is_created" invisible="1"/>
@@ -59,35 +151,89 @@
                         		<field name="semester_id" attrs="{'readonly':[('is_created','=',True)]}"/>
                         		<field name="start_datetime" invisible="1"/>
                         		<field name="end_datetime" invisible="1"/>
+                        		<field name="in_period" invisible="1"/>
                         	</group>
                         </group>
                         <div>
                         	<label for="ext_note" string="NOTE:"/>
                         	<field name="ext_note" nolabel="1"/>
                         </div>
-                        <group string="Register Information">
-                       		<field name="offer_course_ids" nolabel="1" options="{'no_create':True}" 
-                       			domain="[('semester_id','=',semester_id),('has_lab','=',False)]">
-                       			<tree colors="red:avail_students==0" edit="false">
-                       				<field name="course_code" string="Crs Code"/>
-									<field name="name"/>
-									<field name="course_id" invisible="1"/>
-									<field name="department_id" invisible="1"/>
-									<field name="dept_academic_code" string="Dept."/>					
-									<field name="course_group" string="T. Grp"/>
-									<field name="number_credits" string="Credits" sum="Total Credits: "/>
-									<field name="numb_students" string="Size"/>
-									<field name="avail_students" string="Avail."/>
-									<field name="academic_year_id" string="Class"/>
-									<field name="semester_id" invisible="1"/>					
-									<field name="display_study_daytime"/>
-									<field name="display_room"/>
-									<field name="display_lecturer"/>
-									<field name="display_course_period"/>
-									<field name="crs_tuition" sum="Total Tuition"/>
-                       			</tree>	
-                       		</field>                       		
-                       	</group>                       	                       	
+                        <notebook>
+                        	<page string="Register">
+                        		<group string="Registered Courses">
+		                       		<field name="offer_course_ids" nolabel="1" options="{'no_create':True}" 
+		                       			domain="[('semester_id','=',semester_id),('has_lab','=',False)]">
+		                       			<tree edit="false">
+		                       				<field name="course_code" string="Crs Code"/>
+											<field name="name"/>
+											<field name="course_id" invisible="1"/>
+											<field name="department_id" invisible="1"/>
+											<field name="dept_academic_code" string="Dept."/>					
+											<field name="course_group" string="T. Grp"/>
+											<field name="number_credits" string="Credits" sum="Total Credits: "/>
+											<field name="numb_students" string="Size"/>
+											<field name="avail_students" string="Avail." fg_color="red:avail_students==0"/>
+											<field name="academic_year_id" string="Class"/>
+											<field name="semester_id" invisible="1"/>					
+											<field name="display_study_daytime"/>
+											<field name="display_room"/>
+											<field name="display_lecturer"/>
+											<field name="display_course_period"/>
+											<field name="crs_tuition" sum="Total Tuition"/>
+		                       			</tree>	
+		                       		</field>                       		
+		                       	</group>
+		                       	<group string="Dropped Courses" attrs="{'invisible':[('in_period','=', True)]}">		                       		
+		                       		<field name="drop_course_ids" nolabel="1" options="{'no_create':True}" 
+		                       			domain="[('semester_id','=',semester_id),('has_lab','=',False)]">
+		                       			<tree edit="false" create="false">
+		                       				<field name="course_code" string="Crs Code"/>
+											<field name="name"/>
+											<field name="course_id" invisible="1"/>
+											<field name="department_id" invisible="1"/>
+											<field name="dept_academic_code" string="Dept."/>					
+											<field name="course_group" string="T. Grp"/>
+											<field name="number_credits" string="Credits" sum="Total Credits: "/>
+											<field name="academic_year_id" string="Class"/>
+											<field name="semester_id" invisible="1"/>					
+											<field name="display_study_daytime"/>
+											<field name="display_lecturer"/>
+											<field name="display_course_period"/>
+											<field name="crs_tuition" sum="Total Tuition"/>
+		                       			</tree>	
+		                       		</field>		                       				
+		                       	</group>
+                        	</page>
+                        	<page string="Tuition">
+                        		<group string="Tuition Information">
+                        			<group>
+                        				<field name="student_balance"/>
+                        				<field name="total_creds"/>
+                        				<field name="total_actual_creds"/>
+                        			</group>
+                        			<group>
+                        				<label for="amount_tuition"  style="font-weight:bold"/>
+                        				<div>
+                        					<field name="amount_tuition" class="oe_inline"/>
+                        					<span> USD</span>
+                        				</div>
+                        				<label for="amount_paid"  style="font-weight:bold"/>
+                        				<div>
+                        					<field name="amount_paid" class="oe_inline"/>
+                        					<span> USD</span>
+                        				</div>
+                        				<label for="amount_leftover"  style="font-weight:bold"/>
+                        				<div>
+                        					<field name="amount_leftover" class="oe_inline"/>
+                        					<span> USD</span>
+                        				</div>
+                        				<field name="is_full_paid"/>
+                        			</group>
+                        			
+                        		</group>
+                        	</page>
+                        </notebook>
+                                               	                       	
 					</sheet>
 				</form>
 			</field>

@@ -68,9 +68,16 @@
 		<!-- Course Tuition -->
 		<menuitem id="course_tuition_main_menu"
 			name="Course Tuition"
+			sequence="5"
+			parent="course_registration_core_menu"
+			action="course_tuition_main_action"/>
+			
+		<!-- Student Tuition -->
+		<menuitem id="student_registration_tuition_menu"
+			name="Student Tuition"
 			sequence="4"
 			parent="course_registration_core_menu"
-			action="course_tuition_main_action"/>			
+			action="student_registration_tuition_action"/>					
 						
 	</data>
 </openerp>

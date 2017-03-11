@@ -44,6 +44,7 @@
           						<group>
           							<field name="department_id" style="width:60%%"/>
           							<field name="number_credits" style="width:40%%"/>
+          							<field name="number_credits_actual" style="width: 40%%"/>
           							<field name="crs_lang"/>
           						</group>
           						<group>

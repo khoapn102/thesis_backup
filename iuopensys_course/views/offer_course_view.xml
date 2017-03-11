@@ -22,7 +22,7 @@
 					<field name="department_id" invisible="1"/>
 					<field name="dept_academic_code"/>					
 					<field name="course_group"/>
-					<field name="number_credits"/>
+					<field name="number_credits_actual"/>
 					<field name="numb_students"/>
 					<field name="avail_students"/>
 					<field name="academic_year_id"/>
@@ -43,6 +43,10 @@
 			<field name="arch" type="xml">
 				<form>
 					<sheet>
+						<div class="oe_button_box" name="my_button_box">
+                            <button name="print_student" type="object" class="oe_stat_button" icon="fa-print" string="Exam-ready students">
+                            </button>
+                        </div>
 						<div class="oe_title">
                             <label for="name" class="oe_edit_only" string="Course Name"/>
                             <h1>
@@ -52,7 +56,9 @@
                             <h2>
                             	<field name="course_code"/>
                             </h2>
+                            
                         </div>
+                        
                         <group colspan="4">
           					<group string="Course Information">
           						<group>
@@ -65,7 +71,7 @@
           							<field name="is_lab" 
           								attrs="{'invisible':[('lab_sect_display','=',False)]}"/>
           							<field name="theory_course_id" attrs="{'invisible':[('is_lab','=',False)]}"/>
-          							<field name="lab_type" attrs="{'invisible':[('is_lab', '=', False)]}"/>          							
+          							<field name="lab_type" attrs="{'invisible':[('is_lab', '=', False)]}"/>
           						</group>
           						<group>
           							<field name="course_group"/>
@@ -73,7 +79,9 @@
           							<field name="assign_room"/>
           							<field name="numb_students"/>
           							<field name="avail_students"/>
+          							<field name="number_credits" invisible="1"/>          							
           							<field name="tuition_id"/>
+          							<field name="number_credits_actual"/>
           							<field name="display_study_daytime" invisible="1"/>
           							<field name="display_lecturer" invisible="1"/>
           							<field name="display_room" invisible="1"/>
@@ -168,7 +176,7 @@
        						<page string="Student List">
        							<group colspan="4">
        								<field name="student_course_ids" nolabel="1" widget="x2many_selectable">
-       									<tree editable="top">
+       									<tree create="false">
        										<field name="studentId"/>
        										<field name="student_lname"/>
        										<field name="student_fname"/>

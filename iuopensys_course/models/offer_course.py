@@ -6,7 +6,15 @@ from openerp.exceptions import ValidationError, Warning
 class OfferCourse(models.Model):
     
     _name = 'offer.course'
-    _description = 'Offered Course in Semester'    
+    _description = 'Offered Course in Semester'
+    
+    def _default_number_credits_actual(self):
+        context = self._context
+        if 'default_course_id' in context:
+            res = self.env['course'].search([('id','=', context['default_course_id'])])
+            if res:
+                return res[0].number_credits
+        return 0
     
     # Course Info
     name = fields.Char(string='Title')
@@ -24,6 +32,7 @@ class OfferCourse(models.Model):
                                     store=True)
     numb_students = fields.Integer(string='Size',
                                    help='Maximum number of students for each offered course')
+    
     # Compute here
     curr_enroll_students = fields.Integer(string='Current Students',
                                         default=0)
@@ -31,6 +40,8 @@ class OfferCourse(models.Model):
     
     assign_room = fields.Char(string='Assigned Room')
     number_credits = fields.Integer('Credits', related='course_id.number_credits')
+    number_credits_actual = fields.Integer('Credits for Tuition', required=True,
+                                           related="course_id.number_credits_actual")
     dept_academic_code = fields.Char('Department Code', related='department_id.dept_academic_code')
     
     # Notice Lab and PT Theory Class is similar
@@ -76,6 +87,9 @@ class OfferCourse(models.Model):
     
     crs_tuition = fields.Float('Cost', compute='_get_course_tuition')
     
+    # Note
+    ext_note = fields.Text('Note')
+    
     @api.constrains('study_session_ids')
     def _check_overlap_study_session(self):
         for record in self:
@@ -98,7 +112,7 @@ class OfferCourse(models.Model):
     @api.depends('tuition_id', 'number_credits')
     def _get_course_tuition(self):
         for record in self:
-            record.crs_tuition = (record.tuition_id.credit_cost * record.number_credits) or 0.0           
+            record.crs_tuition = (record.tuition_id.credit_cost * record.number_credits_actual) or 0.0                             
                                           
     @api.multi
     def name_get(self):
@@ -159,7 +173,7 @@ class OfferCourse(models.Model):
             temp_lect = ''
             temp_room = ''
             temp_date = ''
-            day = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Satday', 'Sunday']
+            day = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
             # Lab course record
             if record.is_lab: 
                 # Get Theory days first
@@ -212,10 +226,10 @@ class OfferCourse(models.Model):
             record.display_room = temp_room or ''
             record.display_course_period = temp_date or ''
                     
-#     @api.multi
-#     def write(self, vals):
-#         for record in self:
-#             print '=======', vals
+    @api.multi
+    def write(self, vals):
+        for record in self:
+            print '=======', vals
                                  
 #     @api.model
 #     def create(self, vals):

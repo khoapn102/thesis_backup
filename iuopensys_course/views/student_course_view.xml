@@ -27,7 +27,7 @@
 			<field name="model">student.course</field>
 			<field name="type">form</field>
 			<field name="arch" type="xml">
-				<form>
+				<form edit="false">
 					<sheet>
 						<group colspan="4">
 							<group>

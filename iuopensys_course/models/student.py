@@ -10,6 +10,7 @@ class Student(models.Model):
     year_batch_id = fields.Many2one('year.batch', string='Batch',
                                     related='academic_year_id.year_batch_id',
                                     store=True)
+    student_balance = fields.Float('Student Balance', default=0.0)
     
     @api.model
     def _name_search(self, name='', args=None, operator='ilike', limit=100, name_get_uid=None):

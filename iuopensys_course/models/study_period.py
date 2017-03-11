@@ -15,6 +15,12 @@ class StudyPeriod(models.Model):
     def _get_default_period_start_afternoon(self):
         return self.env['ir.config_parameter'].get_param('iuopensys_course.time_start_afternoon')
     
+    period_time_start = {'1': 8.0, '2': 8.75, '3': 10, '4': 10.75, '5': 11.5,
+                         '6': 13.0, '7': 13.75, '8': 14.75, '9':15.5, '10': 16.25}
+    period_time_end = {'1': 8.75, '2': 9.5, '3': 10.75, '4': 11.5, '5': 12.25,
+                       '6': 13.75, '7': 14.5, '8': 15.5, '9': 16.25, '10': 17.0}
+    period_dur = ['1','2','3','4','5','6','7', '8', '9', '10']
+    
     _name = 'study.period'
     _description = 'Study Period for Course (Session, Examination, etc.)'
     
@@ -63,7 +69,7 @@ class StudyPeriod(models.Model):
                                                 ('3', '3'),
                                                 ('4', '4'),
                                                 ('5', '5')],
-                                     string='Amt.P', help='Amount periods for session')
+                                     string='Amt', help='Amount periods for session')
 
     
 #     start_datetime = fields.Datetime('Start Session (same day)')
@@ -125,12 +131,15 @@ class StudyPeriod(models.Model):
     def _onchange_study_period(self):        
         print '++++', float(self.time_start_morning), ' ', self.default_period_length, ' ', self.time_start_afternoon
         if self.study_period_start:
-            if int(self.study_period_start) <= 5:
-                self.start_time = float(self.time_start_morning) + (int(self.study_period_start)-1)*float(self.default_period_length)
-            else:
-                self.start_time = float(self.time_start_afternoon) + (int(self.study_period_start)-6)*float(self.default_period_length)
+            self.start_time = self.period_time_start[self.study_period_start]
+#             if int(self.study_period_start) <= 5:
+#                 self.start_time = float(self.time_start_morning) + (int(self.study_period_start)-1)*float(self.default_period_length)
+#             else:
+#                 self.start_time = float(self.time_start_afternoon) + (int(self.study_period_start)-6)*float(self.default_period_length)
         if self.amount_period:
-            self.end_time = self.start_time + int(self.amount_period)*self.default_period_length
+            index = str(int(self.study_period_start) + int(self.amount_period) - 1)
+#             self.end_time = self.start_time + int(self.amount_period)*self.default_period_length
+            self.end_time = self.period_time_end[index]
     
     @api.model
     def create(self, vals):

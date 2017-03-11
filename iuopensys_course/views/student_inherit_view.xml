@@ -24,6 +24,9 @@
 				<xpath expr="//field[@name='student_class_code']" position="after">
 					<field name="year_batch_id"/>
 				</xpath>
+				<xpath expr="//field[@name='studentId']" position="after">
+					<field name="student_balance" invisible="1"/>
+				</xpath>
 			</field>
 		</record>
 	</data>
