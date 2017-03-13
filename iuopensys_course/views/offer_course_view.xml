@@ -180,10 +180,11 @@
        										<field name="studentId"/>
        										<field name="student_lname"/>
        										<field name="student_fname"/>
-       										<field name="student_class_code"/>      										       										
-       										<field name="mid_score"/>
-       										<field name="final_score"/>
-       										<field name="course_gpa"/>       										
+       										<field string="Class Code" name="student_class_code"/>      										       										
+       										<field name="mid_score" string="Midterm Score"/>
+       										<field name="final_score" string="Final Score"/>
+       										<field name="course_gpa" string="GPA"/>      										
+       										<field name="ext_note"/>
        									</tree>
        								</field>
        							</group>

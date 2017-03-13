@@ -225,11 +225,6 @@ class OfferCourse(models.Model):
             record.display_lecturer = temp_lect or ''
             record.display_room = temp_room or ''
             record.display_course_period = temp_date or ''
-                    
-    @api.multi
-    def write(self, vals):
-        for record in self:
-            print '=======', vals
                                  
 #     @api.model
 #     def create(self, vals):

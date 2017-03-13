@@ -39,7 +39,11 @@ class StudyPeriod(models.Model):
                             help='Session end time')
     duration = fields.Float('Duration', required=True)
     is_summer = fields.Boolean(string='Summer Session')
+    
     is_exam = fields.Boolean(string='Exam Session', default=False)
+    proctor_one_id = fields.Many2one(string='First Proctor')
+    proctor_two_id = fields.Many2one(string='Second Proctor')
+    
     exam_type = fields.Selection(selection=[('mid','Midterm'),
                                             ('final','Final')],
                                  string='Exam Type', default='mid')
@@ -144,15 +148,18 @@ class StudyPeriod(models.Model):
     @api.model
     def create(self, vals):
         curr_period = super(StudyPeriod,self).create(vals)
-#         print '-------', self._context   
-        lecturer_id = curr_period.offer_course_id.lecturer_id
+#         print '-------', self._context  
+        # Add Lecturer to the schedule 
+        lecturer_id = curr_period.offer_course_id.lecturer_id or False
         start_dt = curr_period._get_datetime(curr_period.start_date, curr_period.start_time)
         end_dt = curr_period._get_datetime(curr_period.start_date, curr_period.end_time)
         lab = ''
+        # For Lab Course
         if curr_period.offer_course_id.is_lab:
             lab = ' Lab '
         else:
             lab = ' '
+            
         event_name = curr_period.offer_course_id.name + lab +\
                      curr_period.offer_course_id.course_code + '-' + curr_period.name
         new_vals = {'name': event_name,
@@ -161,8 +168,10 @@ class StudyPeriod(models.Model):
                     'stop': end_dt,
                     'duration': curr_period.duration,
                     'study_period_id': curr_period.id,
-                    'partner_ids': [(6, 0, [lecturer_id.user_id.partner_id.id])],                                         
                     }
+        if lecturer_id:
+            new_vals['partner_ids'] = [(6, 0, [lecturer_id.user_id.partner_id.id])]
+            
         if curr_period.is_recurrency:
             new_vals['recurrency'] = True
             new_vals['interval'] = 1
@@ -171,6 +180,10 @@ class StudyPeriod(models.Model):
             new_vals['final_date'] = curr_period.end_date
 #         print '+++++', new_vals
         self.env['calendar.event'].create(new_vals)
+        planned_ids = self.env['calendar.event'].search([('is_planned_event','=', True),
+                                                         ('start_date', '>=', self.start_date),
+                                                         ('start_date', '<=', self.end_date)])
+        print '++++ Planned', planned_ids
         return curr_period
     
     @api.multi
@@ -179,15 +192,18 @@ class StudyPeriod(models.Model):
         1. If any date/time change
         2. Save the list of partner. Then delete all prev events.
         3. Create new events base on the new date/time with prev partner list.
+        4. Check for Holidays/Planned Event to apply new changes.
         """
         for record in self:
             if vals:
                 event_ids = self.env['calendar.event'].search([('study_period_id', '=', record.id)])
                 partner_ids = event_ids[0].partner_ids
                 lst_partner = []
+                # Retrieve current partner
                 for partner in partner_ids:
                     lst_partner.append(partner.id)
                 event_ids.unlink()
+                # Get Lecturer of current Course
                 lecturer_id = record.offer_course_id.lecturer_id
                 rec_start_dt = vals['start_date'] if 'start_date' in vals else record.start_date
                 rec_end_dt = vals['end_date'] if 'end_date' in vals else record.end_date

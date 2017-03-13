@@ -27,6 +27,7 @@
         'views/course_registration_view.xml',
         'views/student_registration_view.xml',
         'views/course_tuition_view.xml',
+        'views/calendar_event_inherit_view.xml',
         
         # =========================================
         # MENU

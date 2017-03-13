@@ -48,6 +48,14 @@ class StudentRegistration(models.Model):
     
     in_period = fields.Boolean('In Reg Time', compute='_check_in_period')
     
+    @api.one
+    def paid_in_full(self):
+        self.write({'is_full_paid': not self.is_full_paid})
+        if self.is_full_paid:
+            self.write({'amount_paid': self.amount_tuition})
+        else:
+            self.write({'amount_paid': 0})
+    
     def _check_in_period(self):
         now = datetime.now()
         start = datetime.strptime(self.start_datetime, '%Y-%m-%d %H:%M:%S')
@@ -93,6 +101,8 @@ class StudentRegistration(models.Model):
     def _onchange_full_paid(self):
         if self.is_full_paid:
             self.amount_paid = self.amount_tuition
+        else:
+            self.amount_paid = 0
     
     @api.depends('amount_paid')
     def _get_amt_leftover(self):

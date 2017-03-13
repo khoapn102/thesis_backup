@@ -7,6 +7,8 @@ class CalendarEvent(models.Model):
     study_period_id = fields.Many2one('study.period', string='Study Period', ondelete='cascade')
     offer_course_id = fields.Many2one('Course', related='study_period_id.offer_course_id')
     
+    is_planned_event = fields.Boolean('Planned Event')
+    
 #     @api.onchange('offer_course_id')
 #     def _onchange_offer_course_id(self):
 #         for record in self:

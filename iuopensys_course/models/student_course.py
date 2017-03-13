@@ -27,6 +27,8 @@ class StudentCourse(models.Model):
     
     course_gpa = fields.Float(string='Course GPA', compute='_compute_course_gpa')
     
+    ext_note = fields.Char(string='Note')
+    
     @api.multi
     def _compute_course_gpa(self):
         for record in self:

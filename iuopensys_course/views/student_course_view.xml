@@ -45,6 +45,10 @@
 								<field name="course_gpa"/>
 							</group>
 						</group>
+						<div>
+							<label for="ext_note" string="Note"/>
+							<field name="ext_note" nolabel="1"/>
+						</div>
 					</sheet>
 				</form>
 			</field>

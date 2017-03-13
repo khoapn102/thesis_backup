@@ -10,7 +10,7 @@ class Semester(models.Model):
     
     name = fields.Char(string='Semester', compute='_get_semester_name')
     semester_year = fields.Char(string='Year',required=True,
-                       default=str(datetime.now().year))
+                       default=(str(datetime.now().year) + '-' + str(datetime.now().year + 1)))
     semester_type = fields.Selection(selection=[('1', 'Semester 1'),
                                                 ('2', 'Semester 2'),
                                                 ('3', 'Semester 3')],
@@ -32,11 +32,11 @@ class Semester(models.Model):
     @api.multi
     def _get_semester_name(self):
         for record in self:
-            record.name = record.semester_type + '-' + record.semester_year
+            record.name = record.semester_type + '-' + record.semester_year.split('-')[0]
     @api.multi
     def _get_semester_code(self):
         for record in self:
-            record.semester_code = record.semester_year + (record.semester_type or "")
+            record.semester_code = record.semester_year.split('-')[0] + (record.semester_type or "")
     
     @api.onchange('start_date')
     def _onchange_start_date(self):

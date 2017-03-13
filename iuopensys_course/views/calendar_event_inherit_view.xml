@@ -1,0 +1,18 @@
+<?xml version="1.0" ?>
+<openerp>
+	<data>
+		<record id="calendar_event_form_view_inherit" model="ir.ui.view">
+			<field name="name">calendar.event.form.view.inherit</field>
+			<field name="model">calendar.event</field>
+			<field name="inherit_id" ref="calendar.view_calendar_event_form"/>
+			<field name="arch" type="xml">
+				<xpath expr="//field[@name='alarm_ids']" position="after">
+					<field name="is_planned_event"/>
+				</xpath>
+				<xpath expr="//field[@name='location']" position="attributes">
+					<attribute name="invisible">True</attribute>
+				</xpath>
+			</field>
+		</record>
+	</data>
+</openerp>
