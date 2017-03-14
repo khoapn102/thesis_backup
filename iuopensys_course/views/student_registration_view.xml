@@ -1,28 +1,7 @@
 <?xml version="1.0" ?>
 <openerp>
 	<data>		
-		<!-- Student Tuition for Staff -->
-		<record model="ir.actions.act_window" id="student_registration_tuition_action">
-			<field name="name">Student Tuition</field>
-			<field name="res_model">student.registration</field>
-			<field name="view_mode">tree,form</field>
-		</record>
- 		<record model="ir.actions.act_window.view" id="student_registration_tuition_tree_view">
-			<field name="sequence" eval="1"/>
-			<field name="name">Student Tuition</field>
-			<field name="res_model">student.registration</field>
-			<field name="view_mode">tree</field>
-			<field name="view_id" ref="student_tuition_tree_view"/>
-			<field name="act_window_id" ref="student_registration_tuition_action"/>
-		</record>
-		<record model="ir.actions.act_window.view" id="student_registration_tuition_form_view">
-			<field name="sequence" eval="2"/>
-			<field name="name">Student Tuition</field>
-			<field name="res_model">student.registration</field>
-			<field name="view_mode">form</field>
-			<field name="view_id" ref="student_tuition_form_view"/>
-			<field name="act_window_id" ref="student_registration_tuition_action"/>
-		</record>
+		<!-- Student Tuition for Staff -->		
 		<record id="student_tuition_tree_view" model="ir.ui.view">
 			<field name="name">Tuition</field>
 			<field name="model">student.registration</field>
@@ -90,29 +69,29 @@
 			</field>
 		</record>
 		
-		<!-- Student Registration for Student -->
-		<record model="ir.actions.act_window" id="student_registration_main_action">
-			<field name="name">Registration Form</field>
+		<record model="ir.actions.act_window" id="student_registration_tuition_action">
+			<field name="name">Student Tuition</field>
 			<field name="res_model">student.registration</field>
 			<field name="view_mode">tree,form</field>
 		</record>
-		<record model="ir.actions.act_window.view" id="student_registration_main_tree_view">
+ 		<record model="ir.actions.act_window.view" id="student_registration_tuition_tree_view">
 			<field name="sequence" eval="1"/>
 			<field name="name">Student Tuition</field>
 			<field name="res_model">student.registration</field>
 			<field name="view_mode">tree</field>
-			<field name="view_id" ref="iuopensys_course.student_registration_tree_view"/>
-			<field name="act_window_id" ref="student_registration_main_action"/>
+			<field name="view_id" ref="student_tuition_tree_view"/>
+			<field name="act_window_id" ref="student_registration_tuition_action"/>
 		</record>
-		<record model="ir.actions.act_window.view" id="student_registration_main_form_view">
+		<record model="ir.actions.act_window.view" id="student_registration_tuition_form_view">
 			<field name="sequence" eval="2"/>
 			<field name="name">Student Tuition</field>
 			<field name="res_model">student.registration</field>
 			<field name="view_mode">form</field>
-			<field name="view_id" ref="iuopensys_course.student_registration_form_view"/>
-			<field name="act_window_id" ref="student_registration_main_action"/>
-		</record>		
+			<field name="view_id" ref="student_tuition_form_view"/>
+			<field name="act_window_id" ref="student_registration_tuition_action"/>
+		</record>
 		
+		<!-- Student Registration for Student -->		
 		<record id="student_registration_tree_view" model="ir.ui.view">
 			<field name="name">Registration Form</field>
 			<field name="model">student.registration</field>
@@ -250,6 +229,28 @@
 					</sheet>
 				</form>
 			</field>
+		</record>
+		
+		<record model="ir.actions.act_window" id="student_registration_main_action">
+			<field name="name">Registration Form</field>
+			<field name="res_model">student.registration</field>
+			<field name="view_mode">tree,form</field>
+		</record>
+		<record model="ir.actions.act_window.view" id="student_registration_main_tree_view">
+			<field name="sequence" eval="1"/>
+			<field name="name">Student Tuition</field>
+			<field name="res_model">student.registration</field>
+			<field name="view_mode">tree</field>
+			<field name="view_id" ref="iuopensys_course.student_registration_tree_view"/>
+			<field name="act_window_id" ref="student_registration_main_action"/>
+		</record>
+		<record model="ir.actions.act_window.view" id="student_registration_main_form_view">
+			<field name="sequence" eval="2"/>
+			<field name="name">Student Tuition</field>
+			<field name="res_model">student.registration</field>
+			<field name="view_mode">form</field>
+			<field name="view_id" ref="iuopensys_course.student_registration_form_view"/>
+			<field name="act_window_id" ref="student_registration_main_action"/>
 		</record>
 		
 		<!-- Search View -->
