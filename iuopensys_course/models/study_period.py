@@ -5,6 +5,13 @@ from openerp.exceptions import ValidationError
 import pytz
 from pytz import timezone
 
+def get_date_from_event_id(event_id):
+    tmp_str = event_id.split('-')[1]
+    tmp_date = tmp_str[:8]
+    print '------', tmp_date
+    date_str = tmp_date[:4] + '-' + tmp_date[4:6] + '-' + tmp_date[6:8]
+    return date_str
+
 class StudyPeriod(models.Model):
     
     # Default value
@@ -170,7 +177,10 @@ class StudyPeriod(models.Model):
                     'study_period_id': curr_period.id,
                     }
         if lecturer_id:
-            new_vals['partner_ids'] = [(6, 0, [lecturer_id.user_id.partner_id.id])]
+            new_vals['partner_ids'] = [(6, 0, [lecturer_id.user_id.partner_id.id, 3])]
+        else:
+            # 3 is Administrator as default partner
+            new_vals['partner_ids'] = [(6, 0, [3])]
             
         if curr_period.is_recurrency:
             new_vals['recurrency'] = True
@@ -181,9 +191,25 @@ class StudyPeriod(models.Model):
 #         print '+++++', new_vals
         self.env['calendar.event'].create(new_vals)
         planned_ids = self.env['calendar.event'].search([('is_planned_event','=', True),
-                                                         ('start_date', '>=', self.start_date),
-                                                         ('start_date', '<=', self.end_date)])
+                                                         ('start_date', '>=', curr_period.start_date),
+                                                         ('start_date', '<=', curr_period.end_date)])
         print '++++ Planned', planned_ids
+        planned_dates = [(p_event.start_date, p_event.stop_date) for p_event in planned_ids]
+        print '------ Holiday', planned_dates
+        # For each planned date, find the session that overlap with this. -> delete those sessions
+        # Also must check if the Exam period is fit for Which Student Academic year
+        if planned_ids:
+            for p_event in planned_ids:
+                if p_event.academic_year_id and p_event.academic_year_id != curr_period.academic_year_id:
+                    continue
+                study_session_ids = self.env['calendar.event'].search([('study_period_id','=', curr_period.id),])
+                print '======= Sessions', study_session_ids                    
+                for session in study_session_ids:           
+                    session_date = get_date_from_event_id(session.id)
+                    if p_event.start_date <= session_date <= p_event.stop_date:
+                        print 'Delete ----', session.id
+                        session.unlink() 
+#                 study_session_ids.unlink()
         return curr_period
     
     @api.multi

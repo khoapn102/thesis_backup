@@ -8,6 +8,7 @@
 			<field name="arch" type="xml">
 				<xpath expr="//field[@name='alarm_ids']" position="after">
 					<field name="is_planned_event"/>
+					<field name="academic_year_id" attrs="{'invisible':[('is_planned_event','=',False)]}"/>
 				</xpath>
 				<xpath expr="//field[@name='location']" position="attributes">
 					<attribute name="invisible">True</attribute>
