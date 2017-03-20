@@ -199,15 +199,21 @@ class StudyPeriod(models.Model):
         # For each planned date, find the session that overlap with this. -> delete those sessions
         # Also must check if the Exam period is fit for Which Student Academic year
         if planned_ids:
+#             print '===== HoLIDAy', planned_dates
             for p_event in planned_ids:
-                if p_event.academic_year_id and p_event.academic_year_id != curr_period.academic_year_id:
-                    continue
+                # Planned event only apply for certain student batches
+                # Check if the current course' student batch is in the Event's 
+                # If course's year batch not in the event's batch list, -> skip this event.
+                if p_event.year_batch_ids:
+                    if curr_period.offer_course_id.academic_year_id.year_batch_id.id not in p_event.year_batch_ids.ids:
+                        continue
+                    
                 study_session_ids = self.env['calendar.event'].search([('study_period_id','=', curr_period.id),])
-                print '======= Sessions', study_session_ids                    
+#                 print '======= Sessions', study_session_ids                    
                 for session in study_session_ids:           
                     session_date = get_date_from_event_id(session.id)
                     if p_event.start_date <= session_date <= p_event.stop_date:
-                        print 'Delete ----', session.id
+#                         print 'Delete ----', session.id
                         session.unlink() 
 #                 study_session_ids.unlink()
         return curr_period
@@ -261,6 +267,31 @@ class StudyPeriod(models.Model):
                     new_vals['end_type'] = 'end_date'
                     new_vals['final_date'] = rec_end_dt
                 self.env['calendar.event'].create(new_vals)
+                planned_ids = self.env['calendar.event'].search([('is_planned_event','=', True),
+                                                         ('start_date', '>=', record.start_date),
+                                                         ('start_date', '<=', record.end_date)])
+#                 print '++++ Planned', planned_ids
+                planned_dates = [(p_event.start_date, p_event.stop_date) for p_event in planned_ids]
+#                 print '------ Holiday', planned_dates
+                # For each planned date, find the session that overlap with this. -> delete those sessions
+                # Also must check if the Exam period is fit for Which Student Academic year
+                if planned_ids:
+#                     print '===== HoLIDAy', planned_dates
+                    for p_event in planned_ids:
+                        # Planned event only apply for certain student batches
+                        # Check if the current course' student batch is in the Event's 
+                        # If course's year batch not in the event's batch list, -> skip this event.
+                        if p_event.year_batch_ids:
+                            if record.offer_course_id.academic_year_id.year_batch_id.id not in p_event.year_batch_ids.ids:
+                                continue
+                            
+                        study_session_ids = self.env['calendar.event'].search([('study_period_id','=', record.id),])
+#                         print '======= Sessions', study_session_ids                    
+                        for session in study_session_ids:           
+                            session_date = get_date_from_event_id(session.id)
+                            if p_event.start_date <= session_date <= p_event.stop_date:
+#                                 print 'Delete ----', session.id
+                                session.unlink() 
         return super(StudyPeriod,self).write(vals)
                     
                 

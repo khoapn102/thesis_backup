@@ -11,7 +11,8 @@ class CalendarEvent(models.Model):
     
     # For e.g Exam period is different between class of students
     # Student K13 takes exam weeks 1 week after Student K14 for example
-    academic_year_id = fields.Many2one('academic.year', 'Apply For')
+    year_batch_ids = fields.Many2many('year.batch', string='Apply For', 
+                                       help='Event is prioritized for these classes of student only.')
     
 #     @api.onchange('offer_course_id')
 #     def _onchange_offer_course_id(self):

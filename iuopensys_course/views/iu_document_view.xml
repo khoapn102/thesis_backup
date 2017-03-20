@@ -1,0 +1,48 @@
+<?xml version="1.0" ?>
+<openerp>
+	<data>
+		<record model="ir.actions.act_window" id="iu_document_main_action">
+			<field name="name">IU Documents</field>
+			<field name="res_model">iu.document</field>
+			<field name="view_mode">tree,form</field>
+		</record>
+		
+		<record id="iu_document_tree_view" model="ir.ui.view">
+			<field name="name">IU Documents</field>
+			<field name="model">iu.document</field>
+			<field name="type">tree</field>
+			<field name="arch" type="xml">
+				<tree>
+					<field name="name"/>								
+					<field name="doc_created_date"/>
+				</tree>
+			</field>
+		</record>
+		
+		<record id="" model="ir.ui.view">
+			<field name="name"></field>
+			<field name="model"></field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<form>					
+					<sheet>						
+					</sheet>
+				</form>
+			</field>
+		</record>
+		
+		<!-- Search View -->
+		<record id="" model="ir.ui.view">
+			<field name="name"></field>
+			<field name="model"></field>
+			<field name="type">search</field>
+			<field name="arch" type="xml">
+				<search>
+					<!--Search By -->
+					
+					<!--Group By -->
+				</search>
+			</field>
+		</record>
+	</data>
+</openerp>

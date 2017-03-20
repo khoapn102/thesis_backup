@@ -1,0 +1,46 @@
+<?xml version="1.0" ?>
+<openerp>
+	<data>
+		<record model="ir.actions.act_window" id="">
+			<field name="name"></field>
+			<field name="res_model"></field>
+			<field name="view_mode">tree,form</field>
+		</record>
+		
+		<record id="" model="ir.ui.view">
+			<field name="name"></field>
+			<field name="model"></field>
+			<field name="type">tree</field>
+			<field name="arch" type="xml">
+				<tree>								
+				</tree>
+			</field>
+		</record>
+		
+		<record id="" model="ir.ui.view">
+			<field name="name"></field>
+			<field name="model"></field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<form>					
+					<sheet>						
+					</sheet>
+				</form>
+			</field>
+		</record>
+		
+		<!-- Search View -->
+		<record id="" model="ir.ui.view">
+			<field name="name"></field>
+			<field name="model"></field>
+			<field name="type">search</field>
+			<field name="arch" type="xml">
+				<search>
+					<!--Search By -->
+					
+					<!--Group By -->
+				</search>
+			</field>
+		</record>
+	</data>
+</openerp>

@@ -43,10 +43,10 @@
                         </group>
                         <group string="Department Batch">
                         	<field name="academic_year_ids" nolabel="1" context="{'default_year_batch_id':active_id}">
-                        		<tree editable="bottom">
-                        			<field name="name"/>
+                        		<tree editable="bottom">                        			
                         			<field name="year_batch_id"/>
                         			<field name="department_id"/>
+                        			<field name="name"/>
                         			<field name="lecturer_id"/>
                         			<field name="class_code"/>
                         			<field name="start_date"/>

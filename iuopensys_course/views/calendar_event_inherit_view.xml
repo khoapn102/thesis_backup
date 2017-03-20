@@ -8,11 +8,20 @@
 			<field name="arch" type="xml">
 				<xpath expr="//field[@name='alarm_ids']" position="after">
 					<field name="is_planned_event"/>
-					<field name="academic_year_id" attrs="{'invisible':[('is_planned_event','=',False)]}"/>
+					<field name="year_batch_ids" attrs="{'invisible':[('is_planned_event','=',False)]}">
+						<tree edit="false">
+							<field name="name"/>
+							<field name="year"/>
+							<field name="year_code"/>
+						</tree>
+					</field>					
 				</xpath>
 				<xpath expr="//field[@name='location']" position="attributes">
 					<attribute name="invisible">True</attribute>
 				</xpath>
+				<xpath expr="//field[@name='categ_ids']" position="attributes">
+					<attribute name="invisible">True</attribute>
+				</xpath>		
 			</field>
 		</record>
 	</data>
