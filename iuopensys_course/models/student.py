@@ -14,6 +14,10 @@ class Student(models.Model):
     
     # Student Finance Situation
     
+    # Student Academic Program
+    std_academic_prog_id = fields.Many2one('student.academic.program',string='Academic Program')
+#     iu_doc_ids = fields.One2many('iu.document', 'student_id', string='Student Documents')
+    
     
     @api.model
     def _name_search(self, name='', args=None, operator='ilike', limit=100, name_get_uid=None):

@@ -1,29 +1,76 @@
 <?xml version="1.0" ?>
 <openerp>
 	<data>
-		<record model="ir.actions.act_window" id="">
-			<field name="name"></field>
-			<field name="res_model"></field>
+		<record model="ir.actions.act_window" id="student_academic_program_main_action">
+			<field name="name">Academic Programs</field>
+			<field name="res_model">student.academic.program</field>
 			<field name="view_mode">tree,form</field>
 		</record>
 		
-		<record id="" model="ir.ui.view">
-			<field name="name"></field>
-			<field name="model"></field>
+		<!-- Tree View -->
+		<record id="student_academic_program_tree_view" model="ir.ui.view">
+			<field name="name">Academic Programs</field>
+			<field name="model">student.academic.program</field>
 			<field name="type">tree</field>
 			<field name="arch" type="xml">
-				<tree>								
+				<tree>
+					<field name="name"/>
+					<field name="program_type"/>
+					<field name="program_code"/>													
 				</tree>
 			</field>
 		</record>
 		
-		<record id="" model="ir.ui.view">
-			<field name="name"></field>
-			<field name="model"></field>
+		<!-- Form -->
+		<record id="student_academic_program_form_view" model="ir.ui.view">
+			<field name="name">Program</field>
+			<field name="model">student.academic.program</field>
 			<field name="type">form</field>
 			<field name="arch" type="xml">
 				<form>					
-					<sheet>						
+					<sheet>
+						<div class="oe_title">
+                            <label for="name" class="oe_edit_only" string="Program Name"/>
+                            <h1>
+                            	<field name="name" required="1" class="oe_inline" style="width:90%%"/>
+                            </h1>
+                        </div>
+                        <group string="General Information">
+                        	<group>
+                        		<field name="program_type" style="width:60%%" required="1"/>
+                        	</group>
+                        	<group>
+                        		<field name="program_code" style="width:50%%"/>
+                        	</group>
+                        </group>
+                        <notebook>
+                        	<page string="IU Program" attrs="{'invisible':[('program_type','!=','iu')]}">
+                        		<group string="Required Information" attrs="{'invisible':[('program_type','!=','iu')]}">
+                        			<group>
+	                        			<field name="std_grad_year"/>	                        				
+	                        			<field name="max_grad_year"/>
+	                        		</group>
+	                        		<group>
+	                        			<field name="is_req_perms"/>
+	                        			<field name="min_year_req_perms" attrs="{'invisible':[('is_req_perms','=',False)]}"/>
+	                        		</group>
+                        		</group>                      		                       		
+                        	</page>
+                        	<page string="Twining Program" attrs="{'invisible':[('program_type','!=','foreign')]}">
+                        		<group string="Required Information">
+                        			<group>
+                        				<field name="partner_uni_id" style="width:80%%"/>                        				
+                        				<field name="study_uni_first_id" style="width:80%%"/> 
+                        				<field name="study_uni_second_id" style="width:80%%"/>                      				
+                        			</group>
+                        			<group>
+                        				<field name="grad_uni_id" style="width:80%%"/>
+                        				<field name="study_year_first"/>
+                        				<field name="study_year_second"/>
+                        			</group>
+                        		</group>
+                        	</page>
+                        </notebook>					
 					</sheet>
 				</form>
 			</field>

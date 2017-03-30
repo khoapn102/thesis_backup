@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<openerp>
+	<data>
+		<record id="international_university_vnu" model="partner.university">
+			<field name="name">International University - VNU</field>
+			<field name="uni_address">Linh Trung, Thu Duc, Ho Chi Minh City</field>
+			<field name="country_id">243</field>
+			<field name="school_code">IU</field>
+		</record>
+	</data>
+</openerp>

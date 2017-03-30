@@ -3,9 +3,8 @@ from openerp import models, fields, api
 class StudentCourse(models.Model):
     
     _name = 'student.course'
-    _description = 'Registered Course of Student'
+    _description = 'Registered Course of Student'   
     
-    offer_course_id = fields.Many2one('offer.course', string='Offer Course', ondelete="cascade")
     
     # Student
     student_id = fields.Many2one('student', string='Student', ondelete="cascade")    
@@ -15,6 +14,7 @@ class StudentCourse(models.Model):
     student_class_code = fields.Char(string='Student Class Code', related='student_id.student_class_code')
     
     # Course
+    offer_course_id = fields.Many2one('offer.course', string='Offer Course', ondelete="cascade")
     course_code = fields.Char(string='Course Code', related='offer_course_id.course_code')
     course_name = fields.Char(string='Course Name', related='offer_course_id.name')
     course_credits = fields.Integer(string='Credits', related='offer_course_id.course_id.number_credits')

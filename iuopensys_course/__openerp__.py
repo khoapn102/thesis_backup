@@ -10,6 +10,7 @@
         # =========================================
         'data/course_tuition_data.xml',
         'data/study_period_data.xml',
+        'data/partner_university_data.xml',
              
         # =========================================
         # SECURITY
@@ -28,6 +29,10 @@
         'views/student_registration_view.xml',
         'views/course_tuition_view.xml',
         'views/calendar_event_inherit_view.xml',
+        'views/iu_document_view.xml',
+        'views/partner_university_view.xml',
+        'views/student_academic_program_view.xml',
+        'views/student_document_view.xml',
         
         # =========================================
         # MENU

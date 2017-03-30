@@ -12,7 +12,7 @@
 		<!-- Course Section -->	
 		<menuitem id="course_core_menu"
 			name="Course Management"
-			sequence="2"
+			sequence="3"
 			parent="iuopensys_core.academic_core_menu"/>
 			
 		<menuitem id="course_main_menu"
@@ -77,7 +77,47 @@
 			name="Student Tuition"
 			sequence="4"
 			parent="course_registration_core_menu"
-			action="student_registration_tuition_action"/>					
-						
+			action="student_registration_tuition_action"/>
+			
+		<!-- Student Academic Program -->
+		<menuitem id="student_academic_program_menu"
+			name="Academic Program"
+			sequence="2"
+			parent="iuopensys_core.academic_core_menu"
+			action="student_academic_program_main_action"/>
+		
+		<!-- Miscellaneous -->
+		<menuitem id="miscellaneous_core_menu"
+			name="Misc."
+			sequence="4"	
+			parent="iuopensys_core.university_root_menu"/>
+		
+		<!-- Partner University -->
+		<menuitem id="partner_university_main_menu"
+			name="Partner Universities"
+			sequence="0"
+			parent="miscellaneous_core_menu"
+			action="partner_university_main_action"/>
+		
+		<!-- Documents -->
+		<menuitem id="iu_document_core_menu"
+			name="Document"
+			sequence="1"
+			parent="miscellaneous_core_menu"/>
+			
+		<!-- IU Documents -->
+		<menuitem id="iu_document_main_menu"
+			name="Documents"
+			sequence="0"
+			parent="iu_document_core_menu"
+			action="iu_document_main_action"/>
+		
+		<!-- Student's Documents -->
+		<menuitem id="student_document_core_main_menu"
+			name="Student Documents"
+			sequence="1"
+			parent="iu_document_core_menu"
+			action="student_document_main_action"/>		
+		
 	</data>
 </openerp>

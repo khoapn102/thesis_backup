@@ -14,18 +14,46 @@
 			<field name="arch" type="xml">
 				<tree>
 					<field name="name"/>								
-					<field name="doc_created_date"/>
+					<field name="doc_type"/>
+					<field name="is_signed"/>
+					<field name="signee_name"/>
 				</tree>
 			</field>
 		</record>
 		
-		<record id="" model="ir.ui.view">
-			<field name="name"></field>
-			<field name="model"></field>
+		<record id="iu_document_form_view" model="ir.ui.view">
+			<field name="name">Document</field>
+			<field name="model">iu.document</field>
 			<field name="type">form</field>
 			<field name="arch" type="xml">
 				<form>					
-					<sheet>						
+					<sheet>
+						<div class="oe_title">
+                            <label for="name" class="oe_edit_only" string="Document Name"/>
+                            <h1>
+                            	<field name="name" required="1" class="oe_inline" style="width:90%%"/>
+                            </h1>
+                        </div>
+                        <group string="Basic Information">
+                        	<group>
+                        		<field name="doc_type" style="width:60%%"/>
+                        		<field name="is_signed"/>
+                        		<field name="doc_signed_date" attrs="{'invisible': [('is_signed','=',False)]}"/>
+                        		<field name="signee_name" attrs="{'invisible': [('is_signed','=',False)]}"/>                        		
+                        	</group>
+                        	<group>
+                        		<field name="submit_deadline"/>
+                        		<field name="note"/>
+                        	</group>                        	
+                        </group>
+                        <group string="Students' documents" attrs="{'invisible':[('doc_type','!=','student')]}">
+                        	<field name="student_doc_ids" nolabel="1" context="{'default_iu_doc_id': active_id}">
+                        		<tree>
+                        			<field name="student_id"/>
+                        			<field name="is_submit"/>
+                        		</tree>                        		
+                        	</field>
+                        </group>					
 					</sheet>
 				</form>
 			</field>
