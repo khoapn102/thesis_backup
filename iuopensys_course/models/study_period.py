@@ -52,7 +52,8 @@ class StudyPeriod(models.Model):
     proctor_two_id = fields.Many2one(string='Second Proctor')
     
     exam_type = fields.Selection(selection=[('mid','Midterm'),
-                                            ('final','Final')],
+                                            ('final','Final'),
+                                            ('other','Other')],
                                  string='Exam Type', default='mid')
     crs_day = fields.Char(string='Start Day', compute='_get_course_day')
     

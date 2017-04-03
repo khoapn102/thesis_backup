@@ -45,7 +45,7 @@
                         </group>
                         <notebook>
                         	<page string="IU Program" attrs="{'invisible':[('program_type','!=','iu')]}">
-                        		<group string="Required Information" attrs="{'invisible':[('program_type','!=','iu')]}">
+                        		<group string="Program Information" attrs="{'invisible':[('program_type','!=','iu')]}">
                         			<group>
 	                        			<field name="std_grad_year"/>	                        				
 	                        			<field name="max_grad_year"/>
@@ -54,10 +54,10 @@
 	                        			<field name="is_req_perms"/>
 	                        			<field name="min_year_req_perms" attrs="{'invisible':[('is_req_perms','=',False)]}"/>
 	                        		</group>
-                        		</group>                      		                       		
+                        		</group>                        		                      		                       		
                         	</page>
                         	<page string="Twining Program" attrs="{'invisible':[('program_type','!=','foreign')]}">
-                        		<group string="Required Information">
+                        		<group string="Program Information">
                         			<group>
                         				<field name="partner_uni_id" style="width:80%%"/>                        				
                         				<field name="study_uni_first_id" style="width:80%%"/> 
@@ -68,6 +68,19 @@
                         				<field name="study_year_first"/>
                         				<field name="study_year_second"/>
                         			</group>
+                        		</group>
+                        		
+                        	</page>
+                        	<page string="Required Documents" attrs="{'invisible':[('program_type','not in', ['iu','foreign'])]}">
+                        		<group string="Requirements">
+                        			<field name="iu_doc_ids" nolabel="1">
+                        				<tree edit="false">
+                        					<field name="name"/>
+                        					<field name="doc_type"/>
+                        					<field name="submit_deadline"/>
+                        					<field name="note"/>
+                        				</tree>
+                        			</field>
                         		</group>
                         	</page>
                         </notebook>					

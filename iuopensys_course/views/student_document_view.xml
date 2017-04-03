@@ -16,6 +16,7 @@
 					<field name="student_id"/>
 					<field name="iu_doc_id"/>
 					<field name="is_submit"/>
+					<field name="is_stored"/>
 				</tree>
 			</field>
 		</record>
@@ -34,6 +35,7 @@
 							</group>
 							<group>
 								<field name="iu_doc_id"/>
+								<field name="is_stored"/>
 							</group>
 						</group>
 						<group>

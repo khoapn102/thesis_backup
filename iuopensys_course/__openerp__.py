@@ -33,6 +33,8 @@
         'views/partner_university_view.xml',
         'views/student_academic_program_view.xml',
         'views/student_document_view.xml',
+        'views/iu_curriculum_view.xml',
+        'views/major_inherit_view.xml',
         
         # =========================================
         # MENU

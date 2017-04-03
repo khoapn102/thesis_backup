@@ -12,3 +12,5 @@ import iu_document
 import partner_university
 import student_academic_program
 import student_document
+import iu_curriculum
+import major

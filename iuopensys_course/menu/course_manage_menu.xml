@@ -1,6 +1,13 @@
 <?xml version="1.0" ?>
 <openerp>
 	<data>
+		
+		<!-- Curriculum -->
+		<menuitem id="iu_curriculum_main_menu"
+			name="Curriculums"
+			sequence="1"
+			parent="iuopensys_core.major_core_menu"
+			action="iu_curriculum_main_action"/>		
 	
 		<!-- Semester Section -->
 		<menuitem id="semester_main_menu"

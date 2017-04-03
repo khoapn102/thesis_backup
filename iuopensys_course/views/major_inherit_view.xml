@@ -1,0 +1,33 @@
+<?xml version="1.0" ?>
+<openerp>
+	<data>
+		<record id="major_form_view_inherit_new" model="ir.ui.view">
+			<field name="name">Major Inherit</field>
+			<field name="model">major</field>
+			<field name="inherit_id" ref="iuopensys_core.major_form_view"/>
+			<field name="arch" type="xml">
+				<xpath expr="//field[@name='department_id']" position="before">
+					<field name="std_academic_prog_id"/>
+				</xpath>
+				<xpath expr="//page[1]/group[1]" position="after">
+					<group string="Curriculums">
+						<field name="iu_curriculum_ids" nolabel="1">
+							<tree edit="false">
+								<field name="name"/>
+								<field name="department_id"/>
+								<field name="max_cred_require"/>
+								<field name="total_cred"/>
+								<field name="note"/>
+							</tree>
+						</field>
+					</group>
+				</xpath>
+				<xpath expr="//page[1]" position="after">
+					<page string="Course List">
+						<field name="course_ids"/>
+					</page>
+				</xpath>
+			</field>
+		</record>
+	</data>
+</openerp>

@@ -19,14 +19,17 @@ class StudentDocument(models.Model):
     
     # attachment
     attachment_ids = fields.One2many('ir.attachment', 'student_document_id', string='Attachments')
-    is_submit = fields.Boolean(string='Stored Copy')
+    is_stored = fields.Boolean(string='Stored Copy')
+    is_submit = fields.Boolean(string='Submitted')
     
     @api.onchange('attachment_ids')
     def onchange_attachment(self):
         for record in self:
             if record.attachment_ids:
-                record.is_submit = True
+                record.is_stored = True
+                if not record.is_submit:
+                    record.is_submit = True
             else:
-                record.is_submit = False
+                record.is_stored = False
     
     

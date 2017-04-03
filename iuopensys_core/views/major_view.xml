@@ -39,14 +39,15 @@
 								<h1><field name="name" nolabel="1"/></h1>
 							</group>
 							<notebook>
-								<page string="Basic Information">
-									<group colspan="4">
+								<page string="Information">
+									<group colspan="4" string="Basic Information">
 										<group>
-											<field name="major_code"/>
 											<field name="department_id"/>
+											<field name="major_code"/>											
 										</group>
 										<group>
 											<field name="certified_name"/>
+											<field name="note"/>
 										</group>
 									</group>
 								</page>

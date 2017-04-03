@@ -7,7 +7,7 @@ class Course(models.Model):
     
     name = fields.Char(string='Course Name', size=128)
     department_id = fields.Many2one('department', string='Department', required=True)
-    number_credits = fields.Integer(string='Number of Credits', required=True)
+    number_credits = fields.Integer(string='Credits', required=True)
     number_credits_actual = fields.Integer(string='Credits for Tuition', required=True)
                                            
     prereq_course_id = fields.Many2one('course', string='Prerequisite Course',
@@ -19,7 +19,7 @@ class Course(models.Model):
     crs_lang = fields.Selection(selection=[('eng', 'English'),
                                            ('vn', 'Vietnamese')],
                                 default='eng',
-                                string='Course Language')
+                                string='Teaching Language')
     tuition_id = fields.Many2one('course.tuition', string='Credit Cost')
     offer_course_ids = fields.One2many('offer.course', 'course_id', 'Offering Courses')
               

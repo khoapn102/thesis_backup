@@ -31,7 +31,7 @@
 						<div class="oe_title">
                             <label for="name" class="oe_edit_only" string="Document Name"/>
                             <h1>
-                            	<field name="name" required="1" class="oe_inline" style="width:90%%"/>
+                            	<field name="name" required="1" class="oe_inline" style="width:100%%"/>
                             </h1>
                         </div>
                         <group string="Basic Information">
@@ -51,6 +51,7 @@
                         		<tree>
                         			<field name="student_id"/>
                         			<field name="is_submit"/>
+                        			<field name="is_stored"/>
                         		</tree>                        		
                         	</field>
                         </group>					

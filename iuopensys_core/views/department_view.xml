@@ -19,6 +19,7 @@
 					<field name="head_dept_id"/>
 					<field name="dept_office_room"/>
 					<field name="dept_academic_code"/>
+					<field name="has_student"/>
 				</tree>
 			</field>
 		</record>
@@ -50,6 +51,7 @@
 										<group>
 											<field name="head_dept_id" domain="[('department_id','=',active_id)]"/>
 											<field name="vice_dept_id" domain="[('department_id','=',active_id)]"/>
+											<field name="has_student"/>
 										</group>
 									</group>
 								</page>

@@ -48,9 +48,9 @@
           							<field name="crs_lang"/>
           						</group>
           						<group>
-          							<field name="prereq_course_id" style="width:50%%"/>
+          							<field name="prereq_course_id" style="width:55%%"/>
           							<field name="course_type" style="width:50%%"/>
-          							<field name="tuition_id" style="width:50%%"/>
+          							<field name="tuition_id" style="width:55%%"/>
           						</group>
           					</group>          					
                         </group>

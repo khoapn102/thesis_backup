@@ -7,7 +7,22 @@
 			<field name="inherit_id" ref="iuopensys_core.student_main_form_view"/>
 			<field name="arch" type="xml">
 				<notebook position="inside">
-					<page string="Academic Information">
+					<page string="Academic Information I">
+						<group string="General Information">
+							<group>
+								<field name="std_academic_prog_id"/>
+								<field name="standard_grad_date"/>
+								<field name="max_grad_date"/>
+							</group>
+							<group>
+								<field name="is_eng_req"/>							
+								<field name="eng_curriculum_id" attrs="{'invisible':[('is_eng_req','=',False)]}"
+										domain="[('is_eng_req','=',True)]"/>
+								<field name="is_eng_complete" attrs="{'invisible':[('eng_curriculum_id','=',False)]}"/>/>
+							</group>							
+						</group>
+					</page>
+					<page string="Academic Information II">
                			<group colspan="4" id="academic_group">
                				<field name="student_course_ids" nolabel="1"  widget="x2many_selectable">
                					<tree>
@@ -21,11 +36,14 @@
                			</group>
                		</page>
 				</notebook>
-				<xpath expr="//field[@name='student_class_code']" position="after">
+				<xpath expr="//field[@name='academic_year_id']" position="after">
 					<field name="year_batch_id"/>
 				</xpath>
 				<xpath expr="//field[@name='studentId']" position="after">
 					<field name="student_balance" invisible="1"/>
+				</xpath>
+				<xpath expr="//field[@name='student_class_code']" position="after">
+					<field name="academic_status"/>
 				</xpath>
 			</field>
 		</record>
