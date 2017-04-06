@@ -1,0 +1,89 @@
+<?xml version="1.0" ?>
+<openerp>
+	<data>
+		<record model="ir.actions.act_window" id="student_behavior_point_main_action">
+			<field name="name">Behavior Point System</field>
+			<field name="res_model">student.behavior.point</field>
+			<field name="view_mode">tree,form</field>
+		</record>
+		
+		<record id="student_behavior_point_tree_view" model="ir.ui.view">
+			<field name="name">Behavior Point Systems</field>
+			<field name="model">student.behavior.point</field>
+			<field name="type">tree</field>
+			<field name="arch" type="xml">
+				<tree>
+					<field name="student_id"/>
+					<field name="semester_id"/>
+					<field name="total_score"/>
+					<field name="academic_status"/>							
+				</tree>
+			</field>
+		</record>
+		
+		<record id="student_behavior_point_form_view" model="ir.ui.view">
+			<field name="name">Student Behavior Point</field>
+			<field name="model">student.behavior.point</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<form>					
+					<sheet>
+						<div class="oe_button_box" name="my_button_box">
+                            <button name="" type="" class="oe_stat_button" icon="fa-star">
+                            	<field name="total_score" string="Total Score" widget="statinfo"/>
+                            </button>                            
+                        </div>
+						<group string="Basic Information">
+							<group>
+								<field name="student_id"/>
+								<field name="academic_status" readonly="1"/>
+							</group>
+							<group>
+								<field name="semester_id"/>
+							</group>
+						</group>
+						<group string="Behavior Point Information">
+							<group>
+								<field name="learning_score"/>
+								<field name="school_score"/>
+								<field name="social_score"/>
+							</group>
+							<group>
+								<field name="activity_score"/>
+								<field name="leading_score"/>
+								<field name="discipline_score"/>								
+							</group>
+						</group>					
+					</sheet>
+				</form>
+			</field>
+		</record>
+		
+		<!-- Search View -->
+		<record id="student_behavior_point_search_view" model="ir.ui.view">
+			<field name="name">Behavior Point</field>
+			<field name="model">student.behavior.point</field>
+			<field name="type">search</field>
+			<field name="arch" type="xml">
+				<search string="Search">
+					<!--Search By -->
+					<field name="student_id"/>
+					
+					
+					<!--Group By -->
+					<group expand="0" string="Group By">
+						<filter name="group_by_semester" string="Semester"
+							context="{'group_by':'semester_id'}"/>						
+					</group>
+					
+					<!-- Filter -->
+					<filter name="filter_failed_student" string="Failed Students"
+						domain="[('total_score','&lt;', 70)]"/>
+					<filter name="filter_passed_student" string="Passed Students"
+						domain="[('total_score','&gt;=', 70)]"/>
+					
+				</search>
+			</field>
+		</record>
+	</data>
+</openerp>

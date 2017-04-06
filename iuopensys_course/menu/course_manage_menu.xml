@@ -109,7 +109,7 @@
 		<!-- Documents -->
 		<menuitem id="iu_document_core_menu"
 			name="Document"
-			sequence="1"
+			sequence="2"
 			parent="miscellaneous_core_menu"/>
 			
 		<!-- IU Documents -->
@@ -124,7 +124,21 @@
 			name="Student Documents"
 			sequence="1"
 			parent="iu_document_core_menu"
-			action="student_document_main_action"/>		
+			action="student_document_main_action"/>
+			
+		<!-- Financial Aids -->
+		<menuitem id="financial_aid_main_menu"
+			name="Financial Aids"
+			sequence="1"
+			parent="miscellaneous_core_menu"
+			action="financial_aid_main_action"/>
+			
+		<!-- Student Behavior System -->
+		<menuitem id="student_behavior_point_main_menu"
+			name="Behavior Point"
+			sequence="1"
+			parent="iuopensys_core.student_core_menu"
+			action="student_behavior_point_main_action"/>	
 		
 	</data>
 </openerp>

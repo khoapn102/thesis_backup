@@ -35,6 +35,23 @@
                				</field>
                			</group>
                		</page>
+               		<page string="Student Behavior Point">
+               			<group string="Semester List">
+               				<field name="student_behavior_point_ids" nolabel="1"
+               					context="{'default_student_id':active_id}">
+               					<tree editable="bottom">
+               						<field name="semester_id"/>
+               						<field name="learning_score"/>
+               						<field name="school_score"/>
+               						<field name="social_score"/>
+               						<field name="activity_score"/>
+               						<field name="leading_score"/>
+               						<field name="discipline_score"/>
+               						<field name="total_score"/>
+               					</tree>
+               				</field>
+               			</group>
+               		</page>
 				</notebook>
 				<xpath expr="//field[@name='academic_year_id']" position="after">
 					<field name="year_batch_id"/>
@@ -44,6 +61,7 @@
 				</xpath>
 				<xpath expr="//field[@name='student_class_code']" position="after">
 					<field name="academic_status"/>
+					<field name="financial_aid_id"/>
 				</xpath>
 			</field>
 		</record>

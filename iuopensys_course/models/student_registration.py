@@ -35,24 +35,30 @@ class StudentRegistration(models.Model):
     
     ext_note = fields.Text('Note')
     
-    # Student Tuition per Semester
+    # Student Tuition per Semester with Financial Aid calculation
     student_balance = fields.Float('Current balance', related='student_id.student_balance')
     total_creds = fields.Integer('Total credits registered', compute='get_tuition_info', default=0)
     stat_button_total_creds = fields.Integer('Credits', compute='get_tuition_info')
     stat_button_amount_tuition = fields.Char('Tuition', compute='get_tuition_info',)
     total_actual_creds = fields.Integer('Total actual credits', compute='get_tuition_info', default=0)
     amount_tuition = fields.Float('Tuition amount', compute='get_tuition_info')
-    amount_paid = fields.Float('Amount paid')
-    amount_leftover = fields.Float('Amount owned', compute='_get_amt_leftover')
-    is_full_paid = fields.Boolean('Paid in full')    
     
+    amount_financial_aid = fields.Float('Financial Aid amount', compute='get_tuition_info')
+    
+    amount_paid = fields.Float('Amount paid')
+
+    amount_must_pay = fields.Float('Amount must pay', compute='get_tuition_info')
+    
+    amount_leftover = fields.Float('Amount owned', compute='_get_amt_leftover')
+    is_full_paid = fields.Boolean('Paid in full')
+        
     in_period = fields.Boolean('In Reg Time', compute='_check_in_period')
     
     @api.one
     def paid_in_full(self):
         self.write({'is_full_paid': not self.is_full_paid})
         if self.is_full_paid:
-            self.write({'amount_paid': self.amount_tuition})
+            self.write({'amount_paid': self.amount_must_pay})
         else:
             self.write({'amount_paid': 0})
     
@@ -83,6 +89,7 @@ class StudentRegistration(models.Model):
         for record in self:
             cred = 0
             tuition = 0
+            financial_aid_value = 0
             if record.offer_course_ids:
                 for course in record.offer_course_ids:
                     cred += course.course_id.number_credits
@@ -90,9 +97,24 @@ class StudentRegistration(models.Model):
             if record.drop_course_ids:
                 for course in record.drop_course_ids:
                     tuition += 0.3*(course.crs_tuition)
+            # Check if student has Financial Aid
+            if record.student_id.financial_aid_id:
+                financial_aid = record.student_id.financial_aid_id
+                start = datetime.strptime(financial_aid.start_date,"%Y-%m-%d")
+                end = datetime.strptime(financial_aid.end_date,"%Y-%m-%d")
+                # Check if the financial aid is valid (is_active and in valid date range)
+                if financial_aid.is_active and (start <= datetime.now() <= end):
+                    if financial_aid.finance_type == 'percent':
+                        financial_aid_value = tuition * financial_aid.finance_value/100
+                    elif financial_aid.finance_type == 'amount':
+                        financial_aid_value = tuition - financial_aid.finanace_value
+                                    
             record.total_creds = cred
             record.total_actual_creds = cred
             record.amount_tuition = tuition
+            record.amount_financial_aid = financial_aid_value
+            record.amount_must_pay = tuition - financial_aid_value
+            
             record.stat_button_total_creds = cred
             record.stat_button_amount_tuition = str(tuition) + ' USD'
             print '++++ UID', SUPERUSER_ID
@@ -100,14 +122,14 @@ class StudentRegistration(models.Model):
     @api.onchange('is_full_paid')
     def _onchange_full_paid(self):
         if self.is_full_paid:
-            self.amount_paid = self.amount_tuition
+            self.amount_paid = self.amount_must_pay
         else:
             self.amount_paid = 0
     
     @api.depends('amount_paid')
     def _get_amt_leftover(self):
         for record in self:
-            record.amount_leftover = record.amount_tuition - record.amount_paid
+            record.amount_leftover = record.amount_must_pay - record.amount_paid
                     
     @api.constrains('offer_course_ids')
     def _validate_registered_course(self):

@@ -28,7 +28,7 @@
 					<sheet>
 						<div class="oe_button_box" name="my_button_box">                            
                             <button name="paid_in_full" type="object" class="oe_stat_button" icon="fa-check">
-                            	<span>Paid Full</span>
+                            	<span>Paid Full</span>                            	
                             </button>
                         </div>
 						<group string="General Information">
@@ -44,11 +44,22 @@
                    				<field name="student_balance"/>
                    				<field name="total_creds"/>
                    				<field name="total_actual_creds"/>
+                   				<field name="is_full_paid"/>
                    			</group>
                    			<group>
                    				<label for="amount_tuition"  style="font-weight:bold"/>
                    				<div>
                    					<field name="amount_tuition" class="oe_inline"/>
+                   					<span> USD</span>
+                   				</div>
+                   				<label for="amount_financial_aid"  style="font-weight:bold"/>
+                   				<div>
+                   					<field name="amount_financial_aid" class="oe_inline"/>
+                   					<span> USD</span>
+                   				</div>
+                   				<label for="amount_must_pay"  style="font-weight:bold"/>
+                   				<div>
+                   					<field name="amount_must_pay" class="oe_inline"/>
                    					<span> USD</span>
                    				</div>
                    				<label for="amount_paid"  style="font-weight:bold"/>
@@ -61,7 +72,6 @@
                    					<field name="amount_leftover" class="oe_inline"/>
                    					<span> USD</span>
                    				</div>
-                   				<field name="is_full_paid"/>
                    			</group>                    			
                    		</group>					
 					</sheet>
@@ -202,11 +212,21 @@
                         				<field name="student_balance"/>
                         				<field name="total_creds"/>
                         				<field name="total_actual_creds"/>
-                        			</group>
-                        			<group>
                         				<label for="amount_tuition"  style="font-weight:bold"/>
                         				<div>
                         					<field name="amount_tuition" class="oe_inline"/>
+                        					<span> USD</span>
+                        				</div>
+                        			</group>
+                        			<group>                        				
+                        				<label for="amount_financial_aid"  style="font-weight:bold"/>
+                        				<div>
+                        					<field name="amount_financial_aid" class="oe_inline"/>
+                        					<span> USD</span>
+                        				</div>
+                        				<label for="amount_must_pay"  style="font-weight:bold"/>
+                        				<div>
+                        					<field name="amount_must_pay" class="oe_inline"/>
                         					<span> USD</span>
                         				</div>
                         				<label for="amount_paid"  style="font-weight:bold"/>

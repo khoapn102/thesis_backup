@@ -35,6 +35,8 @@
         'views/student_document_view.xml',
         'views/iu_curriculum_view.xml',
         'views/major_inherit_view.xml',
+        'views/financial_aid_view.xml',
+        'views/student_behavior_point_view.xml',
         
         # =========================================
         # MENU

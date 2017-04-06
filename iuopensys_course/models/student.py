@@ -15,7 +15,7 @@ class Student(models.Model):
     student_balance = fields.Float('Student Balance', default=0.0)
     
     # Student Finance Situation
-    
+    financial_aid_id = fields.Many2one('financial.aid', string='Financial Aid')
     
     # Student Academic Program
     std_academic_prog_id = fields.Many2one('student.academic.program',string='Academic Program',
@@ -32,6 +32,9 @@ class Student(models.Model):
     is_eng_req = fields.Boolean('Require IE')
     eng_curriculum_id = fields.Many2one('iu.curriculum', string='English Curriculum')
     is_eng_complete = fields.Boolean('Complete IE')
+    
+    # Student Behavior Point
+    student_behavior_point_ids = fields.One2many('student.behavior.point', 'student_id', string='Behavior Point')    
         
     @api.constrains('is_eng_req')
     def _check_eng_curriculum(self):
