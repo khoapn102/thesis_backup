@@ -66,8 +66,9 @@ class OfferCourse(models.Model):
                                          string='Students')
     
     # Grade and Trancsript
-    mid_exam_percent = fields.Integer(string='Midterm Exam Percentage', default=0)
-    final_exam_percent = fields.Integer(string='Final Exam Percentage', default=0)
+    mid_exam_percent = fields.Float(string='Midterm Exam Percentage')
+    final_exam_percent = fields.Float(string='Final Exam Percentage')
+    assignment_percent = fields.Float(string='Assignment Percentage')
     
     # PERIOD, EXAM SCHEDULE and TIME SCHEDULE go here
 #     calendar_event_ids = fields.One2many('calendar.event', 'offer_course_id', string='Session')
@@ -89,6 +90,13 @@ class OfferCourse(models.Model):
     
     # Note
     ext_note = fields.Text('Note')
+    
+    @api.constrains('mid_exam_percent','final_exam_percent','assignment_percent')
+    def _validate_grade_percent(self):
+        for record in self:
+            temp = record.mid_exam_percent + record.final_exam_percent + record.assignment_percent
+            if temp > 1 or temp < 0:
+                raise ValidationError('Please check Grade Distribution.')
     
     @api.constrains('study_session_ids')
     def _check_overlap_study_session(self):

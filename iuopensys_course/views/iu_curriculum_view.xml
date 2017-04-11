@@ -63,15 +63,22 @@
 		</record>
 		
 		<!-- Search View -->
-		<record id="" model="ir.ui.view">
-			<field name="name"></field>
-			<field name="model"></field>
+		<record id="iu_curriculum_search_view" model="ir.ui.view">
+			<field name="name">Search View</field>
+			<field name="model">iu.curriculum</field>
 			<field name="type">search</field>
 			<field name="arch" type="xml">
 				<search>
 					<!--Search By -->
+					<field name="name"/>
 					
 					<!--Group By -->
+					<group expand="0" string="Group By">
+						<filter string="Department" 
+							context="{'group_by':'department_id'}"/>
+						<filter string="Require English"
+							context="{'group_by':'is_eng_req'}"/>
+					</group>
 				</search>
 			</field>
 		</record>

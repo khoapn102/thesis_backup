@@ -45,11 +45,13 @@ class StudyPeriod(models.Model):
     end_time = fields.Float(string='End at (24h)', required=True,
                             help='Session end time')
     duration = fields.Float('Duration', required=True)
+    
     is_summer = fields.Boolean(string='Summer Session')
     
     is_exam = fields.Boolean(string='Exam Session', default=False)
-    proctor_one_id = fields.Many2one(string='First Proctor')
-    proctor_two_id = fields.Many2one(string='Second Proctor')
+    
+    proctor_one_id = fields.Many2one('lecturer', string='First Proctor')
+    proctor_two_id = fields.Many2one('lecturer', string='Second Proctor')
     
     exam_type = fields.Selection(selection=[('mid','Midterm'),
                                             ('final','Final'),
@@ -88,12 +90,14 @@ class StudyPeriod(models.Model):
 #     end_datetime = fields.Datetime('End Session (same day)')
     @api.constrains('start_date', 'end_date')
     def _validate_study_period(self):
+        # Validate field for Course time. Exam must not checked this validation
         for record in self:
-            start = datetime.strptime(record.start_date,"%Y-%m-%d")
-            end = datetime.strptime(record.end_date,"%Y-%m-%d")
-            diff = int((end-start).days)
-            if diff < 0:
-                raise ValidationError('End Date must be larger than Start Date')
+            if not record.is_exam:
+                start = datetime.strptime(record.start_date,"%Y-%m-%d")
+                end = datetime.strptime(record.end_date,"%Y-%m-%d")
+                diff = int((end-start).days)
+                if diff < 0:
+                    raise ValidationError('End Date must be larger than Start Date')
     
     @api.depends('start_date')
     def _get_course_day(self):
@@ -138,6 +142,8 @@ class StudyPeriod(models.Model):
                 self.name = 'Midterm Exam'
             elif self.exam_type == 'final':
                 self.name = 'Final Exam'
+            elif self.exam_type == 'other':
+                self.name = 'Exam'
     
     @api.onchange('study_period_start', 'amount_period')
     def _onchange_study_period(self):        
@@ -153,70 +159,119 @@ class StudyPeriod(models.Model):
 #             self.end_time = self.start_time + int(self.amount_period)*self.default_period_length
             self.end_time = self.period_time_end[index]
     
+    @api.onchange('start_date','is_exam')
+    def _onchange_start_date(self):
+        if self.is_exam:
+            self.end_date = self.start_date
+    
     @api.model
     def create(self, vals):
+        # Every time it created, it will create calendar.event
+        # Then add the corresponding users.
+               
         curr_period = super(StudyPeriod,self).create(vals)
-#         print '-------', self._context  
-        # Add Lecturer to the schedule 
-        lecturer_id = curr_period.offer_course_id.lecturer_id or False
-        start_dt = curr_period._get_datetime(curr_period.start_date, curr_period.start_time)
-        end_dt = curr_period._get_datetime(curr_period.start_date, curr_period.end_time)
-        lab = ''
-        # For Lab Course
-        if curr_period.offer_course_id.is_lab:
-            lab = ' Lab '
-        else:
-            lab = ' '
+        
+        # 1. Check if This is EXAM SESSION ?
+        # If current study_period is exam -> check student
+        # Then create the calendar event        
+        if curr_period.is_exam:            
+            lst_partner = [3,] # List of partner            
+            if curr_period.proctor_one_id:
+                lst_partner.append(curr_period.proctor_one_id.user_id.partner_id.id)
+            if curr_period.proctor_two_id:
+                lst_partner.append(curr_period.proctor_two_id.user_id.partner_id.id)
+                
+            # Check Student list who has been paid (atm check pay in full/not)
+            std_crs_ids = self.env['student.course'].search([('offer_course_id','=',curr_period.offer_course_id.id)])
+            # Retrieve Student-course entity (all students of the course)
+            for std_crs in std_crs_ids:
+                student = self.env['student'].search([('id','=',std_crs.student_id.id)])
+                if student:
+                    lst_partner.append(student.user_id.partner_id.id)
+                    if student.student_debt > 0:
+                    # If student havent paid (exam_status is global here set need to set only once), 
+                    # -> set exam_status to False at once (for all courses)
+                        if student.exam_status:
+                            student.write({'exam_status':False})
             
-        event_name = curr_period.offer_course_id.name + lab +\
-                     curr_period.offer_course_id.course_code + '-' + curr_period.name
-        new_vals = {'name': event_name,
-                    'start_datetime': start_dt,
-                    'start': start_dt,
-                    'stop': end_dt,
-                    'duration': curr_period.duration,
-                    'study_period_id': curr_period.id,
-                    }
-        if lecturer_id:
-            new_vals['partner_ids'] = [(6, 0, [lecturer_id.user_id.partner_id.id, 3])]
-        else:
-            # 3 is Administrator as default partner
-            new_vals['partner_ids'] = [(6, 0, [3])]
+            event_name =  curr_period.offer_course_id.name + ' ' + curr_period.offer_course_id.course_code +\
+                            '-' + curr_period.name  
+            start_dt = curr_period._get_datetime(curr_period.start_date, curr_period.start_time)
+            end_dt = curr_period._get_datetime(curr_period.start_date, curr_period.end_time)
+            new_vals = {'name': event_name,
+                        'start_datetime': start_dt,
+                        'start': start_dt,
+                        'stop': end_dt,
+                        'duration': curr_period.duration,
+                        'study_period_id': curr_period.id,
+                        'partner_ids': [(6,0, lst_partner)]                   
+                        }
+            self.env['calendar.event'].create(new_vals)
+        
+        # 2. STUDY SESSIONS - Course schedule, etc.
+        else:      
+#         print '-------', self._context
             
-        if curr_period.is_recurrency:
-            new_vals['recurrency'] = True
-            new_vals['interval'] = 1
-            new_vals['rrule_type'] = 'weekly'
-            new_vals['end_type'] = 'end_date'
-            new_vals['final_date'] = curr_period.end_date
-#         print '+++++', new_vals
-        self.env['calendar.event'].create(new_vals)
-        planned_ids = self.env['calendar.event'].search([('is_planned_event','=', True),
-                                                         ('start_date', '>=', curr_period.start_date),
-                                                         ('start_date', '<=', curr_period.end_date)])
-        print '++++ Planned', planned_ids
-        planned_dates = [(p_event.start_date, p_event.stop_date) for p_event in planned_ids]
-        print '------ Holiday', planned_dates
-        # For each planned date, find the session that overlap with this. -> delete those sessions
-        # Also must check if the Exam period is fit for Which Student Academic year
-        if planned_ids:
-#             print '===== HoLIDAy', planned_dates
-            for p_event in planned_ids:
-                # Planned event only apply for certain student batches
-                # Check if the current course' student batch is in the Event's 
-                # If course's year batch not in the event's batch list, -> skip this event.
-                if p_event.year_batch_ids:
-                    if curr_period.offer_course_id.academic_year_id.year_batch_id.id not in p_event.year_batch_ids.ids:
-                        continue
-                    
-                study_session_ids = self.env['calendar.event'].search([('study_period_id','=', curr_period.id),])
-#                 print '======= Sessions', study_session_ids                    
-                for session in study_session_ids:           
-                    session_date = get_date_from_event_id(session.id)
-                    if p_event.start_date <= session_date <= p_event.stop_date:
-#                         print 'Delete ----', session.id
-                        session.unlink() 
-#                 study_session_ids.unlink()
+            # Add Lecturer to the schedule 
+            lecturer_id = curr_period.offer_course_id.lecturer_id or False
+            start_dt = curr_period._get_datetime(curr_period.start_date, curr_period.start_time)
+            end_dt = curr_period._get_datetime(curr_period.start_date, curr_period.end_time)
+            lab = ''
+            # For Lab Course
+            if curr_period.offer_course_id.is_lab:
+                lab = ' Lab '
+            else:
+                lab = ' '
+                
+            event_name = curr_period.offer_course_id.name + lab +\
+                         curr_period.offer_course_id.course_code + '-' + curr_period.name
+            new_vals = {'name': event_name,
+                        'start_datetime': start_dt,
+                        'start': start_dt,
+                        'stop': end_dt,
+                        'duration': curr_period.duration,
+                        'study_period_id': curr_period.id,
+                        }
+            if lecturer_id:
+                new_vals['partner_ids'] = [(6, 0, [lecturer_id.user_id.partner_id.id, 3])]
+            else:
+                # 3 is Administrator as default partner
+                new_vals['partner_ids'] = [(6, 0, [3])]
+                
+            if curr_period.is_recurrency:
+                new_vals['recurrency'] = True
+                new_vals['interval'] = 1
+                new_vals['rrule_type'] = 'weekly'
+                new_vals['end_type'] = 'end_date'
+                new_vals['final_date'] = curr_period.end_date
+    #         print '+++++', new_vals
+            self.env['calendar.event'].create(new_vals)
+            planned_ids = self.env['calendar.event'].search([('is_planned_event','=', True),
+                                                             ('start_date', '>=', curr_period.start_date),
+                                                             ('start_date', '<=', curr_period.end_date)])
+            print '++++ Planned', planned_ids
+            planned_dates = [(p_event.start_date, p_event.stop_date) for p_event in planned_ids]
+            print '------ Holiday', planned_dates
+            # For each planned date, find the session that overlap with this. -> delete those sessions
+            # Also must check if the Exam period is fit for Which Student Academic year
+            if planned_ids:
+    #             print '===== HoLIDAy', planned_dates
+                for p_event in planned_ids:
+                    # Planned event only apply for certain student batches
+                    # Check if the current course' student batch is in the Event's 
+                    # If course's year batch not in the event's batch list, -> skip this event.
+                    if p_event.year_batch_ids:
+                        if curr_period.offer_course_id.academic_year_id.year_batch_id.id not in p_event.year_batch_ids.ids:
+                            continue
+                        
+                    study_session_ids = self.env['calendar.event'].search([('study_period_id','=', curr_period.id),])
+    #                 print '======= Sessions', study_session_ids                    
+                    for session in study_session_ids:           
+                        session_date = get_date_from_event_id(session.id)
+                        if p_event.start_date <= session_date <= p_event.stop_date:
+    #                         print 'Delete ----', session.id
+                            session.unlink() 
+    #                 study_session_ids.unlink()
         return curr_period
     
     @api.multi
@@ -228,71 +283,111 @@ class StudyPeriod(models.Model):
         4. Check for Holidays/Planned Event to apply new changes.
         """
         for record in self:
+            # Check if any changes in current study_period
             if vals:
                 event_ids = self.env['calendar.event'].search([('study_period_id', '=', record.id)])
                 partner_ids = event_ids[0].partner_ids
                 lst_partner = []
                 # Retrieve current partner
                 for partner in partner_ids:
-                    lst_partner.append(partner.id)
-                event_ids.unlink()
+                    lst_partner.append(partner.id) # Reuse the partner list (include lecturer already)
+                event_ids.unlink() # Clear all calendar_event ids                
+                    
                 # Get Lecturer of current Course
                 lecturer_id = record.offer_course_id.lecturer_id
+                
                 rec_start_dt = vals['start_date'] if 'start_date' in vals else record.start_date
                 rec_end_dt = vals['end_date'] if 'end_date' in vals else record.end_date
                 rec_start_time = vals['start_time'] if 'start_time' in vals else record.start_time
                 rec_end_time = vals['end_time'] if 'end_time' in vals else record.end_time
                 duration = vals['duration'] if 'duration' in vals else record.duration
-                # If the course is Lab add Lab into its event's name
-                lab = ''
-                if record.offer_course_id.is_lab:
-                    lab = ' Lab '
-                else:
-                    lab = ' '
-                start_dt = record._get_datetime(rec_start_dt, rec_start_time)
-                end_dt = record._get_datetime(rec_start_dt, rec_end_time)
-                event_name = record.offer_course_id.name + lab +\
-                     record.offer_course_id.course_code + '-' + record.name
-                new_vals = {'name': event_name,
-                            'start_datetime': start_dt,
-                            'start': start_dt,
-                            'stop': end_dt,
-                            'duration': duration,
-                            'study_period_id': record.id,
-                            'partner_ids': [(6, 0, lst_partner)],                                          
-                            }
-                if record.is_recurrency:
-                    new_vals['recurrency'] = True
-                    new_vals['interval'] = 1
-                    new_vals['rrule_type'] = 'weekly'
-                    new_vals['end_type'] = 'end_date'
-                    new_vals['final_date'] = rec_end_dt
-                self.env['calendar.event'].create(new_vals)
-                planned_ids = self.env['calendar.event'].search([('is_planned_event','=', True),
-                                                         ('start_date', '>=', record.start_date),
-                                                         ('start_date', '<=', record.end_date)])
-#                 print '++++ Planned', planned_ids
-                planned_dates = [(p_event.start_date, p_event.stop_date) for p_event in planned_ids]
-#                 print '------ Holiday', planned_dates
-                # For each planned date, find the session that overlap with this. -> delete those sessions
-                # Also must check if the Exam period is fit for Which Student Academic year
-                if planned_ids:
-#                     print '===== HoLIDAy', planned_dates
-                    for p_event in planned_ids:
-                        # Planned event only apply for certain student batches
-                        # Check if the current course' student batch is in the Event's 
-                        # If course's year batch not in the event's batch list, -> skip this event.
-                        if p_event.year_batch_ids:
-                            if record.offer_course_id.academic_year_id.year_batch_id.id not in p_event.year_batch_ids.ids:
-                                continue
+                
+                new_vals = {}
+                
+                # Exam Period
+                if record.is_exam:
+                    event_name = record.offer_course_id.name + ' ' +\
+                                 record.offer_course_id.course_code +\
+                                 '-' + record.name
                             
-                        study_session_ids = self.env['calendar.event'].search([('study_period_id','=', record.id),])
-#                         print '======= Sessions', study_session_ids                    
-                        for session in study_session_ids:           
-                            session_date = get_date_from_event_id(session.id)
-                            if p_event.start_date <= session_date <= p_event.stop_date:
-#                                 print 'Delete ----', session.id
-                                session.unlink() 
+                    # Update new proctors     
+                    if 'proctor_one_id' in vals:
+                        if record.proctor_one_id:
+                            lst_partner.remove(record.proctor_one_id.user_id.partner_id.id)
+                            proctor_id = self.env['lecturer'].search([('id','=',vals['proctor_one_id'])])
+                            lst_partner.append(proctor_id.user_id.partner_id.id)
+                            
+                    if 'proctor_two_id' in vals:
+                        if record.proctor_two_id:
+                            lst_partner.remove(record.proctor_two_id.user_id.partner_id.id)
+                            proctor_id = self.env['lecturer'].search([('id','=',vals['proctor_two_id'])])
+                            lst_partner.append(proctor_id.user_id.partner_id.id)
+                        
+                    start_dt = record._get_datetime(rec_start_dt, rec_start_time)
+                    end_dt = record._get_datetime(rec_start_dt, rec_end_time)
+                    new_vals = {'name': event_name,
+                        'start_datetime': start_dt,
+                        'start': start_dt,
+                        'stop': end_dt,
+                        'duration': record.duration,
+                        'study_period_id': record.id,
+                        'partner_ids': [(6,0, lst_partner)]                   
+                        }
+                    self.env['calendar.event'].create(new_vals)
+                # Not exam, study session/other
+                else:
+                # If the course is Lab add Lab into its event's name
+                    lab = ''
+                    if record.offer_course_id.is_lab:
+                        lab = ' Lab '
+                    else:
+                        lab = ' '
+                    start_dt = record._get_datetime(rec_start_dt, rec_start_time)
+                    end_dt = record._get_datetime(rec_start_dt, rec_end_time)
+                    event_name = record.offer_course_id.name + lab +\
+                         record.offer_course_id.course_code + '-' + record.name
+                    new_vals = {'name': event_name,
+                                'start_datetime': start_dt,
+                                'start': start_dt,
+                                'stop': end_dt,
+                                'duration': duration,
+                                'study_period_id': record.id,
+                                'partner_ids': [(6, 0, lst_partner)],                                          
+                                }
+                    if record.is_recurrency:
+                        new_vals['recurrency'] = True
+                        new_vals['interval'] = 1
+                        new_vals['rrule_type'] = 'weekly'
+                        new_vals['end_type'] = 'end_date'
+                        new_vals['final_date'] = rec_end_dt
+                        
+                    self.env['calendar.event'].create(new_vals)
+                    
+                    planned_ids = self.env['calendar.event'].search([('is_planned_event','=', True),
+                                                             ('start_date', '>=', record.start_date),
+                                                             ('start_date', '<=', record.end_date)])
+    #                 print '++++ Planned', planned_ids
+                    planned_dates = [(p_event.start_date, p_event.stop_date) for p_event in planned_ids]
+    #                 print '------ Holiday', planned_dates
+                    # For each planned date, find the session that overlap with this. -> delete those sessions
+                    # Also must check if the Exam period is fit for Which Student Academic year
+                    if planned_ids:
+    #                     print '===== HoLIDAy', planned_dates
+                        for p_event in planned_ids:
+                            # Planned event only apply for certain student batches
+                            # Check if the current course' student batch is in the Event's 
+                            # If course's year batch not in the event's batch list, -> skip this event.
+                            if p_event.year_batch_ids:
+                                if record.offer_course_id.academic_year_id.year_batch_id.id not in p_event.year_batch_ids.ids:
+                                    continue
+                                
+                            study_session_ids = self.env['calendar.event'].search([('study_period_id','=', record.id),])
+    #                         print '======= Sessions', study_session_ids                    
+                            for session in study_session_ids:           
+                                session_date = get_date_from_event_id(session.id)
+                                if p_event.start_date <= session_date <= p_event.stop_date:
+    #                                 print 'Delete ----', session.id
+                                    session.unlink() 
         return super(StudyPeriod,self).write(vals)
                     
                 

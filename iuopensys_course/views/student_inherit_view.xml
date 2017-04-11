@@ -21,6 +21,23 @@
 								<field name="is_eng_complete" attrs="{'invisible':[('eng_curriculum_id','=',False)]}"/>/>
 							</group>							
 						</group>
+						<group string="Other Information">
+							<group>
+								<label for="student_balance"  style="font-weight:bold"/>
+	                    		<div>
+	                				<field name="student_balance" class="oe_inline"/>
+	                				<span> USD</span>
+	                    		</div>
+	                    		<field name="exam_status"/>
+							</group>
+							<group>
+								<label for="student_debt"  style="font-weight:bold"/>
+	                    		<div>
+	                				<field name="student_debt" class="oe_inline"/>
+	                				<span> USD</span>
+	                    		</div>
+							</group>					
+						</group>
 					</page>
 					<page string="Academic Information II">
                			<group colspan="4" id="academic_group">

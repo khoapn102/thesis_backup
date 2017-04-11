@@ -23,18 +23,26 @@ class StudentCourse(models.Model):
     # GPA    
     mid_score = fields.Float(string='Midterm Exam Score', default=0.0)
     final_score = fields.Float(string='Final Exam Score', default=0.0)
-    assignment_score = fields.Float(string='Assignment SCore', default=0.0)
+    assignment_score = fields.Float(string='Assignment Score', default=0.0)
     
     course_gpa = fields.Float(string='Course GPA', compute='_compute_course_gpa')
     
     ext_note = fields.Char(string='Note')
+    
+    # Exam status (eligible to take test or not)
+    exam_status = fields.Boolean(string='Eligible for Exam',
+                                 related='student_id.exam_status')
+    
+    # Attendance
+    
     
     @api.multi
     def _compute_course_gpa(self):
         for record in self:
             mid_avg = record.mid_score * record.offer_course_id.mid_exam_percent
             fin_avg = record.final_score * record.offer_course_id.final_exam_percent
-            record.course_gpa = (mid_avg + fin_avg)/100
+            assign_avg = record.assignment_score * record.offer_course_id.assignment_percent
+            record.course_gpa = mid_avg + fin_avg + assign_avg
     
     # No write() functions because for simplify purpose. Student.course only
     # can be created/deleted

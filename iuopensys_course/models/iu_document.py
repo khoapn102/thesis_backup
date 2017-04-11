@@ -15,6 +15,7 @@ class IuDocument(models.Model):
     signee_name = fields.Char('Signee')
     submit_deadline = fields.Date(string='Submit Deadline')
     note = fields.Text('Note')
+    is_optional = fields.Boolean('Optional Submission')
     
     # Student doc
     student_doc_ids = fields.One2many('student.document', 'iu_doc_id', 'Submitted Documents')

@@ -49,17 +49,20 @@
 		</record>
 		
 		<!-- Search View -->
-		<!-- <record id="" model="ir.ui.view">
-			<field name="name"></field>
-			<field name="model"></field>
+		<record id="course_tuition_search_view" model="ir.ui.view">
+			<field name="name">Search View</field>
+			<field name="model">course.tuition</field>
 			<field name="type">search</field>
 			<field name="arch" type="xml">
 				<search>
-					Search By
+					<!-- Search By -->
+					<field name="name"/>
+					<field name="currency"/>
+					<field name="credit_cost"/>
 					
-					Group By
+					<!-- Group By -->
 				</search>
 			</field>
-		</record> -->
+		</record>
 	</data>
 </openerp>

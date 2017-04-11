@@ -57,15 +57,26 @@
 		</record>
 		
 		<!-- Search View -->
-		<record id="" model="ir.ui.view">
-			<field name="name"></field>
-			<field name="model"></field>
+		<record id="financial_aid_search_view" model="ir.ui.view">
+			<field name="name">Search View</field>
+			<field name="model">financial.aid</field>
 			<field name="type">search</field>
 			<field name="arch" type="xml">
 				<search>
 					<!--Search By -->
+					<field name="name"/>
 					
 					<!--Group By -->
+					<group string="Group By" expand="0">
+						<filter name="group_by_finance_typ" string="Type"
+							context="{'group_by': 'finance_type'}"/>
+						<filter name="group_by_finance_value" string="Value"
+							context="{'group_by':'finance_value'}"/>
+						<filter name="group_by_start_date" string="Start Date"
+							context="{'group_by':'start_date'}"/>
+						<filter name="group_by_end_date" string="End Date"
+							context="{'group_by':'end_date'}"/>
+					</group>
 				</search>
 			</field>
 		</record>

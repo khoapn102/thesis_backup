@@ -3,7 +3,7 @@
     'version': '0.1',
     'author': 'Khoa Phan',
     'category': 'University Management',
-    'depends': ['base', 'iuopensys_core','calendar'],
+    'depends': ['base', 'iuopensys_core','calendar',],
     'data': [
         # =========================================
         # DATA

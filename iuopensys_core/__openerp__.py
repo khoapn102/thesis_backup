@@ -3,7 +3,7 @@
     'version': '0.1',
     'author': 'Khoa Phan',
     'category': 'University Management',
-    'depends': ['base'],
+    'depends': ['base','percentage_widget',],
     'data': [
         # =========================================
         # SECURITY

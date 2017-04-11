@@ -12,7 +12,11 @@ class Student(models.Model):
     year_batch_id = fields.Many2one('year.batch', string='Batch',
                                     related='academic_year_id.year_batch_id',
                                     store=True)
+    
+    # Student balance and Debt
     student_balance = fields.Float('Student Balance', default=0.0)
+    student_debt = fields.Float('Student Debt')
+    
     
     # Student Finance Situation
     financial_aid_id = fields.Many2one('financial.aid', string='Financial Aid')
@@ -36,6 +40,10 @@ class Student(models.Model):
     # Student Behavior Point
     student_behavior_point_ids = fields.One2many('student.behavior.point', 'student_id', string='Behavior Point')    
         
+    # Student Status
+    exam_status = fields.Boolean('Exam Eligibility', default=True)
+    account_status = fields.Boolean('Account Status', default=True)
+    
     @api.constrains('is_eng_req')
     def _check_eng_curriculum(self):
         for record in self:

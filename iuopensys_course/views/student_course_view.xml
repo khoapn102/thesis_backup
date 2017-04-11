@@ -28,18 +28,20 @@
 			<field name="type">form</field>
 			<field name="arch" type="xml">
 				<form edit="false">
-					<sheet>
+					<sheet>						
 						<group colspan="4">
 							<group>
 								<field name="student_id"/>
 								<field name="student_lname" readonly="1"/>
 								<field name="student_fname" readonly="1"/>
 								<field name="studentId" readonly="1"/>
+								<field name="exam_status"/>
 							</group>
 							<group>
 								<field name="offer_course_id"/>
 								<field name="course_name" readonly="1"/>
-								<field name="course_code" readonly="1"/>
+								<field name="course_code" readonly="1" invisible="1"/>
+								<field name="assignment_score"/>
 								<field name="mid_score"/>
 								<field name="final_score"/>
 								<field name="course_gpa"/>

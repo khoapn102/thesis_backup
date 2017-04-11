@@ -79,6 +79,7 @@
                         					<field name="doc_type"/>
                         					<field name="submit_deadline"/>
                         					<field name="note"/>
+                        					<field name="is_optional" string="Optional"/>
                         				</tree>
                         			</field>
                         		</group>

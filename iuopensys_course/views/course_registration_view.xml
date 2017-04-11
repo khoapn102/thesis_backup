@@ -59,17 +59,28 @@
 		</record>
 		
 		<!-- Search View -->
-		<!-- <record id="" model="ir.ui.view">
-			<field name="name"></field>
-			<field name="model"></field>
+		<record id="course_registration_search_view" model="ir.ui.view">
+			<field name="name">Search View</field>
+			<field name="model">course.registration</field>
 			<field name="type">search</field>
 			<field name="arch" type="xml">
 				<search>
-					Search By
+					<!-- Search By -->
+					<field name="name"/>
+					<field name="max_credits"/>
+					<!-- Group By -->
+					<group expand="0" string="Group By">
+						<filter name="group_by_semester" string="Semester"
+							context="{'group_by':'reg_semester_id'}"/>
+						<filter name="group_by_year_batch" string="Year Batch"
+							context="{'group_by':'year_batch_id'}"/>
+						<filter name="group_by_max_credits" string="Max Credits"
+							cotext="{'group_by':'max_credits'}"/>						
+					</group>
 					
-					Group By
+					<!-- Filter By -->
 				</search>
 			</field>
-		</record> -->
+		</record>
 	</data>
 </openerp>

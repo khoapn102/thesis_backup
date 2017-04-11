@@ -15,6 +15,7 @@ class StudentRegistration(models.Model):
     end_datetime = fields.Datetime(string='End at',
                                    related='crs_reg_id.end_datetime')
     student_id = fields.Many2one('student', string='Student')
+    exam_status = fields.Boolean(string='Exam Status', related='student_id.exam_status')
     semester_id = fields.Many2one('semester', string='Semester')
     
     offer_course_ids = fields.Many2many('offer.course', string='Offer Courses',)
@@ -59,6 +60,7 @@ class StudentRegistration(models.Model):
         self.write({'is_full_paid': not self.is_full_paid})
         if self.is_full_paid:
             self.write({'amount_paid': self.amount_must_pay})
+            self.write({'exam_status': not self.exam_status})
         else:
             self.write({'amount_paid': 0})
     
@@ -97,11 +99,13 @@ class StudentRegistration(models.Model):
             if record.drop_course_ids:
                 for course in record.drop_course_ids:
                     tuition += 0.3*(course.crs_tuition)
+                    
             # Check if student has Financial Aid
             if record.student_id.financial_aid_id:
                 financial_aid = record.student_id.financial_aid_id
                 start = datetime.strptime(financial_aid.start_date,"%Y-%m-%d")
                 end = datetime.strptime(financial_aid.end_date,"%Y-%m-%d")
+                
                 # Check if the financial aid is valid (is_active and in valid date range)
                 if financial_aid.is_active and (start <= datetime.now() <= end):
                     if financial_aid.finance_type == 'percent':
@@ -114,6 +118,16 @@ class StudentRegistration(models.Model):
             record.amount_tuition = tuition
             record.amount_financial_aid = financial_aid_value
             record.amount_must_pay = tuition - financial_aid_value
+            
+            # Student debt is update
+            student_debt = record.student_id.student_debt
+            student_debt += record.amount_must_pay
+            student_id = self.env['student'].search([('id','=',record.student_id.id)])
+            if student_id:
+                student_id.write({'student_debt':student_debt})
+                
+            record.student_id.student_debt = student_debt
+            print '========', record.student_id.student_debt
             
             record.stat_button_total_creds = cred
             record.stat_button_amount_tuition = str(tuition) + ' USD'
@@ -130,6 +144,10 @@ class StudentRegistration(models.Model):
     def _get_amt_leftover(self):
         for record in self:
             record.amount_leftover = record.amount_must_pay - record.amount_paid
+            student_id = self.env['student'].search([('id','=',record.student_id.id)])
+            if student_id:
+                student_id.write({'student_debt':record.amount_leftover})
+                        
                     
     @api.constrains('offer_course_ids')
     def _validate_registered_course(self):

@@ -135,41 +135,30 @@
                         	<page string="Exam Schedule">
                         		<div>
                         			<field name="exam_session_ids" nolabel="1" context="{'default_offer_course_id':active_id}">
-                        				<tree editable="top">
+                        				<tree editable="bottom">
                         					<field name="name"/>
                         					<field name="offer_course_id" invisible="1"/>
                         					<field name="start_date"/>
-                        					<field name="end_date"/>
+                        					<field name="end_date" invisible="1"/>
                         					<field name="start_time" widget="float_time"/>
                         					<field name="end_time" widget="float_time"/>
                         					<field name="duration" widget="float_time"/>                        					
                         					<field name="is_exam"/> 
-                        					<field name="exam_type" attrs="{'invisible': [('is_exam','=',False)]}"/>                      					
+                        					<field name="exam_type" attrs="{'invisible': [('is_exam','=',False)]}"/>
+                        					<field name="proctor_one_id"/>
+                        					<field name="proctor_two_id"/>                      					
                         				</tree>
                         			</field>
                         		</div>
                         	</page>
                         	<page string="Academic Information">
-                        		<group colspan="4" string="Grade Distribution">                        			           
-                        			<!-- <group col="22">
-                        				<field name="mid_exam_percent" class="oe_inline"/><label string="(%)" colspan="20"/>
-                        			</group>
-                        			<group col="22">
-                        				<field name="final_exam_percent" class="oe_inline"/><label string="(%)" colspan="20"/>
-                        			</group> -->
+                        		<group colspan="4" string="Grade Distribution">                       			           
                         			<group>
-                        				<label for="mid_exam_percent"  style="font-weight:bold"/>
-                        				<div>
-                        					<field name="mid_exam_percent" class="oe_inline"/>
-                        					<span> (%)</span>
-                        				</div>
+                        				<field name="mid_exam_percent" widget="percentage"/>
+                        				<field name="assignment_percent" widget="percentage"/>
                         			</group>
                         			<group>
-                        				<label for="final_exam_percent"  style="font-weight:bold"/>
-                        				<div>                        					
-                        					<field name="final_exam_percent" class="oe_inline"/>
-                        					<span> (%)</span>
-                        				</div>
+                        				<field name="final_exam_percent" widget="percentage"/>
                         			</group>
                         		</group>                        		
                         	</page>
@@ -177,14 +166,14 @@
        							<group colspan="4">
        								<field name="student_course_ids" nolabel="1" widget="x2many_selectable">
        									<tree create="false">
-       										<field name="studentId"/>
-       										<field name="student_lname"/>
-       										<field name="student_fname"/>
+       										<field name="studentId" fg_color="red:exam_status==False"/>
+       										<field name="student_lname" fg_color="red:exam_status==False"/>
+       										<field name="student_fname" fg_color="red:exam_status==False"/>
        										<field string="Class Code" name="student_class_code"/>      										       										
        										<field name="mid_score" string="Midterm Score"/>
        										<field name="final_score" string="Final Score"/>
        										<field name="course_gpa" string="GPA"/>      										
-       										<field name="ext_note"/>
+       										<field name="exam_status" string="Exam Eligibility"/>
        									</tree>
        								</field>
        							</group>

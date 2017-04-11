@@ -45,6 +45,7 @@
                    				<field name="total_creds"/>
                    				<field name="total_actual_creds"/>
                    				<field name="is_full_paid"/>
+                   				<field name="exam_status"/>
                    			</group>
                    			<group>
                    				<label for="amount_tuition"  style="font-weight:bold"/>
@@ -53,15 +54,15 @@
                    					<span> USD</span>
                    				</div>
                    				<label for="amount_financial_aid"  style="font-weight:bold"/>
-                   				<div>
-                   					<field name="amount_financial_aid" class="oe_inline"/>
-                   					<span> USD</span>
-                   				</div>
-                   				<label for="amount_must_pay"  style="font-weight:bold"/>
-                   				<div>
-                   					<field name="amount_must_pay" class="oe_inline"/>
-                   					<span> USD</span>
-                   				</div>
+                    				<div>
+                    					<field name="amount_financial_aid" class="oe_inline"/>
+                    					<span> USD</span>
+                    				</div>
+                    				<label for="amount_must_pay"  style="font-weight:bold"/>
+                    				<div>
+                    					<field name="amount_must_pay" class="oe_inline"/>
+                    					<span> USD</span>
+                    				</div>
                    				<label for="amount_paid"  style="font-weight:bold"/>
                    				<div>
                    					<field name="amount_paid" class="oe_inline"/>
