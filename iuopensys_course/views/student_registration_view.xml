@@ -9,7 +9,7 @@
 			<field name="arch" type="xml">
 				<tree>
 					<field name="student_id"/>
-					<field name="student_balance"/>
+					<field name="student_balance" string="Balance"/>
 					<field name="semester_id"/>
 					<field name="total_actual_creds"/>
 					<field name="amount_tuition"/>

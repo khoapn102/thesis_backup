@@ -10,18 +10,28 @@ class Major(models.Model):
     
     # Curriculum
     iu_curriculum_ids = fields.Many2many('iu.curriculum', string='List of curriculums')
-    course_ids = fields.Many2many('course', string='List of Course')
+    course_ids = fields.Many2many('course', string='List of Course', compute='get_all_course_ids')
         
-    @api.onchange('iu_curriculum_ids')
-    def onchange_iu_curriculum(self):
-        if self.iu_curriculum_ids:
-            ids_res = []
-            for curriculum in self.iu_curriculum_ids:
-                if curriculum.course_ids:
+#     @api.onchange('iu_curriculum_ids')
+#     def onchange_iu_curriculum(self):
+#         if self.iu_curriculum_ids:
+#             ids_res = []
+#             for curriculum in self.iu_curriculum_ids:
+#                 if curriculum.course_ids:
+#                     for course in curriculum.course_ids:
+#                         ids_res.append(course.id)
+#             
+#             self.course_ids = ids_res
+         
+    @api.depends('iu_curriculum_ids')
+    def get_all_course_ids(self):
+        for record in self:
+            if record.iu_curriculum_ids:
+                ids_res = []
+                for curriculum in record.iu_curriculum_ids:
                     for course in curriculum.course_ids:
                         ids_res.append(course.id)
-            
-            self.course_ids = ids_res
+            record.course_ids = ids_res
             
     @api.onchange('std_academic_prog_id')
     def onchange_std_academic_prog(self):
