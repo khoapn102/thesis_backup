@@ -7,7 +7,7 @@
 			<field name="inherit_id" ref="iuopensys_core.student_main_form_view"/>
 			<field name="arch" type="xml">
 				<notebook position="inside">
-					<page string="Academic Information I">
+					<page string="Academic Info I">
 						<group string="General Information">
 							<group>
 								<field name="std_academic_prog_id"/>
@@ -22,37 +22,30 @@
 							</group>							
 						</group>
 						<group string="Other Information">
-							<group>
-								<label for="student_balance"  style="font-weight:bold"/>
-	                    		<div>
-	                				<field name="student_balance" class="oe_inline"/>
-	                				<span> USD</span>
-	                    		</div>
-	                    		<field name="exam_status"/>
-							</group>
-							<group>
-								<label for="student_debt"  style="font-weight:bold"/>
-	                    		<div>
-	                				<field name="student_debt" class="oe_inline"/>
-	                				<span> USD</span>
-	                    		</div>
-							</group>					
+	                    	<field name="exam_status"/>
 						</group>
 					</page>
-					<page string="Academic Information II">
-               			<group colspan="4" id="academic_group">
-               				<field name="student_course_ids" nolabel="1"  widget="x2many_selectable">
-               					<tree>
-               						<field name="course_code"/>
+					<page string="Academic Info II">
+               			<group colspan="4" id="academic_group" string="Academic Transcript">
+               				<field name="student_course_ids" nolabel="1">
+               					<tree edit="false" create="false" delete="false">               						
+               						<field name="course_code" string="Code"/>
                						<field name="course_name"/>
-               						<field name="course_credits"/>               						
-               						<field name="mid_score"/>
-               						<field name="final_score"/>
+               						<field name="course_credits" string="Crds"/>
+               						<field name="semester_id"/>
+               						<field name="assignment_percent"/>
+               						<field name="mid_exam_percent"/>
+               						<field name="final_exam_percent"/>
+               						<field name="assignment_score" string="Assignment"/>               						
+               						<field name="mid_score" string="Midterm"/>
+               						<field name="final_score" string="Final"/>
+               						<field name="course_gpa" string="Crs GPA"/>
+               						<field name="letter_grade" string="Letter Grd"/>
                					</tree>
                				</field>
                			</group>
                		</page>
-               		<page string="Student Behavior Point">
+               		<page string="Behavior Point">
                			<group string="Semester List">
                				<field name="student_behavior_point_ids" nolabel="1"
                					context="{'default_student_id':active_id}">
@@ -69,6 +62,48 @@
                				</field>
                			</group>
                		</page>
+               		<page string="Finance Info">
+               			<group string="General Information">
+               				<group>
+								<label for="student_balance"  style="font-weight:bold"/>
+	                    		<div>
+	                				<field name="student_balance" class="oe_inline"/>
+	                				<span> USD</span>
+	                    		</div>
+							</group>
+							<group>
+								<label for="student_debt"  style="font-weight:bold"/>
+	                    		<div>
+	                				<field name="student_debt" class="oe_inline"/>
+	                				<span> USD</span>
+	                    		</div>
+							</group>
+               			</group>
+               			<group string="Tution Information">
+               				<field name="student_tuition_ids" nolabel="1">
+               					<tree create="false" edit="false">
+               						<field name="semester_id"/>
+               						<field name="amount_tuition"/>
+               						<field name="amount_financial_aid"/>	
+               						<field name="amount_must_pay"/>
+               						<field name="amount_paid"/>
+               						<field name="amount_leftover"/>
+               					</tree>
+               				</field>
+               			</group>
+               		</page>
+               		<page string="Documents">
+               			<group string="Document List">
+               				<field name="student_document_ids" nolabel="1">
+               					<tree edit="false" create="false">
+               						<field name="iu_doc_id"/>
+               						<field name="is_submit"/>
+               						<field name="is_stored"/>
+               						<field name="submit_deadline"/>
+               					</tree>
+               				</field>
+               			</group>
+               		</page>               		
 				</notebook>
 				<xpath expr="//field[@name='academic_year_id']" position="after">
 					<field name="year_batch_id"/>

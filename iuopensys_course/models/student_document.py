@@ -16,6 +16,7 @@ class StudentDocument(models.Model):
     
     # document
     iu_doc_id = fields.Many2one('iu.document', 'Document Name')
+    submit_deadline = fields.Date(related='iu_doc_id.submit_deadline')
     
     # attachment
     attachment_ids = fields.One2many('ir.attachment', 'student_document_id', string='Attachments')

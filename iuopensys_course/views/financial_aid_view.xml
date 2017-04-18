@@ -50,6 +50,9 @@
                         		<field name="finance_value"/>
                         		<field name="note"/>
                         	</group>
+                        </group>
+                        <group string="List of Students">
+                        	<field name="student_ids" nolabel="1" context="{'default_financial_aid_id':active_id'}"/>
                         </group>						
 					</sheet>
 				</form>

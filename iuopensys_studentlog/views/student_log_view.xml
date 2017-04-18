@@ -1,0 +1,73 @@
+<?xml version="1.0" ?>
+<openerp>
+	<data>
+		<record model="ir.actions.act_window" id="student_log_main_action">
+			<field name="name">Student Historical Data</field>
+			<field name="res_model">student.log</field>
+			<field name="view_mode">tree,form</field>
+		</record>
+		
+		<record id="student_log_tree_view" model="ir.ui.view">
+			<field name="name">Historical Data</field>
+			<field name="model">student.log</field>
+			<field name="type">tree</field>
+			<field name="arch" type="xml">
+				<tree>
+					<field name="student_id"/>
+					<field name="modified_user_id"/>								
+					<field name="field_change_name" string="Field"/>
+					<field name="old_value"/>
+					<field name="new_value"/>
+					<field name="modified_date"/>
+				</tree>
+			</field>
+		</record>
+		
+		<record id="student_log_form_view" model="ir.ui.view">
+			<field name="name">Data</field>
+			<field name="model">student.log</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<form>					
+					<sheet>
+						<group string="Information">
+							<group>
+								<field name="student_id"/>								
+							</group>							
+							<group>
+								<field name="modified_user_id"/>
+							</group>
+						</group>
+						<group string="Modification Information">
+							<group>
+								<field name="field_change"/>
+								<field name="field_change_name" string="Field's Name"/>
+								<field name="modified_date"/>
+							</group>
+							<group>
+								<field name="old_value"/>
+								<field name="new_value"/>								
+							</group>
+						</group>					
+					</sheet>
+				</form>
+			</field>
+		</record>
+		
+		<!-- Search View -->
+		<!-- <record id="" model="ir.ui.view">
+			<field name="name"></field>
+			<field name="model"></field>
+			<field name="type">search</field>
+			<field name="arch" type="xml">
+				<search string="Search">
+					Search By
+					
+					Group By
+					<group expand="0" string="Group By">
+					</group>
+				</search>
+			</field>
+		</record> -->
+	</data>
+</openerp>

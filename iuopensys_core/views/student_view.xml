@@ -61,7 +61,7 @@
                         		</group>
                         	</group>
                         	<notebook colspan="4">
-                        		<page string="Login Information">
+                        		<page string="Login Info">
                         			<group colspan="4">
                         				<group>
 			                        		<field name="login"/>
@@ -72,7 +72,7 @@
 	                        			</group>
                         			</group>                        			
                         		</page>
-                        		<page string="Personal Information">
+                        		<page string="Personal Info">
                         			<group colspan="4">
                         				<group>
                         					<field name="birthdate"/>

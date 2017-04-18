@@ -63,15 +63,22 @@
 		</record>
 		
 		<!-- Search View -->
-		<record id="" model="ir.ui.view">
-			<field name="name"></field>
-			<field name="model"></field>
+		<record id="iu_document_search_view" model="ir.ui.view">
+			<field name="name">Search</field>
+			<field name="model">iu.document</field>
 			<field name="type">search</field>
 			<field name="arch" type="xml">
 				<search>
-					<!--Search By -->
+					<!-- Search By -->
+					<field name="name"/>
 					
-					<!--Group By -->
+					<!-- Group By -->
+					<group expand="0" string="Group By">
+						<filter string="Provided by"
+							context="{'group_by':'doc_type'}"/>
+						<filter string="Deadline"
+							context="{'group_by':'submit_deadline'}"/>						
+					</group>
 				</search>
 			</field>
 		</record>

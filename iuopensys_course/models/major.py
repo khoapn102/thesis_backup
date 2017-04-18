@@ -29,9 +29,10 @@ class Major(models.Model):
             if record.iu_curriculum_ids:
                 ids_res = []
                 for curriculum in record.iu_curriculum_ids:
-                    for course in curriculum.course_ids:
-                        ids_res.append(course.id)
-            record.course_ids = ids_res
+                    if curriculum.course_ids:
+                        for course in curriculum.course_ids:
+                            ids_res.append(course.id)
+                record.course_ids = ids_res
             
     @api.onchange('std_academic_prog_id')
     def onchange_std_academic_prog(self):

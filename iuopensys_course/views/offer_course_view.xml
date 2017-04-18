@@ -22,11 +22,11 @@
 					<field name="department_id" invisible="1"/>
 					<field name="dept_academic_code"/>					
 					<field name="course_group"/>
-					<field name="number_credits_actual"/>
+					<field name="number_credits_actual" string="Crds Tuition"/>
 					<field name="numb_students"/>
 					<field name="avail_students"/>
 					<field name="academic_year_id"/>
-					<field name="semester_id" invisible="1"/>					
+					<field name="semester_id"/>					
 					<field name="display_study_daytime"/>
 					<field name="display_room"/>
 					<field name="display_lecturer"/>
@@ -164,12 +164,13 @@
                         	</page>
        						<page string="Student List">
        							<group colspan="4">
-       								<field name="student_course_ids" nolabel="1" widget="x2many_selectable">
-       									<tree create="false">
+       								<field name="student_course_ids" nolabel="1">
+       									<tree create="false" editable="bottom">
        										<field name="studentId" fg_color="red:exam_status==False"/>
        										<field name="student_lname" fg_color="red:exam_status==False"/>
        										<field name="student_fname" fg_color="red:exam_status==False"/>
-       										<field string="Class Code" name="student_class_code"/>      										       										
+       										<field string="Class Code" name="student_class_code"/> 
+       										<field name="assignment_score" string="Assign. Score"/>    										       										
        										<field name="mid_score" string="Midterm Score"/>
        										<field name="final_score" string="Final Score"/>
        										<field name="course_gpa" string="GPA"/>      										

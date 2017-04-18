@@ -48,17 +48,17 @@
 		</record>
 		
 		<!-- Search View -->
-		<record id="" model="ir.ui.view">
+		<!-- <record id="" model="ir.ui.view">
 			<field name="name"></field>
 			<field name="model"></field>
 			<field name="type">search</field>
 			<field name="arch" type="xml">
 				<search>
-					<!--Search By -->
+					Search By
 					
-					<!--Group By -->
+					Group By
 				</search>
 			</field>
-		</record>
+		</record> -->
 	</data>
 </openerp>

@@ -55,15 +55,24 @@
 		</record>
 		
 		<!-- Search View -->
-		<record id="" model="ir.ui.view">
-			<field name="name"></field>
-			<field name="model"></field>
+		<record id="student_document_search_view" model="ir.ui.view">
+			<field name="name">Search View</field>
+			<field name="model">student.document</field>
 			<field name="type">search</field>
 			<field name="arch" type="xml">
 				<search>
-					<!--Search By -->
+					<!-- Search By -->
+					<field name="student_id"/>
+					<field name="iu_doc_id"/>
+										
+					<!-- Group By -->
+					<group expand="0" string="Group By">
+						<filter string="Submitted"
+							context="{'group_by':'is_submit'}"/>
+						<filter string="Stored"
+							context="{'group_by':'is_stored'}"/>					
+					</group>				
 					
-					<!--Group By -->
 				</search>
 			</field>
 		</record>

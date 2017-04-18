@@ -12,7 +12,7 @@
 				<xpath expr="//page[1]/group[1]" position="after">
 					<group string="Curriculums">
 						<field name="iu_curriculum_ids" nolabel="1">
-							<tree create="false" edit="false">
+							<tree edit="false">
 								<field name="name"/>
 								<field name="department_id"/>
 								<field name="max_cred_require"/>

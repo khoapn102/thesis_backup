@@ -148,7 +148,8 @@
                         		<field name="is_created" invisible="1"/>
                         		<field name="create_uid" invisible="1"/>
                         		<field name="crs_reg_id" attrs="{'readonly':[('is_created','=',True)]}" invisible="1"/>
-                        		<field name="student_id" attrs="{'readonly':[('is_created','=',True)]}"/>                        		                        		 
+                        		<field name="student_id" attrs="{'readonly':[('is_created','=',True)]}"/>
+                        		<field name="course_ids" invisible="1"/>                        		                        		 
                         	</group>                        	
                         	<group>
                         		<field name="semester_id" attrs="{'readonly':[('is_created','=',True)]}"/>
@@ -165,7 +166,7 @@
                         	<page string="Register">
                         		<group string="Registered Courses">
 		                       		<field name="offer_course_ids" nolabel="1" options="{'no_create':True}" 
-		                       			domain="[('semester_id','=',semester_id),('has_lab','=',False)]">
+		                       			domain="[('semester_id','=',semester_id),('has_lab','=',False),('course_id','in', course_ids and course_ids[0][2])]">
 		                       			<tree edit="false">
 		                       				<field name="course_code" string="Crs Code"/>
 											<field name="name"/>
@@ -275,17 +276,23 @@
 		</record>
 		
 		<!-- Search View -->
-		<!-- <record id="" model="ir.ui.view">
-			<field name="name"></field>
-			<field name="model"></field>
+		<record id="student_registration_search_view" model="ir.ui.view">
+			<field name="name">Search</field>
+			<field name="model">student.registration</field>
 			<field name="type">search</field>
 			<field name="arch" type="xml">
 				<search>
-					Search By
+					<!-- Search By -->
+					<field name="name"/>
+					<field name="student_id"/>
+					<field name="crs_reg_id"/>
 					
-					Group By
+					<!-- Group By -->
+					<group expand="0" string="Group By">
+						
+					</group>
 				</search>
 			</field>
-		</record> -->
+		</record>
 	</data>
 </openerp>

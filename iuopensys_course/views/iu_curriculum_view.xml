@@ -15,8 +15,8 @@
 				<tree>
 					<field name="name"/>
 					<field name="department_id"/>
-					<field name="max_cred_require"/>
-					<field name="total_cred"/>
+					<field name="max_cred_require" string="Max Crds. Req"/>
+					<field name="total_cred" string="Total Crds."/>
 					<field name="note"/>
 				</tree>
 			</field>

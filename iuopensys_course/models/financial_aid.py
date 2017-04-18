@@ -19,6 +19,9 @@ class FinancialAid(models.Model):
     start_date = fields.Date(string='Valid from')
     end_date = fields.Date(string='Until to')
     
+    # List of student with same Financial Aid Type
+    student_ids = fields.One2many('student','financial_aid_id', string='Students')
+    
     @api.constrains('start_date', 'end_date')
     def check_start_end_time(self):
         for record in self:

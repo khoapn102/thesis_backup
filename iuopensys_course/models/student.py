@@ -7,19 +7,22 @@ class Student(models.Model):
     _inherit = 'student'
     
     # Course list referenced to student
+    # One2many Domain is different from Many2many
     student_course_ids = fields.One2many('student.course', 'student_id',
-                                         string='Courses') # domain=[('offer_course_id.is_lab','=',False)])
+                                         string='Courses', domain=['|',('offer_course_id.is_lab','=',False),
+                                                                   ('offer_course_id.lab_type','!=','combine')])
     year_batch_id = fields.Many2one('year.batch', string='Batch',
                                     related='academic_year_id.year_batch_id',
                                     store=True)
     
     # Student balance and Debt
     student_balance = fields.Float('Student Balance', default=0.0)
-    student_debt = fields.Float('Student Debt')
-    
+    student_debt = fields.Float('Student Debt', compute='get_student_debt')
     
     # Student Finance Situation
     financial_aid_id = fields.Many2one('financial.aid', string='Financial Aid')
+    student_tuition_ids = fields.One2many('student.registration', 'student_id',
+                                          string='Finance Info')
     
     # Student Academic Program
     std_academic_prog_id = fields.Many2one('student.academic.program',string='Academic Program',
@@ -43,6 +46,18 @@ class Student(models.Model):
     # Student Status
     exam_status = fields.Boolean('Exam Eligibility', default=True)
     account_status = fields.Boolean('Account Status', default=True)
+    
+    # Student document
+    student_document_ids = fields.One2many('student.document', 'student_id', string='Documents')
+    
+    @api.depends('student_tuition_ids')
+    def get_student_debt(self):
+        for record in self:
+            if record.student_tuition_ids:
+                debt = 0
+                for tuition_id in record.student_tuition_ids:
+                    debt += tuition_id.amount_leftover
+                record.student_debt = debt
     
     @api.constrains('is_eng_req')
     def _check_eng_curriculum(self):
