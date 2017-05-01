@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<openerp>
+	<data>
+		<record id="default_course_passing_grade" model="ir.config_parameter">
+			<field name="key">iuopensys_course.course_passing_grade</field>
+			<field name="value">50.0</field>
+		</record>
+	</data>
+</openerp>

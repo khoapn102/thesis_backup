@@ -9,6 +9,9 @@
 				<xpath expr="//field[@name='department_id']" position="before">
 					<field name="std_academic_prog_id"/>
 				</xpath>
+				<xpath expr="//field[@name='note']" position="before">
+					<field name="major_total_credits"/>
+				</xpath>
 				<xpath expr="//page[1]/group[1]" position="after">
 					<group string="Curriculums">
 						<field name="iu_curriculum_ids" nolabel="1">

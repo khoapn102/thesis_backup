@@ -7,7 +7,7 @@
 			<field name="inherit_id" ref="iuopensys_core.student_main_form_view"/>
 			<field name="arch" type="xml">
 				<notebook position="inside">
-					<page string="Academic Info I">
+					<page string="Academic Info">
 						<group string="General Information">
 							<group>
 								<field name="std_academic_prog_id"/>
@@ -25,25 +25,50 @@
 	                    	<field name="exam_status"/>
 						</group>
 					</page>
-					<page string="Academic Info II">
-               			<group colspan="4" id="academic_group" string="Academic Transcript">
-               				<field name="student_course_ids" nolabel="1">
-               					<tree edit="false" create="false" delete="false">               						
-               						<field name="course_code" string="Code"/>
-               						<field name="course_name"/>
-               						<field name="course_credits" string="Crds"/>
-               						<field name="semester_id"/>
-               						<field name="assignment_percent"/>
-               						<field name="mid_exam_percent"/>
-               						<field name="final_exam_percent"/>
-               						<field name="assignment_score" string="Assignment"/>               						
-               						<field name="mid_score" string="Midterm"/>
-               						<field name="final_score" string="Final"/>
-               						<field name="course_gpa" string="Crs GPA"/>
-               						<field name="letter_grade" string="Letter Grd"/>
-               					</tree>
-               				</field>
-               			</group>
+					<page string="Transcript">
+						<notebook>
+							<page string="Semester Transcript">
+								<field name="student_semester_ids" nolabel="1">
+									<tree>
+										<field name="semester_id"/>
+										<field name="total_credits"/>
+										<field name="achieved_credits"/>
+										<field name="no_count_credits"/>
+										<field name="average_gpa"/>
+									</tree>
+								</field>
+							</page>
+							<page string="Academic Transcript">
+								<group string="Transcript">
+									<group>
+										<group>
+											<field name="accumulated_gpa"/>
+										</group>
+										<group>
+											<field name="accumulated_credits"/>
+										</group>
+									</group>
+		               			</group>
+		               			<group>
+									<field name="student_course_ids" nolabel="1">
+		               					<tree edit="false" create="false" delete="false">               						
+		               						<field name="course_code" string="Code" fg_color="red:letter_grade in ['F']"/>
+		               						<field name="course_name" fg_color="red:letter_grade in ['F']"/>
+		               						<field name="course_credits" string="Crds" fg_color="red:letter_grade in ['F']"/>
+		               						<field name="semester_id" fg_color="red:letter_grade in ['F']"/>
+		               						<field name="assignment_percent" fg_color="red:letter_grade in ['F']"/>
+		               						<field name="mid_exam_percent" fg_color="red:letter_grade in ['F']"/>
+		               						<field name="final_exam_percent" fg_color="red:letter_grade in ['F']"/>
+		               						<field name="assignment_score" string="Assignment" fg_color="red:letter_grade in ['F']"/>               						
+		               						<field name="mid_score" string="Midterm" fg_color="red:letter_grade in ['F']"/>
+		               						<field name="final_score" string="Final" fg_color="red:letter_grade in ['F']"/>
+		               						<field name="course_gpa" string="Crs GPA" fg_color="red:letter_grade in ['F']"/>
+		               						<field name="letter_grade" string="Letter Grd" fg_color="red:letter_grade in ['F']"/>
+		               					</tree>
+		               				</field>
+								</group>
+							</page>
+						</notebook>               			
                		</page>
                		<page string="Behavior Point">
                			<group string="Semester List">
@@ -93,16 +118,34 @@
                			</group>
                		</page>
                		<page string="Documents">
-               			<group string="Document List">
-               				<field name="student_document_ids" nolabel="1">
-               					<tree edit="false" create="false">
-               						<field name="iu_doc_id"/>
-               						<field name="is_submit"/>
-               						<field name="is_stored"/>
-               						<field name="submit_deadline"/>
-               					</tree>
-               				</field>
-               			</group>
+               			<notebook>
+               				<page string="Submitted Documents">
+               					<group string="Document List">
+		               				<field name="student_document_ids" nolabel="1">
+		               					<tree edit="false" create="false">
+		               						<field name="iu_doc_id"/>
+		               						<field name="is_submit"/>
+		               						<field name="is_stored"/>
+		               						<field name="submit_deadline"/>
+		               					</tree>
+		               				</field>
+		               			</group>
+               				</page>
+               				<page string="Uncompleted Documents">
+               					<group>
+               						<field name="student_document_not_submit_ids" nolabel="1">
+               							<tree edit="false">
+               								<field name="name"/>
+               								<field name="doc_type"/>
+               								<field name="submit_deadline"/>
+               								<field name="note"/>
+               								<field name="is_optional"/>
+               							</tree>
+               						</field>
+               					</group>
+               				</page>
+               			</notebook>
+               			
                		</page>               		
 				</notebook>
 				<xpath expr="//field[@name='academic_year_id']" position="after">

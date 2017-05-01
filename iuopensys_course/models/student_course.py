@@ -5,6 +5,7 @@ class StudentCourse(models.Model):
     _name = 'student.course'
     _description = 'Registered Course of Student'   
     
+    name = fields.Char(string='Name', default='Student Course Transcript')
     
     # Student
     student_id = fields.Many2one('student', string='Student', ondelete="cascade")    
@@ -18,7 +19,8 @@ class StudentCourse(models.Model):
     course_code = fields.Char(string='Course Code', related='offer_course_id.course_code')
     course_name = fields.Char(string='Course Name', related='offer_course_id.name')
     course_credits = fields.Integer(string='Credits', related='offer_course_id.course_id.number_credits')    
-    semester_id = fields.Many2one(related='offer_course_id.semester_id')
+    semester_id = fields.Many2one(related='offer_course_id.semester_id',
+                                  store=True)
     
     # GPA
     mid_exam_percent = fields.Float(string="Mid %", related="offer_course_id.mid_exam_percent")
@@ -34,17 +36,48 @@ class StudentCourse(models.Model):
     classification = fields.Char(string='Classification', compute='_compute_course_gpa')
     ext_note = fields.Char(string='Note')
     
+#     is_pass = fields.Boolean('Passed')
+    
     # Exam status (eligible to take test or not)
     exam_status = fields.Boolean(string='Eligible for Exam',
                                  related='student_id.exam_status')
     
     # Attendance
+    amount_session = fields.Integer(related='offer_course_id.amount_session')
+    s1 = fields.Boolean('s1')
+    s2 = fields.Boolean('s2')    
+    s3 = fields.Boolean('s3')
+    s4 = fields.Boolean('s4')
+    s5 = fields.Boolean('s5')
+    s6 = fields.Boolean('s6')
+    s7 = fields.Boolean('s7')
+    s8 = fields.Boolean('s8')
+    s9 = fields.Boolean('s9')
+    s10 = fields.Boolean('s10')
+    s11 = fields.Boolean('s11')
+    s12 = fields.Boolean('s12')
+    s13 = fields.Boolean('s13')
+    s14 = fields.Boolean('s14')
+    s15 = fields.Boolean('s15')
+    s16 = fields.Boolean('s16') 
     
+    # Course status per student
+    is_complete = fields.Boolean('Completed')
+     
+    
+#     @api.onchange('course_gpa')
+#     def onchange_course_gpa(self):
+#         passing_grade = self.env['ir.config_parameter'].get_param('iuopensys_course.course_passing_grade')
+#         print '========', type(passing_grade), ' ', passing_grade
+#         if self.course_gpa and self.course_gpa >= float(passing_grade):
+#             print '+++++ True'
+#             if not self.is_complete:
+#                 self.is_complete = True
     
     @api.multi
     def _compute_course_gpa(self):
         for record in self:
-            if record.final_score:
+            if record.final_score >= 0 and record.offer_course_id.final_exam_percent:
                 mid_avg = record.mid_score * record.offer_course_id.mid_exam_percent
                 fin_avg = record.final_score * record.offer_course_id.final_exam_percent
                 assign_avg = record.assignment_score * record.offer_course_id.assignment_percent
@@ -61,6 +94,14 @@ class StudentCourse(models.Model):
                     if classify[item][0] <= record.course_gpa <= classify[item][1]:
                         record.letter_grade = item
                         break
+                    
+#                 passing_grade = self.env['ir.config_parameter'].get_param('iuopensys_course.course_passing_grade')
+#                 if record.course_gpa >= float(passing_grade):
+#                     if record.is_complete == False:
+#                         record.write({'is_complete': True})
+#                 else:
+#                     if record.is_complete:
+#                         record.write({'is_complete': False})
     
     # No write() functions because for simplify purpose. Student.course can only
     # be created/deleted

@@ -22,7 +22,10 @@ class Course(models.Model):
                                 string='Teaching Language')
     tuition_id = fields.Many2one('course.tuition', string='Credit Cost')
     offer_course_ids = fields.One2many('offer.course', 'course_id', 'Offering Courses')
-              
+    cred_count_type = fields.Selection(selection=[('count', 'Normal'),
+                                                  ('nocount','Only Pass/No pass')],
+                                       default='count', string='Credit Count Type')
+          
     @api.onchange('number_credits')
     def _onchange_number_credits(self):
         self.number_credits_actual = self.number_credits

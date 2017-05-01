@@ -60,12 +60,12 @@
                     				</div>
                     				<label for="amount_must_pay"  style="font-weight:bold"/>
                     				<div>
-                    					<field name="amount_must_pay" class="oe_inline"/>
-                    					<span> USD</span>
+                    					<field name="amount_must_pay" class="oe_inline"/>                 					<span> USD</span>
                     				</div>
                    				<label for="amount_paid"  style="font-weight:bold"/>
                    				<div>
-                   					<field name="amount_paid" class="oe_inline"/>
+                   					<field name="amount_paid" class="oe_inline"
+                   						attrs="{'readonly':[('is_full_paid','=', True)]}"/>
                    					<span> USD</span>
                    				</div>
                    				<label for="amount_leftover"  style="font-weight:bold"/>
@@ -289,8 +289,20 @@
 					
 					<!-- Group By -->
 					<group expand="0" string="Group By">
-						
+						<filter string="Course Registration"
+							context="{'group_by':'crs_reg_id'}"/>				
+						<filter string="Semester"
+							context="{'group_by':'semester_id'}"/>					
+						<filter string="State"
+							context="{'group_by':'reg_state'}"/>
 					</group>
+					
+					<!-- Filter -->
+					<filter string="Exam Eligible"
+						domain="[('exam_status','=',True)]"/>
+					<filter string="Exam not Eligible"
+						domain="[('exam_status','=',False)]"/>
+					
 				</search>
 			</field>
 		</record>

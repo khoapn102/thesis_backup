@@ -64,6 +64,7 @@ class OfferCourse(models.Model):
     # Student List
     student_course_ids = fields.One2many('student.course', 'offer_course_id',
                                          string='Students')
+    student_attendance_ids = fields.One2many('student.course', 'offer_course_id', string='Attendance')
     
     # Grade and Trancsript
     mid_exam_percent = fields.Float(string='Midterm Exam Percentage')
@@ -76,6 +77,9 @@ class OfferCourse(models.Model):
                                         domain=[('is_exam','=',False)])
     exam_session_ids = fields.One2many('study.period', 'offer_course_id', string='Examination',
                                        domain=[('is_exam','=',True)])
+    
+    # For Attendance Purpose (each sess/week or multiple sessions/week)
+    amount_session = fields.Integer('Amt. Sessions', compute='_get_display_details')
     
     display_study_daytime = fields.Text(string='Day(s) and Time(s)', compute='_get_display_details')
     display_course_period = fields.Text(string='Period(s)', compute='_get_display_details')
@@ -90,6 +94,7 @@ class OfferCourse(models.Model):
     
     # Note
     ext_note = fields.Text('Note')
+                    
     
     @api.constrains('mid_exam_percent','final_exam_percent','assignment_percent')
     def _validate_grade_percent(self):
@@ -192,9 +197,18 @@ class OfferCourse(models.Model):
                     temp_date = record.theory_course_id.display_course_period or ' '                      
                 # Get Lab days        
                 if record.study_session_ids:
+                    # For amount of session
+                    amt_session = 0
                     for session in record.study_session_ids:
                         start_d = datetime.strptime(session.start_date, '%Y-%m-%d')
                         end_d = datetime.strptime(session.end_date, '%Y-%m-%d')
+                        
+                        weeks = ((end_d - start_d).days)/7
+                        # In case only 1 section - same day
+                        if weeks == 0:
+                            weeks = 1
+                        amt_session += weeks
+                        
                         end_d = datetime.strftime(end_d, '%d/%m/%y')
                         temp_date += datetime.strftime(start_d,'%d/%m/%y')
                         temp_date += ' - ' + end_d + ' [**]\n'                      
@@ -202,7 +216,10 @@ class OfferCourse(models.Model):
                         temp += day[day_indx] + '\t| '
                         start_t = session._get_time(session.start_time)
                         end_t = session._get_time(session.end_time)
-                        temp += start_t + '-' + end_t + ' [**]' +'\n'                    
+                        temp += start_t + '-' + end_t + ' [**]' +'\n'
+                                            
+                    record.amount_session = amt_session
+                                            
                 if record.lecturer_id:
                     temp_lect += (record.lecturer_id.name + '\n') or ''
                 if record.assign_room:
@@ -211,9 +228,17 @@ class OfferCourse(models.Model):
             # Lecture Course record
             else:         
                 if record.study_session_ids:
+                    amt_session = 0
                     for session in record.study_session_ids:
                         start_d = datetime.strptime(session.start_date, '%Y-%m-%d')
                         end_d = datetime.strptime(session.end_date, '%Y-%m-%d')
+                        
+                        weeks = ((end_d - start_d).days)/7
+                        # In case only 1 section - same day
+                        if weeks == 0:
+                            weeks = 1
+                        amt_session += weeks
+                        
                         end_d = datetime.strftime(end_d, '%d/%m/%y')
                         temp_date += datetime.strftime(start_d,'%d/%m/%y')
                         temp_date += ' - ' + end_d + '\n'                      
@@ -224,6 +249,9 @@ class OfferCourse(models.Model):
                         temp += start_t + '-' + end_t + '\n'
 #                     if len(record.study_session_ids):
 #                         temp += '\n'
+
+                    record.amount_session = amt_session
+
                 if record.lecturer_id:
                     temp_lect = record.lecturer_id.name + '\n\n'
                 if record.assign_room:

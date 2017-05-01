@@ -85,9 +85,15 @@ class StudyPeriod(models.Model):
                                                 ('5', '5')],
                                      string='Amt', help='Amount periods for session')
 
-    
 #     start_datetime = fields.Datetime('Start Session (same day)')
 #     end_datetime = fields.Datetime('End Session (same day)')
+    
+    # For case the session is on 1 day only. No recurrency is needed
+    @api.onchange('is_recurrency')
+    def onchange_is_recurrency(self):
+        if not self.is_recurrency:
+            self.end_date = self.start_date            
+    
     @api.constrains('start_date', 'end_date')
     def _validate_study_period(self):
         # Validate field for Course time. Exam must not checked this validation
@@ -266,8 +272,16 @@ class StudyPeriod(models.Model):
                         
                     study_session_ids = self.env['calendar.event'].search([('study_period_id','=', curr_period.id),])
     #                 print '======= Sessions', study_session_ids                    
-                    for session in study_session_ids:           
+                    for session in study_session_ids:
+                        
+                        # Recurring events will have the date in the name
+                        if session.recurrency:
+                                    session_date = get_date_from_event_id(session.id)
+                        else: # Otherwise only 1 date, get the start_date
+                            session_date = session.start_date 
+                                  
                         session_date = get_date_from_event_id(session.id)
+                        # Non-recurring event will have the date save in data
                         if p_event.start_date <= session_date <= p_event.stop_date:
     #                         print 'Delete ----', session.id
                             session.unlink() 
@@ -383,8 +397,14 @@ class StudyPeriod(models.Model):
                                 
                             study_session_ids = self.env['calendar.event'].search([('study_period_id','=', record.id),])
     #                         print '======= Sessions', study_session_ids                    
-                            for session in study_session_ids:           
-                                session_date = get_date_from_event_id(session.id)
+                            for session in study_session_ids:
+                                           
+                                # Recurring events will have the date in the name
+                                if session.recurrency:
+                                            session_date = get_date_from_event_id(session.id)
+                                else: # Otherwise only 1 date, get the start_date
+                                    session_date = session.start_date
+                                    
                                 if p_event.start_date <= session_date <= p_event.stop_date:
     #                                 print 'Delete ----', session.id
                                     session.unlink() 

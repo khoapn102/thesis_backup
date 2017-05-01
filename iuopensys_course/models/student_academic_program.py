@@ -29,6 +29,8 @@ class StudentAcademicProgram(models.Model):
     # Required Document
     iu_doc_ids = fields.Many2many('iu.document', string='Required Documents')
     
+    # Required Curriculum (SHCD, etc.)
+    req_curriculum_ids = fields.Many2many('iu.curriculum', string='Required Curriculum')
     
     @api.onchange('study_year_first', 'study_year_second')
     def onchange_study_length(self):

@@ -12,7 +12,8 @@
 			<field name="model">student.course</field>
 			<field name="type">tree</field>
 			<field name="arch" type="xml">
-				<tree>
+				<tree edit="false">
+					<field name="name" invisible="1"/>
 					<field name="student_id"/>
 					<field name="offer_course_id"/>
 					<field name="assignment_score"/>
@@ -28,19 +29,22 @@
 			<field name="model">student.course</field>
 			<field name="type">form</field>
 			<field name="arch" type="xml">
-				<form edit="false">
+				<form>
 					<sheet>						
-						<group colspan="4">
+						<group colspan="4" string="Information">
+							<field name="name" invisible="1"/>
 							<group>
-								<field name="student_id"/>
+								<field name="student_id" readonly="1"/>
 								<field name="student_lname" readonly="1"/>
 								<field name="student_fname" readonly="1"/>
 								<field name="studentId" readonly="1"/>
-								<field name="exam_status"/>						
+								<field name="exam_status"/>
+								<field name="amount_session"/>
+								<field name="is_complete"/>					
 							</group>
 							<group>
-								<field name="offer_course_id"/>
-								<field name="course_name" readonly="1"/>
+								<field name="offer_course_id" readonly="1"/>
+								<field name="semester_id" readonly="1"/>
 								<field name="course_code" readonly="1" invisible="1"/>
 								<field name="assignment_score"/>
 								<field name="mid_score"/>
@@ -53,6 +57,34 @@
 							<label for="ext_note" string="Note"/>
 							<field name="ext_note" nolabel="1"/>
 						</div>
+						<group string="Attendance Sheet">
+							<table>
+								<tr>
+									<td>
+										S1: <field name="s1"/>&#160;&#160;&#160;&#160;&#160;|&#160;&#160;&#160;&#160;
+										S2: <field name="s2"/>&#160;&#160;&#160;&#160;&#160;|&#160;&#160;&#160;&#160;
+										S3: <field name="s3"/>&#160;&#160;&#160;&#160;&#160;|&#160;&#160;&#160;&#160;
+										S4: <field name="s4"/>&#160;&#160;&#160;&#160;&#160;|&#160;&#160;&#160;&#160;
+										S5: <field name="s5"/>&#160;&#160;&#160;&#160;&#160;|&#160;&#160;&#160;&#160;
+										S6: <field name="s6"/>&#160;&#160;&#160;&#160;&#160;|&#160;&#160;&#160;&#160;
+										S7: <field name="s7"/>&#160;&#160;&#160;&#160;&#160;|&#160;&#160;&#160;&#160;
+										S8: <field name="s8"/>&#160;&#160;&#160;&#160;&#160;|&#160;&#160;&#160;&#160;
+										S9: <field name="s9"/>&#160;&#160;&#160;&#160;&#160;										
+									</td>
+								</tr>
+								<tr>
+									<td>
+										S10: <field name="s10"/>&#160;&#160;&#160;|&#160;&#160;&#160;&#160;
+										S11: <field name="s11"/>&#160;&#160;&#160;|&#160;&#160;&#160;&#160;
+										S12: <field name="s12"/>&#160;&#160;&#160;|&#160;&#160;&#160;&#160;
+										S13: <field name="s13"/>&#160;&#160;&#160;|&#160;&#160;&#160;&#160;
+										S14: <field name="s14"/>&#160;&#160;&#160;|&#160;&#160;&#160;&#160;
+										S15: <field name="s15"/>&#160;&#160;&#160;|&#160;&#160;&#160;&#160;
+										S16: <field name="s16"/>&#160;&#160;&#160;|&#160;&#160;&#160;&#160;
+									</td>
+								</tr>
+							</table>
+						</group>
 					</sheet>
 				</form>
 			</field>

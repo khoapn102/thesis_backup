@@ -16,3 +16,4 @@ import iu_curriculum
 import major
 import financial_aid
 import student_behavior_point
+import student_semester

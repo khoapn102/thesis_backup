@@ -38,6 +38,7 @@
                         <group string="Basic Information">
                         	<group>
                         		<field name="department_id"/>
+                        		<field name="total_cred"/>
                         		<field name="max_cred_require"/>
                         	</group>
                         	<group>

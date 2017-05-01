@@ -15,7 +15,8 @@ class Department(models.Model):
                                    help='Head of Department')
     vice_dept_id = fields.Many2one('lecturer', string='Department Vice Dean',
                                    help='Vice Dean of Department')
-    has_student = fields.Boolean('Student Management')
+    has_student = fields.Boolean('Student Management',
+                                 help='For Departments that have students only. Dont check this to avoid complication')
 #     head_dept_title = fields.Char(string='Title', compute='_get_lecturer_title',
 #                                   store=True)
 #     

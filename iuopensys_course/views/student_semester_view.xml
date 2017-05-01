@@ -1,0 +1,88 @@
+<?xml version="1.0" ?>
+<openerp>
+	<data>
+		<record model="ir.actions.act_window" id="student_semester_main_action">
+			<field name="name">Semester Academic Managment</field>
+			<field name="res_model">student.semester</field>
+			<field name="view_mode">tree,form</field>
+		</record>
+		
+		<record id="student_semester_tree_view" model="ir.ui.view">
+			<field name="name">Semester Academic Management</field>
+			<field name="model">student.semester</field>
+			<field name="type">tree</field>
+			<field name="arch" type="xml">
+				<tree>
+					<field name="student_id"/>
+					<field name="semester_id"/>
+					<field name="average_gpa"/>							
+				</tree>
+			</field>
+		</record>
+		
+		<record id="student_semester_form_view" model="ir.ui.view">
+			<field name="name">Semester</field>
+			<field name="model">student.semester</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<form>					
+					<sheet>
+						<group string="Information">
+							<group>
+								<field name="student_id"/>
+								<field name="calculate_gpa"/>
+							</group>
+							<group>
+								<field name="semester_id"/>
+								
+							</group>
+						</group>
+						<group string="Semester Grade">
+							<group>
+								<field name="average_gpa"/>
+								<field name="total_credits"/>
+							</group>
+							<group>
+								<field name="achieved_credits"/>
+								<field name="no_count_credits"/>
+							</group>
+						</group>
+						<group string="Registered Courses">
+							<field name="student_course_ids" nolabel="1">
+								<tree edit="false" create="false" delete="false">
+									<field name="course_code" string="Code"/>
+               						<field name="course_name"/>
+               						<field name="course_credits" string="Crds"/>
+               						<field name="assignment_percent"/>
+               						<field name="mid_exam_percent"/>
+               						<field name="final_exam_percent"/>
+               						<field name="assignment_score" string="Assignment"/>               						
+               						<field name="mid_score" string="Midterm"/>
+               						<field name="final_score" string="Final"/>
+               						<field name="course_gpa" string="Crs GPA"/>
+               						<field name="letter_grade" string="Letter Grd"/>
+								</tree>
+							</field>							
+						</group>					
+					</sheet>
+				</form>
+			</field>
+		</record>
+		
+		<!-- Search View -->
+		<!--<record id="" model="ir.ui.view">
+			<field name="name"></field>
+			<field name="model"></field>
+			<field name="type">search</field>
+			<field name="arch" type="xml">
+				<search string="Search">
+					Search By
+					
+					Group By
+					<group expand="0" string="Group By">
+					</group>
+				</search>
+			</field>
+		</record>-->
+	</data>
+</openerp>

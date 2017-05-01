@@ -14,14 +14,41 @@
 							<field name="year"/>
 							<field name="year_code"/>
 						</tree>
-					</field>					
+					</field>
+					<field name="study_period_id" invisible="1"/>
+					<field name="offer_course_id" attrs="{'invisible':[('offer_course_id','=',False)]}"/>
 				</xpath>
 				<xpath expr="//field[@name='location']" position="attributes">
 					<attribute name="invisible">True</attribute>
 				</xpath>
 				<xpath expr="//field[@name='categ_ids']" position="attributes">
 					<attribute name="invisible">True</attribute>
-				</xpath>		
+				</xpath>
+				<!-- <xpath expr="//page[2]" position="after">
+					<page string="Attendance">
+						<group string="General Information">
+							<group>
+								<field name="amount_std_total"/>
+							</group>
+							<group>
+								<field name="amount_std_attend"/>
+							</group>						
+						</group>
+						<group string="Student List">
+							<field name="student_attendance_ids" nolabel="1">
+								<tree editable="bottom">
+									<field name="studentId"/>
+									<field name="last_name"/>
+									<field name="name"/>
+									<field name="department_id"/>
+									<field name="academic_year_id"/>
+									<field name="student_class_code" string="Class Code"/>
+									<field name="is_attend"/>
+								</tree>
+							</field>
+						</group>
+					</page>
+				</xpath> -->		
 			</field>
 		</record>
 	</data>

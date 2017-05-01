@@ -17,8 +17,10 @@ class Student(models.Model):
     studentId = fields.Char(string='Student ID', size=15,
                             default="Assigning")
     student_sequence = fields.Char('Student Sequence', size=5,
-                                   default="Asgn")                                  
-    academic_year_id = fields.Many2one('academic.year', string='Class')
+                                   default="Asgn")
+    # Student Academic Year related to Department where they are belong to                                
+    academic_year_id = fields.Many2one('academic.year', string='Class',
+                                       domain="[('department_id','=',department_id)]")
     student_class_code = fields.Char(string='Student Class Code',
                                      compute='_get_student_class_code')
     gender = fields.Selection(selection=[('m', 'Male'), ('f', 'Female')],
@@ -68,8 +70,11 @@ class Student(models.Model):
             dept_code = 'student.'
             dept_code += str(self.department_id.dept_academic_code).lower()
             self.student_sequence = self.env['ir.sequence'].get(dept_code)
+            self.studentId = self.department_id.dept_academic_code +\
+                            self.major_id.major_code +\
+                            str(int(self.academic_year_id.year_batch_id.year)%100)+\
+                            self.student_sequence
             
-
     @api.onchange('major_id','academic_year_id')
     def _onchange_dept_major_year_id(self):
         if self.major_id and self.academic_year_id:

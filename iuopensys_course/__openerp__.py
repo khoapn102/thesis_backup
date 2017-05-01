@@ -11,6 +11,7 @@
         'data/course_tuition_data.xml',
         'data/study_period_data.xml',
         'data/partner_university_data.xml',
+        'data/student_course_data.xml',
              
         # =========================================
         # SECURITY
@@ -37,6 +38,7 @@
         'views/major_inherit_view.xml',
         'views/financial_aid_view.xml',
         'views/student_behavior_point_view.xml',
+        'views/student_semester_view.xml',
         
         # =========================================
         # MENU

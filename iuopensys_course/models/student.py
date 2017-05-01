@@ -48,7 +48,68 @@ class Student(models.Model):
     account_status = fields.Boolean('Account Status', default=True)
     
     # Student document
+        # Submitted Document
     student_document_ids = fields.One2many('student.document', 'student_id', string='Documents')
+        # Not submitted Document
+    student_document_not_submit_ids = fields.Many2many('iu.document', string='Uncompleted Documents',
+                                                       compute='get_student_document_not_submit')
+    
+    # Semester GPA
+    student_semester_ids = fields.One2many('student.semester', 'student_id',
+                                           string='Student Semester')
+    
+    # Accumulated GPA
+    accumulated_gpa = fields.Float(string='Accumulated GPA', compute='get_accumulated_gpa')
+    accumulated_gpa_system_4 = fields.Float(string='Accumulated (Sys. 4)')
+    accumulated_credits = fields.Integer(string='Accumulated Credits', compute='get_accumulated_gpa')
+    gpa_classification = fields.Selection(selection=[('excellent', 'Excellent'),
+                                                     ('verygood', 'Very Good'),
+                                                     ('good', 'Good'),
+                                                     ('fair', 'Fair'),
+                                                     ('average', 'Average'),
+                                                     ('weak', 'Weak'),
+                                                     ('veryweak', 'Very Weak')],
+                                          string='Classification',
+                                          compute = 'get_accumulated_gpa')
+    
+    @api.depends('student_semester_ids')
+    def get_accumulated_gpa(self):
+        for record in self:
+            accum_cred = 0
+            total_gpa = 0
+            avg_gpa = 0
+            if record.student_semester_ids:
+                for std_semester in record.student_semester_ids:
+                    accum_cred += std_semester.achieved_credits
+                    for std_crs in std_semester.student_course_ids:
+                        if std_crs.offer_course_id.course_id.cred_count_type == 'count':
+                            total_gpa += std_crs.course_gpa * std_crs.course_credits
+                        else:
+                            continue
+                if accum_cred:
+                    avg_gpa = total_gpa/accum_cred
+                print '======', total_gpa
+            record.accumulated_credits = accum_cred
+            record.accumulated_gpa = avg_gpa
+                    
+    @api.depends('student_document_ids')
+    def get_student_document_not_submit(self):
+        for record in self:
+            doc_ids = []
+            # Retrieve all the required Docs from Academic Program
+            if record.major_id.std_academic_prog_id:
+                
+                academic_prog = record.major_id.std_academic_prog_id
+                if academic_prog.iu_doc_ids:
+                    for doc in academic_prog.iu_doc_ids:
+                        doc_ids.append(doc.id)
+                     
+            if record.student_document_ids:
+                for document in record.student_document_ids:
+                    if document.is_submit or document.is_stored:
+                        doc_id = document.iu_doc_id.id
+                        doc_ids.remove(doc_id)
+            record.student_document_not_submit_ids = doc_ids
     
     @api.depends('student_tuition_ids')
     def get_student_debt(self):

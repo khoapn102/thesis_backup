@@ -4,7 +4,7 @@
 	
 		<menuitem id="student_root_menu"
 			name="Student Management"
-			sequence="1"
+			sequence="2"
 			groups="iuopensys_core.group_student"/>
 			
 		<menuitem id="student_core_menu"

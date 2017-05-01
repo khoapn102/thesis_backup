@@ -11,7 +11,11 @@ class Major(models.Model):
     # Curriculum
     iu_curriculum_ids = fields.Many2many('iu.curriculum', string='List of curriculums')
     course_ids = fields.Many2many('course', string='List of Course', compute='get_all_course_ids')
-        
+    
+    # Total Credits
+    major_total_credits = fields.Integer(string='Total Req. Credits', compute='get_all_course_ids',
+                                         help='Total Required Credits for Graduation')
+     
 #     @api.onchange('iu_curriculum_ids')
 #     def onchange_iu_curriculum(self):
 #         if self.iu_curriculum_ids:
@@ -27,12 +31,15 @@ class Major(models.Model):
     def get_all_course_ids(self):
         for record in self:
             if record.iu_curriculum_ids:
+                total_cred = 0
                 ids_res = []
                 for curriculum in record.iu_curriculum_ids:
                     if curriculum.course_ids:
                         for course in curriculum.course_ids:
                             ids_res.append(course.id)
+                    total_cred += curriculum.max_cred_require
                 record.course_ids = ids_res
+                record.major_total_credits = total_cred
             
     @api.onchange('std_academic_prog_id')
     def onchange_std_academic_prog(self):

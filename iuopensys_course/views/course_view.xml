@@ -20,6 +20,7 @@
 					<field name="prereq_course_id"/>
 					<field name="department_id"/>
 					<field name="course_type"/>
+					<field name="cred_count_type"/>
 					<field name="crs_lang"/>
 				</tree>
 			</field>
@@ -51,13 +52,30 @@
           							<field name="prereq_course_id" style="width:55%%"/>
           							<field name="course_type" style="width:50%%"/>
           							<field name="tuition_id" style="width:55%%"/>
+          							<field name="cred_count_type" style="width:55%%"/>
           						</group>
           					</group>          					
                         </group>
                         <notebook>
        						<page string="Offering Courses">
        							<div>
-       								<field name="offer_course_ids" nolabel="1" context="{'default_course_id':active_id}"/>
+       								<field name="offer_course_ids" nolabel="1" context="{'default_course_id':active_id}">
+       									<tree>
+       										<field name="course_code"/>
+											<field name="name"/>
+											<field name="course_id" invisible="1"/>
+											<field name="dept_academic_code" invisible="1"/>
+											<field name="semester_id"/>				
+											<field name="course_group"/>											
+											<field name="numb_students"/>
+											<field name="avail_students"/>
+											<field name="academic_year_id"/>
+											<field name="display_room"/>
+											<field name="display_lecturer"/>
+											<field name="display_course_period"/>
+											<field name="is_lab" string="Lab"/>
+       									</tree>
+       								</field>
        							</div>
        						</page>
        					</notebook>	

@@ -66,10 +66,13 @@ class StudentRegistration(models.Model):
         self.write({'is_full_paid': not self.is_full_paid})
         if self.is_full_paid:
             self.write({'amount_paid': self.amount_must_pay})
-            self.write({'exam_status': not self.exam_status})
+            if not self.exam_status:
+                self.write({'exam_status': not self.exam_status})
         else:
             self.write({'amount_paid': 0})
+            
     
+    # Checkin Period - Register Time 
     def _check_in_period(self):
         now = datetime.now()
         start = datetime.strptime(self.start_datetime, '%Y-%m-%d %H:%M:%S')
@@ -93,6 +96,7 @@ class StudentRegistration(models.Model):
 #                 'context': self._context,
 #                 }
 
+    # Calculate Tuition base on Courses Registered
     @api.depends('offer_course_ids')
     def get_tuition_info(self):
         for record in self:
@@ -128,6 +132,9 @@ class StudentRegistration(models.Model):
             record.amount_financial_aid = financial_aid_value
             record.amount_must_pay = tuition - financial_aid_value
             
+            if record.amount_must_pay == 0:
+                record.is_full_paid = True
+            
             # Student debt is update
 #             student_debt = record.student_id.student_debt
 #             print '==== Before: ', student_debt
@@ -160,7 +167,8 @@ class StudentRegistration(models.Model):
 #             student_id = self.env['student'].search([('id','=',record.student_id.id)])
 #             if student_id:
 #                 student_id.write({'student_debt':record.amount_leftover})
-                        
+    
+#     @api.constrains('amount_paid','amount_must_pay')                    
                     
     @api.constrains('offer_course_ids')
     def _validate_registered_course(self):

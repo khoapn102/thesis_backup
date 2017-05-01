@@ -47,11 +47,18 @@ class CourseRegistration(models.Model):
         # Search for all students in this batch and assign Registration Form
         student_ids = self.env['student'].search([('year_batch_id','=',curr_reg.year_batch_id.id)])
         for student in student_ids:
+            # Student Registration
             new_vals = {'crs_reg_id':curr_reg.id,
                         'student_id':student.id,
                         'semester_id':curr_reg.reg_semester_id.id,
                         'is_created':True}
             self.env['student.registration'].create(new_vals)
+            
+            # Student Semester
+            new_vals = {'student_id': student.id,
+                        'semester_id': curr_reg.reg_semester_id.id,}
+            self.env['student.semester'].create(new_vals)
+            
         return curr_reg
     
         

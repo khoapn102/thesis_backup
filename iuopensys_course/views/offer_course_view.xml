@@ -66,6 +66,7 @@
           							<field name="department_id"/>
           							<field name="academic_year_id"/>
           							<field name="semester_id"/>
+          							<field name="course_group"/>
           							<field name="lab_sect_display" invisible="1"/>
           							<field name="has_lab" attrs="{'invisible':[('lab_sect_display','=',True),('is_lab','=',True)]}"/>
           							<field name="is_lab" 
@@ -73,8 +74,7 @@
           							<field name="theory_course_id" attrs="{'invisible':[('is_lab','=',False)]}"/>
           							<field name="lab_type" attrs="{'invisible':[('is_lab', '=', False)]}"/>
           						</group>
-          						<group>
-          							<field name="course_group"/>
+          						<group>          							
           							<field name="lecturer_id"/>
           							<field name="assign_room"/>
           							<field name="numb_students"/>
@@ -82,6 +82,7 @@
           							<field name="number_credits" invisible="1"/>          							
           							<field name="tuition_id"/>
           							<field name="number_credits_actual"/>
+          							<field name="amount_session"/>
           							<field name="display_study_daytime" invisible="1"/>
           							<field name="display_lecturer" invisible="1"/>
           							<field name="display_room" invisible="1"/>
@@ -173,12 +174,39 @@
        										<field name="assignment_score" string="Assign. Score"/>    										       										
        										<field name="mid_score" string="Midterm Score"/>
        										<field name="final_score" string="Final Score"/>
-       										<field name="course_gpa" string="GPA"/>      										
+       										<field name="course_gpa" string="GPA"/>
+       										<field name="is_complete"/>     										
        										<field name="exam_status" string="Exam Eligibility"/>
        									</tree>
        								</field>
        							</group>
-       						</page>       						
+       						</page>
+       						<page string="Attendance">
+       							<group>
+       								<field name="student_attendance_ids" nolabel="1">
+       									<tree create="false" editable="bottom">
+       										<field name="studentId"/>
+       										<field name="student_lname"/>
+       										<field name="student_fname"/>
+       										<field name="s1"/>
+       										<field name="s2"/>
+       										<field name="s3"/>
+       										<field name="s4"/>
+       										<field name="s5"/>
+       										<field name="s6"/>
+       										<field name="s7"/>
+       										<field name="s8"/>
+       										<field name="s9"/>
+       										<field name="s10"/>
+       										<field name="s11"/>
+       										<field name="s12"/>
+       										<field name="s13"/>
+       										<field name="s14"/>
+       										<field name="s15"/>
+       									</tree>
+       								</field>
+       							</group>
+       						</page>      						
        					</notebook>	
 					</sheet>
 				</form>

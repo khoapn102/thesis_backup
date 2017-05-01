@@ -31,6 +31,7 @@
         # =========================================
         'menu/student_menu.xml',
         'menu/university_menu.xml',
+        'menu/academic_menu.xml',
         
         # =========================================
         # WIZARDS

@@ -17,8 +17,66 @@
 							</tree>
 						</field>
 					</page>
+					<page string="Graduation Progress">
+						<notebook>							
+							<page string="Major Program">
+								<group string="General">
+									<group>
+										<field name="major_total_credits"/>
+									</group>
+									<group>
+										<field name="major_accumulated_credits"/>
+										<field name="major_incomplete_credits"/>
+									</group>
+								</group>
+								<notebook>
+									<page string="Incompleted Courses">
+										<group>
+											<field name="major_course_not_complete_ids" nolabel="1">
+												<tree edit="false">
+													<field name="name"/>
+													<field name="department_id"/>
+													<field name="number_credits"/>
+													<field name="prereq_course_id" string='Pre-req. Course'/>
+													<field name="course_type"/>
+													<field name="crs_lang" string="Language"/>
+												</tree>
+											</field>
+										</group>
+									</page>
+									<page string="Completed Courses">
+										<group>
+											<field name="major_course_complete_ids" nolabel="1">
+												<tree edit="false">
+													<field name="name"/>
+													<field name="department_id"/>
+													<field name="number_credits"/>
+													<field name="prereq_course_id" string='Pre-req. Course'/>
+													<field name="course_type"/>
+													<field name="crs_lang" string="Language"/>
+												</tree>
+											</field>
+										</group>
+									</page>
+								</notebook>								
+								
+							</page>
+							<page string="IU Programs">
+								<group string="Incomplete Programs">
+									<field name="academic_program_course_not_complete_ids" nolabel="1">
+										<tree edit="false">
+											<field name="name"/>
+											<field name="department_id"/>
+											<field name="course_type"/>
+											<field name="crs_lang" string="Language"/>
+										</tree>
+									</field>
+								</group>
+							</page>							
+						</notebook>
+						
+					</page>					
 				</xpath>
-				
 			</field>
 		</record>
 	</data>
