@@ -9,7 +9,7 @@ class Department(models.Model):
     name = fields.Char(string='Department Name', required=True)
     dept_code = fields.Char(string='Department Code', required=True)
     dept_academic_code = fields.Char(string='Department Academic Code', required=True)
-    dept_office_room =  fields.Char(string='Office Room', required=True)
+    dept_office_room =  fields.Char(string='Office Room')
     # Will be changed to Many2one after Lecturer is implemented
     head_dept_id = fields.Many2one('lecturer', string='Department Dean',
                                    help='Head of Department')

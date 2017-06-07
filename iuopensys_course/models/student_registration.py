@@ -17,6 +17,7 @@ class StudentRegistration(models.Model):
     
     # Student Related Info
     student_id = fields.Many2one('student', string='Student')
+    user_id = fields.Many2one(related='student_id.user_id')
     major_id = fields.Many2one('major', related='student_id.major_id')
     course_ids = fields.Many2many('course', related='major_id.course_ids')
     
@@ -72,7 +73,7 @@ class StudentRegistration(models.Model):
             self.write({'amount_paid': 0})
             
     
-    # Checkin Period - Register Time 
+    # Checkin Period - Register Time
     def _check_in_period(self):
         now = datetime.now()
         start = datetime.strptime(self.start_datetime, '%Y-%m-%d %H:%M:%S')

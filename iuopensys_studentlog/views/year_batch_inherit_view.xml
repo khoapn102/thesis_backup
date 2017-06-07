@@ -1,0 +1,37 @@
+<?xml version="1.0" ?>
+<openerp>
+	<data>
+		<record id="year_batch_form_view_inherit" model="ir.ui.view">
+			<field name="name">year.batch.form.inherit</field>
+			<field name="model">year.batch</field>
+			<field name="inherit_id" ref="iuopensys_core.year_batch_form_view"/>
+			<field name="arch" type="xml">
+				<notebook position="inside">
+					<page string="Students">
+						<group>
+							<field name="student_ids" nolabel="1">
+								<tree edit="false" create="false">
+									<field name="studentId"/>
+									<field name="last_name"/>
+									<field name="name"/>
+									<field name="birthdate" string="Dob"/>
+									<field name="department_id"/>
+									<field name="academic_year_id"/>
+									<field name="student_class_code" string="Class Code"/>
+									<field name="major_id"/>
+									<field name="country_id"/>
+									<field name="graduation_status"/>
+								</tree>
+							</field>
+						</group>
+					</page>
+					<page string="Graduating Students">
+						<group>
+							<field name="graduating_student_ids" nolabel="1"/>
+						</group>
+					</page>
+				</notebook>
+			</field>
+		</record>
+	</data>
+</openerp>

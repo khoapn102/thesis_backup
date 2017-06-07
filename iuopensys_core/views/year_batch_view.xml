@@ -41,19 +41,23 @@
                         		<field name="year_code"/>
                         	</group>
                         </group>
-                        <group string="Department Batch">
-                        	<field name="academic_year_ids" nolabel="1" context="{'default_year_batch_id':active_id}">
-                        		<tree editable="bottom">                        			
-                        			<field name="year_batch_id"/>
-                        			<field name="department_id"/>
-                        			<field name="name"/>
-                        			<field name="lecturer_id"/>
-                        			<field name="class_code"/>
-                        			<field name="start_date"/>
-                        			<field name="end_date"/>
-                        		</tree>
-                        	</field>
-                        </group>
+                        <notebook>
+                        	<page string="Department">
+                        		<group string="Department Batch">
+		                        	<field name="academic_year_ids" nolabel="1" context="{'default_year_batch_id':active_id}">
+		                        		<tree editable="bottom">                        			
+		                        			<field name="year_batch_id"/>
+		                        			<field name="department_id"/>
+		                        			<field name="name"/>
+		                        			<field name="lecturer_id"/>
+		                        			<field name="class_code"/>
+		                        			<field name="start_date"/>
+		                        			<field name="end_date"/>
+		                        		</tree>
+		                        	</field>
+                        		</group>
+                        	</page>
+                        </notebook>
 					</sheet>
 				</form>
 			</field>

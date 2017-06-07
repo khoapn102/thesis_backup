@@ -22,7 +22,7 @@ class StudentBehaviorPoint(models.Model):
     discipline_score = fields.Integer('Discipline Score', default=0,)
     total_score = fields.Integer('Total Score', compute='get_total_score')
     
-    api.constrains('total_score')
+    @api.constrains('total_score')
     def validate_total_score(self):
         for record in self:
             if record.total_score > 100:

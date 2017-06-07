@@ -36,7 +36,7 @@
 			<field name="arch" type="xml">
 				<form>
 					<header>
-						<button string="Change Password" type="action" name="67" help="Change the user password."/>
+						<!-- Add Graduation Status later on -->
 					</header>
 					<sheet>
 						<field name="image" widget="image" class="oe_avatar" options="{&quot;preview_image&quot;: &quot;image_medium&quot;}"/>
@@ -53,6 +53,7 @@
                         			<field name="department_id" domain="[('has_student','=',True)]" options="{'no_create':True}"/>
                         			<field name="major_id" options="{'no_create':True}"/>
                         			<field name="academic_year_id" options="{'no_create':True}"/>
+                        			<field name="year_batch_id"/>
                         		</group>
                         		<group>
                         			<field name="studentId" placeholder="Student Id..."/> 
@@ -70,7 +71,10 @@
 	                        			<group>
 	                        				 <field name="email"/> 
 	                        			</group>
-                        			</group>                        			
+                        			</group> 
+                        			<group>
+                        				<field name="groups_id" class="oe_edit_only"/>
+                        			</group>                      			
                         		</page>
                         		<page string="Personal Info">
                         			<group colspan="4">

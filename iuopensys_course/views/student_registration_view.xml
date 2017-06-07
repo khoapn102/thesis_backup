@@ -126,7 +126,7 @@
 			<field name="arch" type="xml">
 				<form>
 					<header>						
-						<field name="reg_state" widget="statusbar" clickable="1"/>
+						<field name="reg_state" widget="statusbar" clickable="1"  groups="iuopensys_core.group_staff"/>
 					</header>
 					<sheet>
 						<div class="oe_button_box" name="my_button_box">
@@ -149,7 +149,8 @@
                         		<field name="create_uid" invisible="1"/>
                         		<field name="crs_reg_id" attrs="{'readonly':[('is_created','=',True)]}" invisible="1"/>
                         		<field name="student_id" attrs="{'readonly':[('is_created','=',True)]}"/>
-                        		<field name="course_ids" invisible="1"/>                        		                        		 
+                        		<field name="course_ids" invisible="1"/>
+                        		<field name="user_id" invisible="1"/>                        		                        		 
                         	</group>                        	
                         	<group>
                         		<field name="semester_id" attrs="{'readonly':[('is_created','=',True)]}"/>
@@ -158,10 +159,10 @@
                         		<field name="in_period" invisible="1"/>
                         	</group>
                         </group>
-                        <div>
-                        	<label for="ext_note" string="NOTE:"/>
-                        	<field name="ext_note" nolabel="1"/>
-                        </div>
+                        <group>
+                        	<label for="ext_note" string="NOTE:"  groups="iuopensys_core.group_staff"/>
+                        	<field name="ext_note" nolabel="1" groups="iuopensys_core.group_staff"/>
+                        </group>
                         <notebook>
                         	<page string="Register">
                         		<group string="Registered Courses">
@@ -273,6 +274,22 @@
 			<field name="view_mode">form</field>
 			<field name="view_id" ref="iuopensys_course.student_registration_form_view"/>
 			<field name="act_window_id" ref="student_registration_main_action"/>
+		</record>
+		
+		<!-- Student balance and Amount paid readonly for Student -->
+		<record id="student_registration_form_view_readonly" model="ir.ui.view">
+			<field name="name">student.registration.form.view.readonly</field>
+			<field name="model">student.registration</field>
+			<field name="inherit_id" ref="iuopensys_course.student_registration_form_view"/>
+			<field name="groups_id" eval="[(6,0,[ref('iuopensys_core.group_student')])]"/>
+			<field name="arch" type="xml">
+				<field name="student_balance" position="attributes">
+					<attribute name="readonly">1</attribute>
+				</field>
+				<field name="amount_paid" position="attributes">
+					<attribute name="readonly">1</attribute>
+				</field>
+			</field>
 		</record>
 		
 		<!-- Search View -->

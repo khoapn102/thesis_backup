@@ -1,11 +1,24 @@
 <?xml version="1.0" ?>
 <openerp>
 	<data>
+		<record id="student_main_tree_view_inherit_new" model="ir.ui.view">
+			<field name="name">student.tree.view.inherit.new</field>
+			<field name="model">student</field>
+			<field name="inherit_id" ref="iuopensys_core.student_main_tree_view"/>
+			<field name="arch" type="xml">
+				<tree>
+					<field name="graduation_status" fg_color="green:graduation_status in ['graduated']"/>
+				</tree>
+			</field>
+		</record>
 		<record id="student_main_form_view_inherit_new" model="ir.ui.view">
 			<field name="name">student.form.view.inherit.new</field>
 			<field name="model">student</field>
 			<field name="inherit_id" ref="iuopensys_core.student_main_form_view"/>
 			<field name="arch" type="xml">
+				<header>
+					<field name="graduation_status" widget="statusbar"/>
+				</header>
 				<xpath expr="//page[7]" position="after">
 					<page string="Student Progress">
 						<field name="student_log_ids" context="{'default_student_id':active_id}">
@@ -23,9 +36,10 @@
 								<group string="General">
 									<group>
 										<field name="major_total_credits"/>
+										<field name="major_accumulated_credits"/>
 									</group>
 									<group>
-										<field name="major_accumulated_credits"/>
+										<field name="major_achieved_credits"/>
 										<field name="major_incomplete_credits"/>
 									</group>
 								</group>
@@ -38,7 +52,7 @@
 													<field name="department_id"/>
 													<field name="number_credits"/>
 													<field name="prereq_course_id" string='Pre-req. Course'/>
-													<field name="course_type"/>
+													<field name="course_type" string="Type"/>
 													<field name="crs_lang" string="Language"/>
 												</tree>
 											</field>
@@ -48,9 +62,9 @@
 										<group>
 											<field name="major_course_complete_ids" nolabel="1">
 												<tree edit="false">
-													<field name="name"/>
+													<field name="course_name"/>
 													<field name="department_id"/>
-													<field name="number_credits"/>
+													<field name="course_credits"/>
 													<field name="prereq_course_id" string='Pre-req. Course'/>
 													<field name="course_type"/>
 													<field name="crs_lang" string="Language"/>
@@ -62,19 +76,36 @@
 								
 							</page>
 							<page string="IU Programs">
-								<group string="Incomplete Programs">
-									<field name="academic_program_course_not_complete_ids" nolabel="1">
-										<tree edit="false">
-											<field name="name"/>
-											<field name="department_id"/>
-											<field name="course_type"/>
-											<field name="crs_lang" string="Language"/>
-										</tree>
-									</field>
+								<group string="General Information">
+									<notebook>
+										<page string="Incomplete Programs">
+											<group>
+												<field name="academic_program_course_not_complete_ids" nolabel="1">
+													<tree edit="false">
+														<field name="name"/>
+														<field name="department_id"/>
+														<field name="course_type"/>
+														<field name="crs_lang" string="Language"/>
+													</tree>
+												</field>
+											</group>
+										</page>
+										<page string="Completed Programs">
+											<group>
+												<field name="academic_program_course_complete_ids" nolabel="1">
+													<tree edit="false">
+														<field name="course_name" string="Course Name"/>
+														<field name="department_id"/>
+														<field name="course_type"/>
+														<field name="crs_lang" string="Language"/>
+													</tree>	
+												</field>
+											</group>
+										</page>
+									</notebook>
 								</group>
 							</page>							
 						</notebook>
-						
 					</page>					
 				</xpath>
 			</field>

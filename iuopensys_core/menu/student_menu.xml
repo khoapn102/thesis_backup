@@ -5,20 +5,20 @@
 		<menuitem id="student_root_menu"
 			name="Student Management"
 			sequence="2"
-			groups="iuopensys_core.group_student"/>
+		/>
 			
 		<menuitem id="student_core_menu"
 			name="Student"
 			sequence="0"
 			parent="student_root_menu"
-			groups="iuopensys_core.group_student"/>
+		/>
 			
 		<menuitem id="student_main_menu"
 			name="Students"
 			sequence="0"
 			parent="student_core_menu"
 			action="student_main_action"
-			groups="iuopensys_core.group_student"/>
+		/>
 			
 	</data>
 </openerp>

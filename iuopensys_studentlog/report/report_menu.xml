@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+	<data>
+		<report
+			id="action_report_student_transcript"
+			model="student"
+			string="Student Transcript"
+			report_type="qweb-pdf"
+			name="iuopensys_studentlog.report_student_transcript"
+			file="iuopensys_studentlog.report_student_transcript"
+		/>
+	</data>
+</odoo>

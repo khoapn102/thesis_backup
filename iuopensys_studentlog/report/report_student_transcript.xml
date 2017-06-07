@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+		<template id="report_student_transcript">
+			<t t-call="report.html_container">
+				<t t-foreach="docs" t-as="o">
+					<t>
+						<div class="page" style="font-size: 14px">
+							<div>
+								<img class="image"
+								src="/iuopensys_studentlog/static/src/img/logo_small.png"
+								align="left" vertical-align="middle"/>							
+								<div>
+									<p class="text-center" vertical-align="middle"><br/>INTERNATIONAL UNIVERSITY<br/>
+										<span style="font-weight:bold">ACADEMIC AFFAIRS OFFICE<br/>
+										<hr size="100"/></span>
+									</p>
+								</div>
+							</div>
+							<div>
+								<h4 class="text-center" style="font-weight:bold">TRANSCRIPT</h4>
+								<table width="100%">
+									<tbody>
+										<tr>
+											<td width="14%">Full Name: </td>
+											<td width="35%" style="font-size: 15px"><b><t t-esc="o.last_name"/>&#160;<t t-esc="o.name"/></b></td>
+											<td width="9%">Degree: </td>
+											<td width="35%">Undergraduate</td>
+										</tr>
+										<tr>
+											<td>Student's ID: </td>
+											<td><t t-esc="o.studentId"/></td>
+											<td>School: </td>
+											<td><t t-esc="o.department_id.name"/></td>
+										</tr>
+										<tr>
+											<td>Date of Birth: </td>
+											<td><t t-esc="o.birthdate"/></td>
+											<td>Major: </td>
+											<td><t t-esc="o.major_id.name"/></td>
+										</tr>
+										<tr>
+											<td>Class: </td>
+											<td><t t-esc="o.student_class_code"/></td>
+											<td>Program: </td>
+											<td><t t-esc="o.academic_year_id.year_batch_id.name"/></td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+							<br/>
+							<br/>
+							<div>
+								<table class="table table-bordered" style="width:100%; text-align:center">
+									<tr>
+										<td width="2%">No.</td>
+										<td width="8%">Course ID</td>
+										<td width="75%">Course</td>
+										<td width="3%">Credits</td>
+										<td width="6%">GPA</td>
+										<td width="6%">Letter Grade</td>
+									</tr>
+									<t t-foreach="o.student_course_ids" t-as="course">
+									<t t-if="course.course_gpa != 0.0"/>
+									<tr>
+										<td></td>
+										<td><t t-esc="course.course_code"/></td>
+										<td  style="text-align:left"><t t-esc="course.course_name"/></td>
+										<td><t t-esc="course.course_credits"/></td>
+										<td><t t-esc="course.course_gpa"/></td>
+										<td><t t-esc="course.letter_grade"/></td>
+									</tr>
+									</t>
+								</table>
+							</div>
+						</div>
+					</t>
+				</t>
+			</t>
+		</template>
+	</data>
+</odoo>

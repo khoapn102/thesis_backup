@@ -7,6 +7,7 @@ class Semester(models.Model):
     
     _name = 'semester'
     _description = 'Semester'
+    _order = 'semester_year, semester_type, id'
     
     name = fields.Char(string='Semester', compute='_get_semester_name')
     semester_year = fields.Char(string='Year',required=True,

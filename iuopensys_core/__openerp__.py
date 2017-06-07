@@ -3,7 +3,7 @@
     'version': '0.1',
     'author': 'Khoa Phan',
     'category': 'University Management',
-    'depends': ['base','percentage_widget',],
+    'depends': ['base','percentage_widget','web_tree_dynamic_colored_field'],
     'data': [
         # =========================================
         # SECURITY
@@ -15,6 +15,7 @@
         # SEQUENCE CODE
         # ========================================= 
         'data/student_code_sequence.xml',
+        'data/department_data.xml',
         
         # =========================================
         # VIEWS

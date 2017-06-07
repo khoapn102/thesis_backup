@@ -134,12 +134,19 @@
 			parent="miscellaneous_core_menu"
 			action="financial_aid_main_action"/>
 			
-		<!-- Student Behavior System -->
-		<menuitem id="student_behavior_point_main_menu"
+		<!-- <menuitem id="student_behavior_point_main_menu"
 			name="Behavior Point"
 			sequence="1"
 			parent="iuopensys_core.student_core_menu"
-			action="student_behavior_point_main_action"/>
+			action="student_behavior_point_main_action"/> -->
+			
+		<!-- Student Behavior System -->
+		<menuitem id="student_semester_behavior_point_main_menu"
+			name="Behavior Point"
+			sequence="1"
+			parent="iuopensys_core.student_core_menu"
+			groups="iuopensys_core.group_staff"
+			action="student_semester_behavior_point_main_action"/>
 			
 		<!-- Student Semester -->
 		<menuitem id="academic_management_core_menu"
@@ -148,12 +155,12 @@
 			parent="iuopensys_core.academic_root_menu"/>
 		
 		<menuitem id="student_semester_main_menu"
-			name="Semester"
+			name="Semester Transcript"
 			sequence="1"
 			parent="academic_management_core_menu"
 			action="student_semester_main_action"/>	
 			
-		<!-- <delete model="ir.ui.menu" id="mail.mail_channel_menu_root_chat"/> -->
+		<delete model="ir.ui.menu" id="mail.mail_channel_menu_root_chat"/>
 		
 	</data>
 </openerp>

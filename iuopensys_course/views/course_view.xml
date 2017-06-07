@@ -43,15 +43,16 @@
                         <group colspan="4">
           					<group string="Course Information">
           						<group>
-          							<field name="department_id" style="width:60%%"/>
+          							<field name="department_id" style="width:60%%" options="{'no_create':True}"/>
           							<field name="number_credits" style="width:40%%"/>
           							<field name="number_credits_actual" style="width: 40%%"/>
+          							<field name="is_extra_curricular"/>
           							<field name="crs_lang"/>
           						</group>
           						<group>
-          							<field name="prereq_course_id" style="width:55%%"/>
+          							<field name="prereq_course_id" style="width:55%%" options="{'no_create':True}"/>
           							<field name="course_type" style="width:50%%"/>
-          							<field name="tuition_id" style="width:55%%"/>
+          							<field name="tuition_id" style="width:55%%" options="{'no_create':True}"/>
           							<field name="cred_count_type" style="width:55%%"/>
           						</group>
           					</group>          					

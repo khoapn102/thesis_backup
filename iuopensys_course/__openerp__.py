@@ -16,6 +16,13 @@
         # =========================================
         # SECURITY
         # =========================================
+        'security/ir.model.access.csv',
+        'security/iuopensys_security.xml',
+        
+        # =========================================
+        # WIZARDS
+        # =========================================
+        'wizards/student_course_addition_wizard_view.xml',
         
         # =========================================
         # VIEWS
@@ -37,17 +44,13 @@
         'views/iu_curriculum_view.xml',
         'views/major_inherit_view.xml',
         'views/financial_aid_view.xml',
-        'views/student_behavior_point_view.xml',
+#         'views/student_behavior_point_view.xml',
         'views/student_semester_view.xml',
         
         # =========================================
         # MENU
         # =========================================
         'menu/course_manage_menu.xml',
-        
-        # =========================================
-        # WIZARDS
-        # =========================================
         
         # =========================================
         # REPORTS and CUSTOM ASSETS

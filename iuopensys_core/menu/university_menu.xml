@@ -4,7 +4,8 @@
 		<!-- University Tab -->
 		<menuitem id="university_root_menu"
 			name="University Management"
-			sequence="0"/>
+			sequence="0"
+			groups="group_staff"/>
 		
 		<!-- Department Section -->
 		<menuitem id="department_core_menu"

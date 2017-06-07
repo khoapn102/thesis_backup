@@ -1,0 +1,82 @@
+<?xml version="1.0" ?>
+<openerp>
+	<data>
+		<!-- CSE -->		
+		<record id="cse_iu" model="department">
+			<field name="name">Computer Science and Engineering</field>
+			<field name="dept_code">CSE</field>
+			<field name="dept_academic_code">IT</field>
+			<field name="has_student">True</field>
+		</record>
+		
+		<!-- EE -->
+		<record id="ee_iu" model="department">
+			<field name="name">Electrical Engineering</field>
+			<field name="dept_code">EE</field>
+			<field name="dept_academic_code">EE</field>
+			<field name="has_student">True</field>
+		</record>
+		
+		<!-- BT -->
+		<record id="bt_iu" model="department">
+			<field name="name">Biotechnology</field>
+			<field name="dept_code">BT</field>
+			<field name="dept_academic_code">BT</field>
+			<field name="has_student">True</field>
+		</record>
+		
+		<!-- Business -->
+		<record id="ba_iu" model="department">
+			<field name="name">Business Administration</field>
+			<field name="dept_code">BA</field>
+			<field name="dept_academic_code">BA</field>
+			<field name="has_student">True</field>
+		</record>
+		
+		<!-- ISE -->
+		<record id="ise_iu" model="department">
+			<field name="name">Industrial and System Engineering</field>
+			<field name="dept_code">ISE</field>
+			<field name="dept_academic_code">IE</field>
+			<field name="has_student">True</field>
+		</record>
+		
+		<!-- BME -->
+		<record id="bme_iu" model="department">
+			<field name="name">Biomedical Engineering</field>
+			<field name="dept_code">BME</field>
+			<field name="dept_academic_code">BE</field>
+			<field name="has_student">True</field>
+		</record>
+		
+		<!-- CE -->
+		<record id="ce_iu" model="department">
+			<field name="name">Civil Engineering</field>
+			<field name="dept_code">CE</field>
+			<field name="dept_academic_code">CE</field>
+			<field name="has_student">True</field>
+		</record>
+		
+		<!-- Math -->
+		<record id="ma_iu" model="department">
+			<field name="name">Mathematics</field>
+			<field name="dept_code">MA</field>
+			<field name="dept_academic_code">MA</field>
+			<field name="has_student">True</field>
+		</record>
+		
+		<!-- Physics -->
+		<record id="phy_iu" model="department">
+			<field name="name">Physics</field>
+			<field name="dept_code">PHY</field>
+			<field name="dept_academic_code">PHY</field>
+		</record>
+		
+		<!-- English -->
+		<record id="eng_iu" model="department">
+			<field name="name">English</field>
+			<field name="dept_code">ENG</field>
+			<field name="dept_academic_code">ENG</field>
+		</record>
+	</data>
+</openerp>

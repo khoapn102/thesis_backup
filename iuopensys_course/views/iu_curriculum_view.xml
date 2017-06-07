@@ -43,6 +43,7 @@
                         	</group>
                         	<group>
                         		<field name="is_eng_req"/>
+                        		<field name="max_course_require"/>
                         		<field name="note"/>
                         	</group>
                         </group>

@@ -18,9 +18,13 @@ class StudentCourse(models.Model):
     offer_course_id = fields.Many2one('offer.course', string='Offer Course', ondelete="cascade")
     course_code = fields.Char(string='Course Code', related='offer_course_id.course_code')
     course_name = fields.Char(string='Course Name', related='offer_course_id.name')
-    course_credits = fields.Integer(string='Credits', related='offer_course_id.course_id.number_credits')    
+    course_credits = fields.Integer(string='Credits', related='offer_course_id.course_id.number_credits')
+    course_type = fields.Selection(string='Type', related='offer_course_id.course_type')
+    crs_lang = fields.Selection(string='Language', related='offer_course_id.crs_lang')
+    department_id = fields.Many2one(string='Department', related='offer_course_id.department_id')  
     semester_id = fields.Many2one(related='offer_course_id.semester_id',
                                   store=True)
+    prereq_course_id = fields.Many2one(related='offer_course_id.course_id.prereq_course_id')
     
     # GPA
     mid_exam_percent = fields.Float(string="Mid %", related="offer_course_id.mid_exam_percent")
@@ -35,9 +39,7 @@ class StudentCourse(models.Model):
     letter_grade = fields.Char(string='Letter Grade', compute='_compute_course_gpa')
     classification = fields.Char(string='Classification', compute='_compute_course_gpa')
     ext_note = fields.Char(string='Note')
-    
-#     is_pass = fields.Boolean('Passed')
-    
+        
     # Exam status (eligible to take test or not)
     exam_status = fields.Boolean(string='Eligible for Exam',
                                  related='student_id.exam_status')
@@ -75,6 +77,7 @@ class StudentCourse(models.Model):
 #                 self.is_complete = True
     
     @api.multi
+    @api.depends('final_score','mid_score','assignment_score')
     def _compute_course_gpa(self):
         for record in self:
             if record.final_score >= 0 and record.offer_course_id.final_exam_percent:
@@ -83,15 +86,16 @@ class StudentCourse(models.Model):
                 assign_avg = record.assignment_score * record.offer_course_id.assignment_percent
                 record.course_gpa = mid_avg + fin_avg + assign_avg
                 
-                classify = {'A+':(90, 100),
-                            'A':(80, 89),
-                            'B+':(70, 79),
-                            'B':(60, 69),
-                            'C':(52, 59),
-                            'D':(50,51),
-                            'F':(0, 49)}
+                classify = {'A+':(90.0, 100.0),
+                            'A':(80.0, 89.0),
+                            'B+':(70.0, 79.0),
+                            'B':(60.0, 69.0),
+                            'C':(52.0, 59.0),
+                            'D':(50.0,51.0),
+                            'F':(0, 49.0)}
                 for item in classify:
-                    if classify[item][0] <= record.course_gpa <= classify[item][1]:
+                    gpa_round = round(record.course_gpa)
+                    if classify[item][0] <= gpa_round <= classify[item][1]:
                         record.letter_grade = item
                         break
                     
@@ -105,6 +109,18 @@ class StudentCourse(models.Model):
     
     # No write() functions because for simplify purpose. Student.course can only
     # be created/deleted
+    
+    # Onchagne final_score -> will check if is completed or not.
+    @api.onchange('final_score','mid_score', 'assignment_score')
+    def onchange_final_score(self):
+        if self.final_score or self.mid_score or self.assignment_score:
+            passing_grade = self.env['ir.config_parameter'].get_param('iuopensys_course.course_passing_grade')
+            if self.course_gpa >= float(passing_grade):
+#                 print '======== HERE'
+                if not self.is_complete:
+                    self.is_complete = True
+            else:
+                self.is_complete = False
             
     @api.model
     def create(self, vals):

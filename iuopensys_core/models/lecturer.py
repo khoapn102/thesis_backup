@@ -5,6 +5,7 @@ class Lecturer(models.Model):
     _name = 'lecturer'
     _inherits = {'res.users': 'user_id'}
     _description = 'IU Lecturers'
+    _order = 'department_id, id'
     
     # Fields
     user_id = fields.Many2one('res.users', string='User',
@@ -28,6 +29,16 @@ class Lecturer(models.Model):
                                            ('lecturer', 'Lecturer')],
                                 string='Position', default='lecturer')
     office_room = fields.Char(string='Office Room', size=10)
+    
+    groups_id = fields.Many2many('res.groups', string='Security Level',
+                                 related='user_id.groups_id',
+                                 domain=[('name', '=', 'IU Lecturer/Staff')])
+    
+    # Automatically set Security when create Lecturer
+    @api.onchange('title')
+    def onchange_title(self):
+        group_id = self.env['res.groups'].search([('name','=', 'IU Lecturer/Staff')])
+        self.groups_id = group_id
     
     @api.multi
     def unlink(self):

@@ -10,8 +10,10 @@ class Course(models.Model):
     number_credits = fields.Integer(string='Credits', required=True)
     number_credits_actual = fields.Integer(string='Credits for Tuition', required=True)
                                            
-    prereq_course_id = fields.Many2one('course', string='Prerequisite Course',
-                                       domain="[('department_id','=',department_id)]")
+#     prereq_course_id = fields.Many2one('course', string='Prerequisite Course',
+#                                        domain="[('department_id','=',department_id)]")
+    prereq_course_id = fields.Many2one('course', string='Prerequisite Course')
+       
     course_type = fields.Selection(selection=[('compulsory', 'Compulsory'),
                                               ('elective', 'Elective')],
                                    string='Course Type',
@@ -25,6 +27,8 @@ class Course(models.Model):
     cred_count_type = fields.Selection(selection=[('count', 'Normal'),
                                                   ('nocount','Only Pass/No pass')],
                                        default='count', string='Credit Count Type')
+    # Extra Curricular
+    is_extra_curricular = fields.Boolean(string='Extra Curricular')
           
     @api.onchange('number_credits')
     def _onchange_number_credits(self):

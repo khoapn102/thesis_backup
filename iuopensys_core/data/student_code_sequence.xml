@@ -14,5 +14,48 @@
 			<field name="code">student.ba</field>
 			<field name="padding">3</field>
 		</record>
+		
+		<!-- Sequence for EE -->
+		<record id="seq_ee_code" model="ir.sequence">
+			<field name="name">EE Student Code</field>
+			<field name="code">student.ee</field>
+			<field name="padding">3</field>
+		</record>
+		
+		<!-- Sequence for BT -->
+		<record id="seq_bt_code" model="ir.sequence">
+			<field name="name">BT Student Code</field>
+			<field name="code">student.bt</field>
+			<field name="padding">3</field>
+		</record>
+		
+		<!-- Sequence for ISE -->
+		<record id="seq_ie_code" model="ir.sequence">
+			<field name="name">IE Student Code</field>
+			<field name="code">student.ie</field>
+			<field name="padding">3</field>
+		</record>
+		
+		<!-- BME -->
+		<record id="seq_be_code" model="ir.sequence">
+			<field name="name">BME Student Code</field>
+			<field name="code">student.be</field>
+			<field name="padding">3</field>
+		</record>
+		
+		<!-- CE -->
+		<record id="seq_ce_code" model="ir.sequence">
+			<field name="name">CE Student Code</field>
+			<field name="code">student.ce</field>
+			<field name="padding">3</field>
+		</record>
+		
+		<!-- Math -->
+		<record id="seq_ma_code" model="ir.sequence">
+			<field name="name">MA Student Code</field>
+			<field name="code">student.ma</field>
+			<field name="padding">3</field>
+		</record>
+		
 	</data>
 </openerp>

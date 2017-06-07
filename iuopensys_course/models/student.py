@@ -8,13 +8,11 @@ class Student(models.Model):
     
     # Course list referenced to student
     # One2many Domain is different from Many2many
+    # Only for Major Courses, not for Extra Curricular progs
     student_course_ids = fields.One2many('student.course', 'student_id',
                                          string='Courses', domain=['|',('offer_course_id.is_lab','=',False),
-                                                                   ('offer_course_id.lab_type','!=','combine')])
-    year_batch_id = fields.Many2one('year.batch', string='Batch',
-                                    related='academic_year_id.year_batch_id',
-                                    store=True)
-    
+                                                                   ('offer_course_id.lab_type','!=','combine'),
+                                                                   ('offer_course_id.course_id.is_extra_curricular','=',False)])
     # Student balance and Debt
     student_balance = fields.Float('Student Balance', default=0.0)
     student_debt = fields.Float('Student Debt', compute='get_student_debt')
@@ -28,7 +26,7 @@ class Student(models.Model):
     std_academic_prog_id = fields.Many2one('student.academic.program',string='Academic Program',
                                            related='major_id.std_academic_prog_id',
                                            readonly=True)
-    standard_grad_date = fields.Char('Std. Graduation Date (at IU)', compute='get_grad_date')
+    standard_grad_date = fields.Char('Expected to Graduate (at IU)', compute='get_grad_date')
     max_grad_date = fields.Char('Maximum Expectation (at IU)', compute='get_grad_date')
     
     academic_status = fields.Selection(selection=[('regular', 'Regular'),
@@ -41,7 +39,7 @@ class Student(models.Model):
     is_eng_complete = fields.Boolean('Complete IE')
     
     # Student Behavior Point
-    student_behavior_point_ids = fields.One2many('student.behavior.point', 'student_id', string='Behavior Point')    
+#     student_behavior_point_ids = fields.One2many('student.behavior.point', 'student_id', string='Behavior Point')    
         
     # Student Status
     exam_status = fields.Boolean('Exam Eligibility', default=True)
@@ -56,7 +54,10 @@ class Student(models.Model):
     
     # Semester GPA
     student_semester_ids = fields.One2many('student.semester', 'student_id',
-                                           string='Student Semester')
+                                           string='Semester Transcript')
+    # Behavior Point Semester
+    behavior_point_semester_ids = fields.One2many('student.semester','student_id',
+                                                  string='Semester Behavior Point')
     
     # Accumulated GPA
     accumulated_gpa = fields.Float(string='Accumulated GPA', compute='get_accumulated_gpa')
@@ -72,7 +73,12 @@ class Student(models.Model):
                                           string='Classification',
                                           compute = 'get_accumulated_gpa')
     
-    @api.depends('student_semester_ids')
+#     @api.onchange('academic_year_id')
+#     def onchange_academic_year_id(self):
+#         if self.academic_year_id:
+#             self.year_batch_id = self.academic_year_id.year_batch_id.id
+    
+    @api.depends('student_semester_ids','student_course_ids')
     def get_accumulated_gpa(self):
         for record in self:
             accum_cred = 0

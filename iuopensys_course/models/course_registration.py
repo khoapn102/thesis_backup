@@ -54,7 +54,7 @@ class CourseRegistration(models.Model):
                         'is_created':True}
             self.env['student.registration'].create(new_vals)
             
-            # Student Semester
+            # Student Semester -> for tracking each Semester
             new_vals = {'student_id': student.id,
                         'semester_id': curr_reg.reg_semester_id.id,}
             self.env['student.semester'].create(new_vals)

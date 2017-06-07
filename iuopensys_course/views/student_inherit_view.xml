@@ -29,7 +29,7 @@
 						<notebook>
 							<page string="Semester Transcript">
 								<field name="student_semester_ids" nolabel="1">
-									<tree>
+									<tree edit="false" create="false">
 										<field name="semester_id"/>
 										<field name="total_credits"/>
 										<field name="achieved_credits"/>
@@ -72,9 +72,8 @@
                		</page>
                		<page string="Behavior Point">
                			<group string="Semester List">
-               				<field name="student_behavior_point_ids" nolabel="1"
-               					context="{'default_student_id':active_id}">
-               					<tree editable="bottom">
+               				<field name="behavior_point_semester_ids" nolabel="1">
+               					<tree edit="false" create="false" delete="false">
                						<field name="semester_id"/>
                						<field name="learning_score"/>
                						<field name="school_score"/>
@@ -148,9 +147,7 @@
                			
                		</page>               		
 				</notebook>
-				<xpath expr="//field[@name='academic_year_id']" position="after">
-					<field name="year_batch_id"/>
-				</xpath>
+			
 				<xpath expr="//field[@name='studentId']" position="after">
 					<field name="student_balance" invisible="1"/>
 				</xpath>

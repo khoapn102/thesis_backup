@@ -21,6 +21,9 @@ class Student(models.Model):
     # Student Academic Year related to Department where they are belong to                                
     academic_year_id = fields.Many2one('academic.year', string='Class',
                                        domain="[('department_id','=',department_id)]")
+    
+    year_batch_id = fields.Many2one('year.batch', string='Batch')
+    
     student_class_code = fields.Char(string='Student Class Code',
                                      compute='_get_student_class_code')
     gender = fields.Selection(selection=[('m', 'Male'), ('f', 'Female')],
@@ -41,6 +44,16 @@ class Student(models.Model):
                                          ('khome', 'Kho Me')], string='Ethnic')
     emergency_name = fields.Char(string='Emergency Contact Name', size=128)
     emergency_phone = fields.Char(string='Emergency Contact Phone', size=25)
+    
+    groups_id = fields.Many2many('res.groups', string='Security Level',
+                                 related='user_id.groups_id',
+                                 domain=[('name', '=', 'IU Students')])
+    
+    # Security Group for Students
+    @api.onchange('name')
+    def onchange_name(self):
+        group_id = self.env['res.groups'].search([('name','=', 'IU Students')])
+        self.groups_id = group_id
     
     # Overide name_get to display Student Id rather than Name
     @api.multi
@@ -64,9 +77,9 @@ class Student(models.Model):
             return super(Student, self).unlink()
     
     # Assign Student ID 
-    @api.onchange('department_id')
+    @api.onchange('department_id','academic_year_id')
     def _onchange_dept_id(self):
-        if self.department_id:
+        if self.department_id and self.academic_year_id:
             dept_code = 'student.'
             dept_code += str(self.department_id.dept_academic_code).lower()
             self.student_sequence = self.env['ir.sequence'].get(dept_code)
@@ -78,11 +91,14 @@ class Student(models.Model):
     @api.onchange('major_id','academic_year_id')
     def _onchange_dept_major_year_id(self):
         if self.major_id and self.academic_year_id:
-           self.studentId = self.department_id.dept_academic_code +\
+            self.studentId = self.department_id.dept_academic_code +\
                             self.major_id.major_code +\
                             str(int(self.academic_year_id.year_batch_id.year)%100)+\
                             self.student_sequence
+            self.year_batch_id = self.academic_year_id.year_batch_id.id
         else:
+            if self.academic_year_id:
+                self.year_batch_id = self.academic_year_id.year_batch_id
             self.studentId = self.student_sequence
         
     @api.multi

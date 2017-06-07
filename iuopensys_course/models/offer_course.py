@@ -19,6 +19,10 @@ class OfferCourse(models.Model):
     # Course Info
     name = fields.Char(string='Title')
     course_id = fields.Many2one('course', string='Parent Course', ondelete='cascade')
+    
+    course_type = fields.Selection(related='course_id.course_type')
+    crs_lang = fields.Selection(related='course_id.crs_lang')
+    
     course_code = fields.Char(string='Course Code', size=10,
                               compute='_generate_course_code')
     course_group = fields.Selection(selection=[('grp1', 'Group 1'),
@@ -261,7 +265,26 @@ class OfferCourse(models.Model):
             record.display_lecturer = temp_lect or ''
             record.display_room = temp_room or ''
             record.display_course_period = temp_date or ''
-                                 
+            
+#     @api.multi
+#     def call_student_course_addition_wizard(self):
+#         for record in self:
+#             wizard_form = self.env.ref('iuopensys_course.student_course_addition_wizard_form_view', False)
+#             view_id = self.env['student.course.addition.wizard']
+#             vals={'name':'Add Student Wizard'}
+#             new = view_id.create(vals)
+#             return{
+#                    'name': 'Add Students',
+#                    'type': 'ir.actions.act_window',
+#                    'res_model': 'student.course.addition.wizard',
+#                    'res_id': new.id,
+#                    'view_id': wizard_form.id,
+#                    'view_type': 'form',
+#                    'view_mode': 'form',
+#                    'context': {'offer_course_id': record.id},
+#                    'target': 'new',
+#                    }
+#                                  
 #     @api.model
 #     def create(self, vals):
 #         """

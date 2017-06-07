@@ -5,7 +5,8 @@
 		<!-- Academic Menu -->
 		<menuitem id="academic_root_menu"
 			name="Academic Management"
-			sequence="1"/>
+			sequence="1"
+			groups="group_staff"/>
 			
 	</data>
 </openerp>

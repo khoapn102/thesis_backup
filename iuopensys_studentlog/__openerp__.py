@@ -12,13 +12,14 @@
         # =========================================
         # SECURITY
         # =========================================
-        
+        'security/ir.model.access.csv',
         
         # =========================================
         # VIEWS
         # =========================================
         'views/student_log_view.xml',
         'views/student_inherit_view.xml',
+        'views/year_batch_inherit_view.xml',
         
         # =========================================
         # MENU
@@ -33,6 +34,8 @@
         # =========================================
         # REPORTS and CUSTOM ASSETS
         # =========================================
+        'report/report_menu.xml',
+        'report/report_student_transcript.xml',
         
         ],
 }

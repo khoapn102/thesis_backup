@@ -4,3 +4,10 @@ access_department_student,access.department.student,model_department,group_stude
 access_lecturer_student,access.lecturer.student,model_lecturer,group_student,1,0,0,0
 access_major_student,access.major.student,model_major,group_student,1,0,0,0
 access_student_student,access.student.student,model_student,group_student,1,1,0,0
+access_year_batch_student,access.year.batch.student,model_year_batch,group_student,1,0,0,0
+access_academic_year_staff,access.academic.year.staff,model_academic_year,group_staff,1,1,1,1
+access_department_staff,access.department.staff,model_department,group_staff,1,1,1,1
+access_lecturer_staff,access.lecturer.staff,model_lecturer,group_staff,1,1,1,1
+access_major_staff,access.major.staff,model_major,group_staff,1,1,1,1
+access_student_staff,access.student.staff,model_student,group_staff,1,1,1,1
+access_year_batch_staff,access.year.batch.staff,model_year_batch,group_staff,1,1,1,1
