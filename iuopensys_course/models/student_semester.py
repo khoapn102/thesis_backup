@@ -52,7 +52,7 @@ class StudentSemester(models.Model):
                                   record.leading_score) - record.discipline_score
                                   
     
-    @api.depends('student_course_ids')
+    @api.depends('student_course_ids','calculate_gpa')
     def get_avg_gpa_semester(self):
         # Compute AVG = Sum(course_gpa * credit) / total_credits (no count pass/fail course)
         # 

@@ -10,12 +10,14 @@ class StudentCourseAdditionWizard(models.TransientModel):
     year_batch_id = fields.Many2one('year.batch', string='Year Batch')
     student_ids = fields.Many2many('student', string='Student Lists', compute='get_all_students_from_year_batch')
     
+    student_id = fields.Many2one('student', string='Student')
+    
     @api.depends('year_batch_id')
     def get_all_students_from_year_batch(self):
         for record in self:
             if record.year_batch_id:
                 all_students = self.env['student'].search([('academic_year_id.year_batch_id','=', record.year_batch_id.id)])
-                print '=========', all_students
+#                 print '=========', all_students
                 if all_students:
                     record.student_ids = all_students.ids
     
@@ -36,3 +38,17 @@ class StudentCourseAdditionWizard(models.TransientModel):
                                 }
                     student_course = self.env['student.course']
                     student_course.create(new_vals)
+
+    @api.multi
+    def add_a_student_to_course(self):
+        for record in self:
+            if record.student_id:
+                check_std_crs_id = self.env['student.course'].search([('student_id','=', record.student_id.id),
+                                                                          ('offer_course_id','=',record.offer_course_id.id)])
+                if not check_std_crs_id:
+                    new_vals = {
+                                'student_id': record.student_id.id,
+                                'offer_course_id': record.offer_course_id.id,
+                                }
+                    student_course = self.env['student.course']
+                    student_course.create(new_vals)   

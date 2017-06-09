@@ -17,6 +17,7 @@
 					<field name="department_id"/>
 					<field name="max_cred_require" string="Max Crds. Req"/>
 					<field name="total_cred" string="Total Crds."/>
+					<field name="total_cred_not_count" string="Credits P/F"/>
 					<field name="note"/>
 				</tree>
 			</field>
@@ -44,8 +45,12 @@
                         	<group>
                         		<field name="is_eng_req"/>
                         		<field name="max_course_require"/>
-                        		<field name="note"/>
+                        		<field name="total_cred_not_count"/>
                         	</group>
+                        </group>
+                        <group>
+                        	<label for="note" string="Note"/>
+                        	<field name="note" nolabel="1"/>
                         </group>
                         <group string="Course List"> 
                         	<field name="course_ids" nolabel="1">

@@ -47,8 +47,10 @@
 										</group>
 										<group>
 											<field name="certified_name"/>
-											<field name="note"/>
 										</group>
+									</group>
+									<group>
+										<field name="note"/>
 									</group>
 								</page>
 							</notebook>

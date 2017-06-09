@@ -55,7 +55,8 @@
         # =========================================
         # REPORTS and CUSTOM ASSETS
         # =========================================
-        
+        'report/report_menu.xml',
+        'report/report_exam_student_list.xml',
         'views/web_custom_assets.xml',
         ],
 }

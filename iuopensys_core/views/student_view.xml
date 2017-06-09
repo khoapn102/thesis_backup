@@ -39,6 +39,9 @@
 						<!-- Add Graduation Status later on -->
 					</header>
 					<sheet>
+						<div class="oe_button_box" name="my_button_box">
+							<!-- Add Button later on -->
+						</div>
 						<field name="image" widget="image" class="oe_avatar" options="{&quot;preview_image&quot;: &quot;image_medium&quot;}"/>
                         <div class="oe_title">
                             <label for="name" class="oe_edit_only" string="Student Name"/>

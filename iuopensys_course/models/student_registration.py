@@ -33,14 +33,14 @@ class StudentRegistration(models.Model):
     # To set other field to be readonly
     is_created = fields.Boolean(string='Created', default=False)
     reg_state = fields.Selection(selection=[('draft', 'Draft'),
-                                            ('progress', 'Processing'),
                                             ('confirm', 'Confirmed'),
                                             ('approve', 'Approved'),
-                                            ('reopen','Reopen'),
-                                            ('paid', 'Paid')], string='State',
+                                            ('deny', 'Denied'),                                          
+                                            ], string='State',
                                  default='draft')
     
-    ext_note = fields.Text('Note')
+    ext_note = fields.Char('Note')
+    advisor_note = fields.Text('Advisor\'s Note')
     
     # Student Tuition per Semester with Financial Aid calculation
     student_balance = fields.Float('Current balance', related='student_id.student_balance')
@@ -61,6 +61,15 @@ class StudentRegistration(models.Model):
     is_full_paid = fields.Boolean('Paid in full')
         
     in_period = fields.Boolean('In Reg Time', compute='_check_in_period')
+    
+    @api.onchange('offer_course_ids')
+    def onchange_offer_course_ids(self):
+        if self.offer_course_ids:
+            print '=======', self.total_creds
+            if self.total_creds < self.crs_reg_id.min_credits:
+                self.ext_note = 'Register under minimum credits required.'
+        else:
+            self.ext_note = ''
     
     @api.one
     def paid_in_full(self):
@@ -352,8 +361,8 @@ class StudentRegistration(models.Model):
                                 vals['drop_course_ids'] = [(4, course.id)]                           
 
                     vals['reg_state'] = 'confirm'
-                    if sum_cred < record.crs_reg_id.min_credits:
-                        vals['ext_note'] = 'Register under minimum credits required.'
+#                     if sum_cred < record.crs_reg_id.min_credits:
+#                         vals['ext_note'] = 'Register under minimum credits required.'
                     
         return super(StudentRegistration,self).write(vals)
         

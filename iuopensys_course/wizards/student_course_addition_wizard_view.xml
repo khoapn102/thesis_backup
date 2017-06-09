@@ -1,13 +1,6 @@
 <?xml version="1.0" ?>
 <openerp>
 	<data>
-		<record model="ir.actions.act_window" id="student_course_addition_wizard_action">
-			<field name="name">Add Students</field>
-			<field name="res_model">student.course.addition.wizard</field>
-			<field name="view_mode">form</field>
-			<field name="view_type">form</field>
-			<field name="target">new</field>
-		</record>
 		
 		<record id="student_course_addition_wizard_form_view" model="ir.ui.view">
 			<field name="name">Add Students</field>
@@ -18,11 +11,11 @@
 					<sheet>
 						<group>
 							<group>
-								<field name="offer_course_id"/>
+								<field name="offer_course_id" options="{'no_create':True}"/>
 							</group>
 						</group>	
 						<group>
-							<field name="year_batch_id"/>
+							<field name="year_batch_id" options="{'no_create':True}"/>
 						</group>
 						<group>
 							<field name="student_ids"/>
@@ -41,6 +34,70 @@
 				</form>
 			</field>
 		</record>
+		
+		<record model="ir.actions.act_window" id="student_course_addition_wizard_action">
+			<field name="name">Add Students</field>
+			<field name="res_model">student.course.addition.wizard</field>
+			<field name="view_mode">form</field>
+			<field name="view_type">form</field>
+			<field name="target">new</field>
+		</record>
+		<record model="ir.actions.act_window.view" id="student_course_addition_wizard_form">
+			<field name="sequence" eval="1"/>
+			<field name="name">Add Students</field>
+			<field name="res_model">student.course.addition.wizard</field>
+			<field name="view_mode">form</field>
+			<field name="view_id" ref="student_course_addition_wizard_form_view"/>
+			<field name="act_window_id" ref="student_course_addition_wizard_action"/>
+		</record>
+		
+		
+		<record id="one_student_course_addition_wizard_form_view" model="ir.ui.view">
+			<field name="name">Add Student</field>
+			<field name="model">student.course.addition.wizard</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<form>					
+					<sheet>
+						<group>
+							<group>
+								<field name="offer_course_id" options="{'no_create':True}"/>
+							</group>
+							<group>
+								<field name="student_id" options="{'no_create':True}"/>
+							</group>
+						</group>	
+					</sheet>
+					<footer>
+						<button name="add_a_student_to_course"
+							type="object"
+							class="btn-primary"
+							string="Confirm"/>
+						or
+						<button string="Cancel"
+							class="btn-default"
+							special="cancel"/>
+					</footer>
+				</form>
+			</field>
+		</record>
 
+		<record model="ir.actions.act_window" id="one_student_course_addition_wizard_action">
+			<field name="name">Add Student</field>
+			<field name="res_model">student.course.addition.wizard</field>
+			<field name="view_mode">form</field>
+			<field name="view_type">form</field>
+			<field name="target">new</field>
+		</record>
+		<record model="ir.actions.act_window.view" id="one_student_course_addition_wizard_form">
+			<field name="sequence" eval="1"/>
+			<field name="name">Add Student</field>
+			<field name="res_model">student.course.addition.wizard</field>
+			<field name="view_mode">form</field>
+			<field name="view_id" ref="one_student_course_addition_wizard_form_view"/>
+			<field name="act_window_id" ref="one_student_course_addition_wizard_action"/>
+		</record>
+		
+		
 	</data>
 </openerp>

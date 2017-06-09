@@ -16,6 +16,7 @@
 					<field name="name" invisible="1"/>
 					<field name="student_id"/>
 					<field name="offer_course_id"/>
+					<field name="semester_id"/>
 					<field name="assignment_score"/>
 					<field name="mid_score"/>
 					<field name="final_score"/>

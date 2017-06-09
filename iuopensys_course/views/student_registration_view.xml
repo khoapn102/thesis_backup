@@ -108,10 +108,10 @@
 			<field name="model">student.registration</field>
 			<field name="type">tree</field>
 			<field name="arch" type="xml">
-				<tree>
+				<tree default_order="id DESC">
+					<field name="semester_id"/>
 					<field name="student_id"/>
 					<field name="crs_reg_id"/>
-					<field name="semester_id"/>
 					<field name="start_datetime"/>
 					<field name="end_datetime"/>
 					<field name="reg_state"/>					
@@ -162,6 +162,7 @@
                         <group>
                         	<label for="ext_note" string="NOTE:"  groups="iuopensys_core.group_staff"/>
                         	<field name="ext_note" nolabel="1" groups="iuopensys_core.group_staff"/>
+                        	<field name="advisor_note"/>
                         </group>
                         <notebook>
                         	<page string="Register">

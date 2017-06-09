@@ -18,7 +18,8 @@ class CourseRegistration(models.Model):
     # Courses reference this one
     reg_semester_id = fields.Many2one('semester', string='Semester',
                                 default=_default_reg_semester_id)
-    year_batch_id = fields.Many2one('year.batch', string='Student Batch')
+    year_batch_id = fields.Many2one('year.batch', string='Student Batch',
+                                    required=True)
     start_datetime = fields.Datetime(string='Start at',
                                      default=lambda self: datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
     end_datetime = fields.Datetime(string='End at',

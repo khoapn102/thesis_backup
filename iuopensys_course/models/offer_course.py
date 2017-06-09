@@ -99,6 +99,10 @@ class OfferCourse(models.Model):
     # Note
     ext_note = fields.Text('Note')
                     
+    @api.multi
+    def print_exam_student_list(self):
+        report_name = 'iuopensys_course.report_exam_student_list'
+        return self.env['report'].get_action(self, report_name)
     
     @api.constrains('mid_exam_percent','final_exam_percent','assignment_percent')
     def _validate_grade_percent(self):

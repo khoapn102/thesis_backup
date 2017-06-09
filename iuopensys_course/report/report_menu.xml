@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+	<data>
+		<report
+			id="action_report_exam_student_list"
+			model="offer.course"
+			string="Exam Attendance Sheet"
+			report_type="qweb-pdf"
+			name="iuopensys_course.report_exam_student_list"
+			file="iuopensys_course.report_exam_student_list"
+			menu="False"
+		/>
+	</data>
+</odoo>

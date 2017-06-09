@@ -11,14 +11,10 @@
 						<group string="General Information">
 							<group>
 								<field name="std_academic_prog_id"/>
-								<field name="standard_grad_date"/>
-								<field name="max_grad_date"/>
 							</group>
 							<group>
-								<field name="is_eng_req"/>							
-								<field name="eng_curriculum_id" attrs="{'invisible':[('is_eng_req','=',False)]}"
-										domain="[('is_eng_req','=',True)]"/>
-								<field name="is_eng_complete" attrs="{'invisible':[('eng_curriculum_id','=',False)]}"/>/>
+								<field name="standard_grad_date"/>
+								<field name="max_grad_date"/>
 							</group>							
 						</group>
 						<group string="Other Information">

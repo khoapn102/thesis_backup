@@ -36,7 +36,8 @@ class Student(models.Model):
     
     is_eng_req = fields.Boolean('Require IE')
     eng_curriculum_id = fields.Many2one('iu.curriculum', string='English Curriculum')
-    is_eng_complete = fields.Boolean('Complete IE')
+    is_eng_complete = fields.Boolean('Complete IE', 
+                                     help='Only check when completely finished IE Programs/Submitted efficient English proficiency.')
     
     # Student Behavior Point
 #     student_behavior_point_ids = fields.One2many('student.behavior.point', 'student_id', string='Behavior Point')    

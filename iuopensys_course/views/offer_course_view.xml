@@ -6,6 +6,7 @@
 			<field name="name">Offer Course List</field>
 			<field name="res_model">offer.course</field>
 			<field name="view_mode">tree,form</field>
+			<field name="context">{'search_default_filter_theory_course':1}</field>
 		</record>
 		
 		<!-- Tree View -->
@@ -51,7 +52,18 @@
                             	name="%(iuopensys_course.student_course_addition_wizard_action)d"
                             	type="action"
                             	context="{'default_offer_course_id':active_id}"
+                            	icon="fa-bars"/>
+                            <button string="Add Student"
+                            	class="oe_stat_button"
+                            	name="%(iuopensys_course.one_student_course_addition_wizard_action)d"
+                            	type="action"
+                            	context="{'default_offer_course_id':active_id}"
                             	icon="fa-plus"/>
+                            <button string="Exam Attendance"
+                            	class="oe_stat_button"
+                            	name="print_exam_student_list"
+                            	type="object"
+                            	icon="fa-print"/>
                             <!-- <button string="Add Students"
                             	class="oe_stat_button"
                             	name="call_student_course_addition_wizard"
@@ -73,10 +85,10 @@
                         <group colspan="4">
           					<group string="Course Information">
           						<group>
-          							<field name="course_id"/>
-          							<field name="department_id"/>
-          							<field name="academic_year_id"/>
-          							<field name="semester_id"/>
+          							<field name="course_id" options="{'no_create':True}"/>
+          							<field name="department_id" options="{'no_create':True}"/>
+          							<field name="academic_year_id" options="{'no_create':True}"/>
+          							<field name="semester_id" options="{'no_create':True}"/>
           							<field name="course_group"/>
           							<field name="lab_sect_display" invisible="1"/>
           							<field name="has_lab" attrs="{'invisible':[('lab_sect_display','=',True),('is_lab','=',True)]}"/>
@@ -86,7 +98,7 @@
           							<field name="lab_type" attrs="{'invisible':[('is_lab', '=', False)]}"/>
           						</group>
           						<group>          							
-          							<field name="lecturer_id"/>
+          							<field name="lecturer_id" options="{'no_create':True}"/>
           							<field name="assign_room"/>
           							<field name="numb_students"/>
           							<field name="avail_students"/>
@@ -166,8 +178,8 @@
                         	<page string="Academic Information">
                         		<group colspan="4" string="Grade Distribution">                       			           
                         			<group>
-                        				<field name="mid_exam_percent" widget="percentage"/>
                         				<field name="assignment_percent" widget="percentage"/>
+                        				<field name="mid_exam_percent" widget="percentage"/>                        				
                         			</group>
                         			<group>
                         				<field name="final_exam_percent" widget="percentage"/>
@@ -254,7 +266,15 @@
 							context="{'group_by':'semester_id'}"/>
 						<filter string="Lab"
 							domain="[('is_lab', '=', True)]" context="{'group_by':'course_id'}"/>
-					</group>					
+					</group>
+						
+					<!-- Filter -->
+					<filter name="filter_lab_course" string="Filter Lab Courses"
+						domain="[('is_lab','=',True)]"/>
+					<filter name="filter_theory_course" string="Filter Theory Courses"
+						domain="[('is_lab','=',False)]"/>
+					<filter name="filter_extra_curricular" string="Filter Extra-Curriculars"
+						domain="[('course_id.is_extra_curricular','=', True)]"/>	
 				</search>
 			</field>
 		</record>

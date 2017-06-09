@@ -84,7 +84,7 @@ class StudentCourse(models.Model):
                 mid_avg = record.mid_score * record.offer_course_id.mid_exam_percent
                 fin_avg = record.final_score * record.offer_course_id.final_exam_percent
                 assign_avg = record.assignment_score * record.offer_course_id.assignment_percent
-                record.course_gpa = mid_avg + fin_avg + assign_avg
+                record.course_gpa = round(mid_avg + fin_avg + assign_avg)
                 
                 classify = {'A+':(90.0, 100.0),
                             'A':(80.0, 89.0),
@@ -94,8 +94,7 @@ class StudentCourse(models.Model):
                             'D':(50.0,51.0),
                             'F':(0, 49.0)}
                 for item in classify:
-                    gpa_round = round(record.course_gpa)
-                    if classify[item][0] <= gpa_round <= classify[item][1]:
+                    if classify[item][0] <= record.course_gpa <= classify[item][1]:
                         record.letter_grade = item
                         break
                     

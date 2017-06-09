@@ -19,18 +19,15 @@
 				<header>
 					<field name="graduation_status" widget="statusbar"/>
 				</header>
+				<xpath expr="//div[1]" position="inside">
+					<button string="Print Transcript"
+						class="oe_stat_button"
+						icon="fa-print"
+						type="object"
+						name="print_student_transcript"/>
+				</xpath>
 				<xpath expr="//page[7]" position="after">
 					<page string="Student Progress">
-						<field name="student_log_ids" context="{'default_student_id':active_id}">
-							<tree edit="false" create="false">
-								<field name="field_change_name" string="Change"/>
-								<field name="old_value" string="From"/>
-								<field name="new_value" string="To"/>
-								<field name="modified_date" string="Complete on"/>
-							</tree>
-						</field>
-					</page>
-					<page string="Graduation Progress">
 						<notebook>							
 							<page string="Major Program">
 								<group string="General">
@@ -75,8 +72,20 @@
 								</notebook>								
 								
 							</page>
-							<page string="IU Programs">
-								<group string="General Information">
+							<page string="English and IU Programs">
+								<group string="English Program">
+									<group>
+										<field name="is_eng_req" string="Require IE Program"
+											attrs="{'readonly':['|', ('eng_curriculum_id', '!=', False),('is_eng_complete','=',True)]}"/>	
+										<field name="is_eng_complete" attrs="{'invisible':[('eng_curriculum_id','=',False)]}"/>					
+									</group>
+									<group>
+										<field name="eng_curriculum_id" attrs="{'invisible':[('is_eng_req','=',False)],
+																				'readonly':[('is_eng_complete','=',True)]}"
+											domain="[('is_eng_req','=',True)]" options="{'no_create':True}"/>
+									</group>
+								</group>
+								<group string="IU Programs">
 									<notebook>
 										<page string="Incomplete Programs">
 											<group>
@@ -104,8 +113,18 @@
 										</page>
 									</notebook>
 								</group>
-							</page>							
+							</page>
 						</notebook>
+					</page>
+					<page string="Progress Logs">
+						<field name="student_log_ids" context="{'default_student_id':active_id}">
+							<tree edit="false" create="false">
+								<field name="field_change_name" string="Change"/>
+								<field name="old_value" string="From"/>
+								<field name="new_value" string="To"/>
+								<field name="modified_date" string="Complete on"/>
+							</tree>
+						</field>
 					</page>					
 				</xpath>
 			</field>

@@ -52,4 +52,14 @@ class Semester(models.Model):
             diff = int((end-start).days)
             if diff < 0:
                 raise ValidationError('End Date must be larger than Start Date')
+    
+    @api.multi
+    def activate_calculate_gpa(self):
+        for record in self:
+            std_sem_ids = self.env['student.semester'].search([('semester_id','=',self.id)])
+            for std_sem in std_sem_ids:
+                if not std_sem.calculate_gpa:
+                    std_sem.write({'calculate_gpa': True})
+                
+        
             

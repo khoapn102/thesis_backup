@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+		<template id="report_exam_student_list">
+			<t t-call="report.html_container">
+				<t t-foreach="docs" t-as="o">
+					<t>
+						<div class="page" style="font-size: 14px">
+							<div>
+								<img class="image"
+								src="/iuopensys_studentlog/static/src/img/logo_small.png"
+								align="left" vertical-align="middle"/>							
+								<div>
+									<p class="text-center" vertical-align="middle"><br/>INTERNATIONAL UNIVERSITY<br/>
+										<hr size="100"/>
+									</p>
+								</div>
+							</div>
+							<div>
+								<h4 class="text-center" style="font-weight:bold">EXAM ATTENDANCE SHEET</h4>
+								<table width="100%">
+									<tbody>
+										<tr>
+											<td width="14%">Exam: </td>
+											<td width="35%" style="font-size: 15px"><b><t t-esc="o.name"/></b></td>
+											<td width="14%">Semester: </td>
+											<td width="35%"><t t-esc="o.semester_id.name"/></td>
+										</tr>
+										<tr>
+											<td>Date: </td>
+											<td></td>
+											<td>Exam Type: </td>
+											<td></td>
+										</tr>										
+									</tbody>
+								</table>
+							</div>
+							<br/>
+							<br/>
+							<div>
+								<table class="table table-bordered" style="width:100%; text-align:center">
+									<tr>
+										<td width="2%">No.</td>
+										<td width="10%">Student ID</td>
+										<td width="25%">Last Name</td>
+										<td width="15%">First Name</td>
+										<td width="8%">Class Code</td>
+										<td width="30%">Signature</td>
+										<td width="10%">Note</td>
+									</tr>
+									<t t-set="i" t-value="1"/>
+									<t t-foreach="o.student_course_ids" t-as="student">
+									<tr>
+										<td><t t-esc="i"/><t t-set="i" t-value="i+1"/></td>
+										<td><t t-esc="student.studentId"/></td>
+										<td  style="text-align:left"><t t-esc="student.student_lname"/></td>
+										<td><t t-esc="student.student_fname"/></td>
+										<td><t t-esc="student.student_class_code"/></td>
+										<td></td>
+										<t t-if="student.exam_status == False"/>
+										<td><t t-esc="Prohibited"/></td>
+									</tr>
+									</t>
+								</table>
+							</div>
+						</div>
+					</t>
+				</t>
+			</t>
+		</template>
+	</data>
+</odoo>

@@ -8,6 +8,7 @@
 			report_type="qweb-pdf"
 			name="iuopensys_studentlog.report_student_transcript"
 			file="iuopensys_studentlog.report_student_transcript"
+			menu="False"
 		/>
 	</data>
 </odoo>

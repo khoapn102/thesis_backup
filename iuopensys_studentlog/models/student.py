@@ -23,6 +23,8 @@ class Student(models.Model):
                                             help='Total achieved credits during studying duration.')
     major_accumulated_credits = fields.Integer(string='Accumulated Credits', compute='get_all_course_details',
                                                help='Total accumulated credits counted toward Curriculum.')
+    major_total_not_count_credits = fields.Integer(related='major_id.major_total_not_count_credits')
+    major_total_with_no_count_credits = fields.Integer(related='major_id.major_total_with_no_count_credits')
     
     # Program Incomplete
     academic_program_course_not_complete_ids = fields.Many2many('course', string='Incomplete Programs',
@@ -39,7 +41,8 @@ class Student(models.Model):
 #     major_achieved_credits = fields.Integer(string='Achieved Credits', compute='get_all_credits')
     
     
-    graduation_status = fields.Selection(selection=[('ontrack','On Track'),
+    graduation_status = fields.Selection(selection=[('ie', 'IE Program'),
+                                                    ('ontrack','On Track'),
                                                     ('donemajor', 'Complete Major Program'),
                                                     ('complete', 'Ready for Graduation'),
                                                     ('graduated', 'Graduated')],
@@ -47,31 +50,53 @@ class Student(models.Model):
                                          default='ontrack',
                                          compute='get_all_course_details')
     
+    @api.multi
+    def print_student_transcript(self):
+        report_name = 'iuopensys_studentlog.report_student_transcript'
+        return self.env['report'].get_action(self, report_name)
+    
+    @api.onchange('is_eng_req')
+    def onchange_is_eng_req(self):
+        if self.graduation_status != 'ie':
+            self.graduation_status = 'ie'
+        else:
+            self.graduation_status = 'ontrack'
+        
+    @api.onchange('is_eng_complete')
+    def onchange_is_eng_complete(self):
+        if self.is_eng_req and self.eng_curriculum_id:
+            if self.is_eng_complete:
+                if self.graduation_status == 'ie':
+                    if self.major_incomplete_credits == 0:
+                        self.graduation_status = 'complete'
+                    else:
+                        self.graduation_status = 'ontrack'
+                    
     # Student Graduatino Status -> Check on following
     # 1. Complete all Majors
     # 2. Complete all required Programs
     # 3. Complete Behavior Point -> Need Behavior Point Standard
     # 4. Submit all Documents
     # 5. No Debt 
-    @api.depends('student_course_ids', 'major_course_not_complete_ids',
-                 'major_course_complete_ids',
-                 'academic_program_course_not_complete_ids',
-                 'student_document_not_submit_ids')
-    def get_graduation_status(self):
-        for record in self:
-            # 3 Stage for each Student
-            # Complete major
-            # 1. For each curriculum -> satisfied max credit ?
-            # 2. If any elective not complete -> cant graduate
-            
-            if record.major_accumulated_credits == record.major_id.major_total_credits:
-                record.graduation_status = 'donemajor'
-                if not record.academic_program_course_not_complete_ids:
-                    if not record.student_document_not_submit_ids:
-                        if record.student_debt == 0.0:
-                            record.graduation_status = 'complete'                
-            else:
-                record.graduation_status = 'ontrack'
+#     @api.depends('student_course_ids', 'major_course_not_complete_ids',
+#                  'major_course_complete_ids',
+#                  'academic_program_course_not_complete_ids',
+#                  'student_document_not_submit_ids')
+#     def get_graduation_status(self):
+#         for record in self:
+#             # 3 Stage for each Student
+#             # Complete major
+#             # 1. For each curriculum -> satisfied max credit ?
+#             # 2. If any elective not complete -> cant graduate
+#             
+#             if record.major_accumulated_credits == record.major_id.major_total_credits:
+#                 record.graduation_status = 'donemajor'
+#                 if not record.academic_program_course_not_complete_ids:
+#                     if not record.student_document_not_submit_ids:
+#                         if record.student_debt == 0.0:
+#                             record.graduation_status = 'complete'                
+#             else:
+#                 record.graduation_status = 'ontrack'
                 
     # Manage IU Programs / Extra Curriculars Courses
     @api.depends('academic_program_course_complete_ids')

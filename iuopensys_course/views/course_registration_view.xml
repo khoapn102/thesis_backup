@@ -39,8 +39,8 @@
                         </div>
                         <group string="Basic Information">
                         	<group>
-                        		<field name="reg_semester_id"/>
-                        		<field name="year_batch_id"/>
+                        		<field name="reg_semester_id" options="{'no_create':True}"/>
+                        		<field name="year_batch_id" options="{'no_create':True}"/>
                         		<field name="min_credits"/>
                         	</group>
                         	<group>

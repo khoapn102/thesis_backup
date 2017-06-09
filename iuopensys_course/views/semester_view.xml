@@ -32,6 +32,11 @@
 			<field name="type">form</field>
 			<field name="arch" type="xml">
 				<form>
+					<header>
+							<button string="Update Semester GPA" type="object"
+								name="activate_calculate_gpa" class="oe_highlight"
+								groups="iuopensys_core.group_staff"/>
+					</header>
 					<sheet>
 						<div class="oe_title">
 							<label for="name" class="oe_edit_only" string="Semester"/>
@@ -43,7 +48,7 @@
 							<group>
 								<field name="semester_type"/>
 								<field name="semester_year" style="width: 30%%"/>
-								<field name="semester_code"/>								
+								<field name="semester_code" groups="iuopensys_core.group_staff"/>								
 							</group>
 							<group>
 								<field name="start_date"/>
