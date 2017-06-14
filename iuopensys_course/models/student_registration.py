@@ -44,6 +44,8 @@ class StudentRegistration(models.Model):
     
     # Student Tuition per Semester with Financial Aid calculation
     student_balance = fields.Float('Current balance', related='student_id.student_balance')
+    # Student Debt here to check if student allow to register for upcoming semester. Must pay last one
+    student_debt = fields.Float('Student Debt', related='student_id.student_debt')
     total_creds = fields.Integer('Total credits registered', compute='get_tuition_info', default=0)
     stat_button_total_creds = fields.Integer('Credits', compute='get_tuition_info')
     stat_button_amount_tuition = fields.Char('Tuition', compute='get_tuition_info',)
@@ -287,17 +289,17 @@ class StudentRegistration(models.Model):
                     old_ids = [a.id for a in record.offer_course_ids] # Old courses reg (before onchange)
                     drop_ids = [a.id for a in record.drop_course_ids] # Drop courses
                     
-                    print '+++++++ old: ', old_ids, ' ===== curr: ' , ids
+#                     print '+++++++ old: ', old_ids, ' ===== curr: ' , ids
                     onchange_crs_ids = [x for x in (old_ids+ids) if\
                                          (x not in old_ids) or (x not in ids)] # After onchange
-                    print '========== onchange: ', onchange_crs_ids
+#                     print '========== onchange: ', onchange_crs_ids
                     
                     lab_only_ids = self.env['offer.course'].search([('id', 'in', onchange_crs_ids), ('is_lab','=',True)])
                     if lab_only_ids:
                         for course in lab_only_ids:
                             onchange_crs_ids.append(course.theory_course_id.id)
                     offer_course_ids = self.env['offer.course'].search([('id', 'in', onchange_crs_ids)])
-                    print '------ updated-onchange: ', offer_course_ids
+#                     print '------ updated-onchange: ', offer_course_ids
                     
                     sum_cred = 0
                     for course in offer_course_ids:

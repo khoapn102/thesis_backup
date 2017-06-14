@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+		<template id="report_student_progress">
+			<t t-call="report.html_container">
+				<t t-foreach="docs" t-as="o">
+					<t>
+						<div class="page" style="font-size: 14px">
+							<div>
+								<img class="image"
+								src="/iuopensys_studentlog/static/src/img/logo_small.png"
+								align="left" vertical-align="middle"/>							
+								<div>
+									<p class="text-center" vertical-align="middle"><br/>INTERNATIONAL UNIVERSITY<br/>
+										<span style="font-weight:bold">ACADEMIC AFFAIRS OFFICE<br/>
+										<hr size="100"/></span>
+									</p>
+								</div>
+							</div>
+							<div>
+								<h4 class="text-center" style="font-weight:bold">STUDENT ACADEMIC PROGRESS</h4>
+								<br/>
+								<h5 style="font-weight:bold">I. Personal Information</h5>
+								<table width="100%">
+									<tbody>
+										<tr>
+											<td width="15%">Full Name: </td>
+											<td width="35%" style="font-size: 15px"><b><t t-esc="o.last_name"/>&#160;<t t-esc="o.name"/></b></td>
+											<td width="17%">Date of Birth: </td>
+											<td width="35%"><t t-esc="o.birthdate"/></td>
+										</tr>
+										<tr>
+											<td>Gender: </td>
+											<t t-if="o.gender == 'm'">
+												<td><p>Male</p></td>
+											</t>
+											<t t-if="o.gender == 'f'">
+												<td><p>Female</p></td>
+											</t>
+											<td>Ethnic: </td>
+											<td><t t-esc="o.ethnic"/></td>
+										</tr>
+										<tr>
+											<td>Address: </td>
+											<td><t t-esc="o.street"/>&#160;<t t-esc="o.street2"/>,&#160;<t t-esc="o.city"/>,&#160;<t t-esc="o.country_id.name"/></td>
+											<td>Email: </td>
+											<td><t t-esc="o.email"/></td>
+										</tr>										
+									</tbody>
+								</table>
+								<br/>
+								<h5 style="font-weight:bold">II. Academic Information</h5>
+								<table width="100%">
+									<tbody>
+										<tr>
+											<td width="15%">Student ID: </td>
+											<td width="35%"><t t-esc="o.studentId"/></td>
+											<td width="17%">Degree: </td>
+											<td width="35%">Undergraduate</td>
+										</tr>
+										<tr>
+											<td>School: </td>
+											<td><t t-esc="o.department_id.name"/></td>
+											<td>Major: </td>
+											<td><t t-esc="o.major_id.name"/></td>
+										</tr>
+										<tr>
+											<td>Class: </td>
+											<td><t t-esc="o.student_class_code"/></td>
+											<td>Status: </td>
+											<t t-if="o.academic_status == 'regular'">
+												<td><p style="color:green">Regular</p></td>
+											</t>
+											<t t-if="o.academic_status == 'suspended'">
+												<td><p style="color:red">Suspended</p></td>
+											</t>
+											<t t-if="o.academic_status == 'expelled'">
+												<td><p style="color:red">Expelled</p></td>
+											</t>
+										</tr>
+										<tr>
+											<td>Program: </td>
+											<td><t t-esc="o.std_academic_prog_id.name"/></td>
+											<td>Prog. Code: </td>
+											<td><t t-esc="o.std_academic_prog_id.program_code"/></td>
+										</tr>
+										<tr>
+											<td>Type: </td>
+											<t t-if="o.std_academic_prog_id.program_type == 'iu'">
+												<td><p>International University</p></td>
+											</t>
+											<t t-if="o.std_academic_prog_id.program_type == 'foreign'">
+												<td><p>Twinning</p></td>
+											</t>
+											<td>Partner University: </td>
+											<td><t t-esc="o.std_academic_prog_id.partner_uni_id.name"/></td>
+										</tr>
+										<tr>
+											<td>Certificate: </td>
+											<t t-if="o.std_academic_prog_id.program_type == 'iu'">
+												<td><p>International University</p></td>
+											</t>
+											<t t-if="o.std_academic_prog_id.program_type == 'foreign'">
+												<td><p>Partner University</p></td>
+											</t>
+											<td>Gradudate (IU): </td>
+											<td><t t-esc="o.standard_grad_date"/></td>											
+										</tr>									
+									</tbody>
+								</table>
+								<br/>
+								<h5 style="font-weight:bold">III. Academic Progress</h5>
+								<table width="100%">
+									<tbody>
+										<tr>
+											<td>IE required: </td>
+											<t t-if="o.is_eng_req == True">
+												<td><t t-esc="o.eng_curriculum_id.name"/></td>
+											</t>
+											<t t-if="o.is_eng_req == False">
+												<td><p>No</p></td>
+											</t>
+											<td>IE completed: </td>
+											<t t-if="o.is_eng_req == False">
+												<td><p>Not neccessary.</p></td>
+											</t>
+											<t t-if="o.is_eng_req == True">
+												<t t-if="o.is_eng_complete == True">
+													<td><p>Completed</p></td>
+												</t>
+												<t t-if="o.is_eng_complete == False">
+													<td><p>Incomplete</p></td>
+												</t>
+											</t>
+										</tr>
+										<tr>
+											<td width="20%">Major Credits: </td>
+											<td width="30%"><t t-esc="o.major_total_credits"/>&#160;credits</td>
+											<td width="20">Achieved Credits: </td>
+											<td width="30%"><t t-esc="o.major_achieved_credits"/>&#160;credits</td>
+										</tr>
+										<tr>
+											<td>Accumulated Credits: </td>
+											<td><t t-esc="o.major_accumulated_credits"/>&#160;credits</td>
+											<td>Missing Credits: </td>
+											<td><t t-esc="o.major_incomplete_credits"/>&#160;credits</td>
+										</tr>
+									</tbody>
+								</table>
+								<br/>
+								<table class="table table-bordered" style="width:100%">
+									<tr>
+										<td width="3%">No.</td>
+										<td width="15%">Semester</td>
+										<td width="15%">Total Credits</td>
+										<td width="15%">Achieved Credits</td>
+										<td width="15%">P/F Credits</td>
+										<td width="15%">Average GPA</td>
+										<td width="15%">Behavior Point</td>
+									</tr>
+									<t t-set="i" t-value="1"/>
+									<t t-foreach="o.student_semester_ids" t-as="semester">
+									<tr>
+										<td><t t-esc="i"/><t t-set="i" t-value="i+1"/></td>
+										<td><t t-esc="semester.semester_id.name"/></td>
+										<td><t t-esc="semester.total_credits"/></td>
+										<td><t t-esc="semester.achieved_credits"/></td>
+										<td><t t-esc="semester.no_count_credits"/></td>
+										<td><t t-esc="semester.average_gpa"/></td>
+										<td><t t-esc="semester.total_score"/></td>
+									</tr>
+									</t>
+								</table>
+								<br/>
+								<table width="100%">
+									<tbody>
+										<tr>
+											<td style="font-weight:bold" width="20%">Accumulated GPA (10/100): </td>
+											<td width="30%"><t t-esc="o.accumulated_gpa"/></td>
+											<td style="font-weight:bold" width="20%">Accumulated GPA (US): </td>
+											<td></td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+							<br/>							
+							<h5 style="font-weight:bold">IV. Extra-Curricular Activities Progress</h5>
+							<p>Incomplete Programs: </p>
+							<t t-if="o.academic_program_course_not_complete_ids != False">
+								<table class="table table-bordered" style="width:100%">
+									<tbody>
+										<tr>
+											<td width="3%">No.</td>
+											<td width="75%">Course</td>
+											<td width="22%">Department</td>
+										</tr>
+										<t t-set="i" t-value="1"/>
+										<t t-foreach="o.academic_program_course_not_complete_ids" t-as="course">
+										<tr>
+											<td><t t-esc="i"/><t t-set="i" t-value="i+1"/></td>
+											<td><t t-esc="course.name"/></td>
+											<td><t t-esc="course.department_id.name"/></td>
+										</tr>
+										</t>
+									</tbody>
+								</table>
+							</t>
+							<p>Complete Programs: </p>
+							<t t-if="o.academic_program_course_complete_ids != False">
+								<table class="table table-bordered" style="width:100%">
+									<tbody>
+										<tr>
+											<td width="3%">No.</td>
+											<td width="75%">Course</td>
+											<td width="22%">Department</td>
+										</tr>
+										<t t-set="i" t-value="1"/>
+										<t t-foreach="o.academic_program_course_complete_ids" t-as="new_course">
+										<tr>
+											<td><t t-esc="i"/><t t-set="i" t-value="i+1"/></td>
+											<td><t t-esc="new_course.offer_course_id.name"/></td>
+											<td><t t-esc="new_course.department_id.name"/></td>
+										</tr>
+										</t>
+									</tbody>
+								</table>
+							</t>
+							<h5 style="font-weight:bold">V. Required Documents</h5>
+							<p>Unsubmitted Documents: </p>
+							
+							<p>Submitted Documents: </p>
+							
+							<!-- <div>
+								<table class="table table-bordered" style="width:100%; text-align:center">
+									<tr>
+										<td width="2%">No.</td>
+										<td width="8%">Course ID</td>
+										<td width="75%">Course</td>
+										<td width="3%">Credits</td>
+										<td width="6%">GPA</td>
+										<td width="6%">Letter Grade</td>
+									</tr>
+									<t t-set="i" t-value="1"/>
+									<t t-foreach="o.student_course_ids" t-as="course">
+									<t t-if="course.course_gpa != 0.0"/>
+									<tr>
+										<td><t t-esc="i"/><t t-set="i" t-value="i+1"/></td>
+										<td><t t-esc="course.course_code"/></td>
+										<td  style="text-align:left"><t t-esc="course.course_name"/></td>
+										<td><t t-esc="course.course_credits"/></td>
+										<td><t t-esc="course.course_gpa"/></td>
+										<td><t t-esc="course.letter_grade"/></td>
+									</tr>
+									</t>
+								</table>
+							</div> -->
+						</div>
+					</t>
+				</t>
+			</t>
+		</template>
+	</data>
+</odoo>

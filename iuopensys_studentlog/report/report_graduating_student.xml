@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+		<template id="report_graduating_student">
+			<t t-call="report.html_container">
+				<t t-foreach="docs" t-as="o">
+					<t>
+						<div class="page" style="font-size: 14px">
+							<div>
+								<img class="image"
+								src="/iuopensys_studentlog/static/src/img/logo_small.png"
+								align="left" vertical-align="middle"/>							
+								<div>
+									<p class="text-center" vertical-align="middle"><br/>INTERNATIONAL UNIVERSITY<br/>
+										<hr size="100"/>
+									</p>
+								</div>
+							</div>
+							<div>
+								<h4 class="text-center" style="font-weight:bold">GRADUATING STUDENT LIST</h4>
+								<table width="100%">
+									<tbody>
+										<tr>
+											<td width="14%">Year: </td>
+											<td width="35%" style="font-size: 15px"><b><t t-esc="o.school_year"/></b></td>
+											<td>Date: </td>
+											<td></td>
+										</tr>																		
+									</tbody>
+								</table>
+							</div>
+							<br/>
+							<br/>
+							<div>
+								<table class="table table-bordered" style="width:100%; text-align:center">
+									<tr>
+										<td width="2%">No.</td>
+										<td width="10%">ID</td>
+										<td width="25%">Last Name</td>
+										<td width="15%">First Name</td>
+										<td width="8%">Class Code</td>
+										<td width="20%">Status</td>
+										<td width="10%">Graduate on</td>
+										<td width="10%">Note</td>
+									</tr>
+									<t t-set="i" t-value="1"/>
+									<t t-foreach="o.graduate_student_ids" t-as="student">
+									<tr>
+										<td><t t-esc="i"/><t t-set="i" t-value="i+1"/></td>
+										<td><t t-esc="student.studentId"/></td>
+										<td  style="text-align:left"><t t-esc="student.last_name"/></td>
+										<td><t t-esc="student.name"/></td>
+										<td><t t-esc="student.student_class_code"/></td>
+										<t t-if="student.graduation_status == 'complete'">
+											<td>
+												<p>Complete Major/Transfer Program</p>	
+											</td>
+										</t>
+										<t t-if="not student.graduation_status == 'complete'">
+											<td>
+												<p>Ready for Graduation/Transfer</p>
+											</td>
+										</t>
+										<td><t t-esc="student.graduation_date"/></td>
+										<td></td>
+									</tr>
+									</t>
+								</table>
+							</div>
+						</div>
+					</t>
+				</t>
+			</t>
+		</template>
+	</data>
+</odoo>

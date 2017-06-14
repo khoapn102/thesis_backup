@@ -95,9 +95,8 @@ class Student(models.Model):
                             continue
                 if accum_cred:
                     avg_gpa = total_gpa/accum_cred
-                print '======', total_gpa
             record.accumulated_credits = accum_cred
-            record.accumulated_gpa = avg_gpa
+            record.accumulated_gpa = round(avg_gpa,1)
                     
     @api.depends('student_document_ids')
     def get_student_document_not_submit(self):

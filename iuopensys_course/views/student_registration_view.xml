@@ -166,7 +166,7 @@
                         </group>
                         <notebook>
                         	<page string="Register">
-                        		<group string="Registered Courses">
+                        		<group string="Registered Courses" attrs="{'invisible':[('student_debt', '>', 0)]}">
 		                       		<field name="offer_course_ids" nolabel="1" options="{'no_create':True}" 
 		                       			domain="[('semester_id','=',semester_id),('has_lab','=',False),('course_id','in', course_ids and course_ids[0][2])]">
 		                       			<tree edit="false">
@@ -214,6 +214,7 @@
                         		<group string="Tuition Information">
                         			<group>
                         				<field name="student_balance"/>
+                        				<field name="student_debt" invisible="1"/>
                         				<field name="total_creds"/>
                         				<field name="total_actual_creds"/>
                         				<label for="amount_tuition"  style="font-weight:bold"/>
@@ -288,6 +289,9 @@
 					<attribute name="readonly">1</attribute>
 				</field>
 				<field name="amount_paid" position="attributes">
+					<attribute name="readonly">1</attribute>
+				</field>
+				<field name="advisor_note" position="attributes">
 					<attribute name="readonly">1</attribute>
 				</field>
 			</field>

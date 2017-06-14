@@ -1,0 +1,42 @@
+<?xml version="1.0" ?>
+<openerp>
+	<data>
+		<record id="add_graduation_date_wizard_form_view" model="ir.ui.view">
+			<field name="name">Add Graduation Date</field>
+			<field name="model">add.graduation.date.wizard</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<form>					
+					<sheet>
+						<group>
+							<group>
+								<field name="student_id" options="{'no_create':True}"/>
+							</group>
+							<group>
+								<field name="graduation_date"/>
+							</group>
+						</group>	
+					</sheet>
+					<footer>
+						<button name="add_graduation_date"
+							type="object"
+							class="btn-primary"
+							string="Confirm"/>
+						or
+						<button string="Cancel"
+							class="btn-default"
+							special="cancel"/>
+					</footer>
+				</form>
+			</field>
+		</record>
+		
+		<record model="ir.actions.act_window" id="add_graduation_date_wizard_action">
+			<field name="name">Add Graduation Date</field>
+			<field name="res_model">add.graduation.date.wizard</field>
+			<field name="view_mode">form</field>
+			<field name="view_type">form</field>
+			<field name="target">new</field>
+		</record>
+	</data>
+</openerp>

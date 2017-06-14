@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
 	<data>
+	
+		<!-- Transcript -->
 		<report
 			id="action_report_student_transcript"
 			model="student"
@@ -10,5 +12,28 @@
 			file="iuopensys_studentlog.report_student_transcript"
 			menu="False"
 		/>
+		
+		<!-- Graduating Report -->
+		<report
+			id="action_report_graduating_student"
+			model="year.batch"
+			string="Graduating Student List"
+			report_type="qweb-pdf"
+			name="iuopensys_studentlog.report_graduating_student"
+			file="iuopensys_studentlog.report_graduating_student"
+			menu="False"
+		/>
+		
+		<!-- Student Progress Report -->
+		<report
+			id="action_report_student_progress"
+			model="student"
+			string="Student Progress Report"
+			report_type="qweb-pdf"
+			name="iuopensys_studentlog.report_student_progress"
+			file="iuopensys_studentlog.report_student_progress"
+			
+		/>
+		
 	</data>
 </odoo>

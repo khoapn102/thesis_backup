@@ -74,10 +74,13 @@ class StudentSemester(models.Model):
                         no_count_cred += std_crs.course_credits
                     
                     total_cred += std_crs.course_credits
-                   
-                avg_gpa = total_gpa/achieved_cred
+                
+                if achieved_cred:
+                    avg_gpa = total_gpa/achieved_cred
+                else:
+                    avg_gpa = total_gpa
                                 
-                record.average_gpa = avg_gpa
+                record.average_gpa = round(avg_gpa,1)
                 record.achieved_credits = achieved_cred
                 record.total_credits = total_cred
                 record.no_count_credits = no_count_cred                        

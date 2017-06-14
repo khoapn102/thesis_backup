@@ -6,7 +6,8 @@
 			name="Student Historical Logs"
 			sequence="2"
 			parent="iuopensys_core.student_core_menu"
-			action="student_log_main_action"/>
+			action="student_log_main_action"
+			groups="iuopensys_core.group_staff"/>
 		
 	</data>
 </openerp>

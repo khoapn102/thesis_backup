@@ -11,13 +11,13 @@
 						<group string="General Information">
 							<group>
 								<field name="std_academic_prog_id"/>
+								<field name="standard_grad_date"/>
 							</group>
 							<group>
-								<field name="standard_grad_date"/>
 								<field name="max_grad_date"/>
 							</group>							
 						</group>
-						<group string="Other Information">
+						<group string="Other Information" groups="iuopensys_core.group_staff">
 	                    	<field name="exam_status"/>
 						</group>
 					</page>
@@ -99,7 +99,7 @@
 	                    		</div>
 							</group>
                			</group>
-               			<group string="Tution Information">
+               			<group string="Tution Information" groups="iuopensys_core.group_staff">
                				<field name="student_tuition_ids" nolabel="1">
                					<tree create="false" edit="false">
                						<field name="semester_id"/>
@@ -114,18 +114,6 @@
                		</page>
                		<page string="Documents">
                			<notebook>
-               				<page string="Submitted Documents">
-               					<group string="Document List">
-		               				<field name="student_document_ids" nolabel="1">
-		               					<tree edit="false" create="false">
-		               						<field name="iu_doc_id"/>
-		               						<field name="is_submit"/>
-		               						<field name="is_stored"/>
-		               						<field name="submit_deadline"/>
-		               					</tree>
-		               				</field>
-		               			</group>
-               				</page>
                				<page string="Uncompleted Documents">
                					<group>
                						<field name="student_document_not_submit_ids" nolabel="1">
@@ -138,6 +126,18 @@
                							</tree>
                						</field>
                					</group>
+               				</page>
+               				<page string="Submitted Documents">
+               					<group string="Document List">
+		               				<field name="student_document_ids" nolabel="1">
+		               					<tree edit="false" create="false">
+		               						<field name="iu_doc_id"/>
+		               						<field name="is_submit"/>
+		               						<field name="is_stored"/>
+		               						<field name="submit_deadline"/>
+		               					</tree>
+		               				</field>
+		               			</group>
                				</page>
                			</notebook>
                			

@@ -20,7 +20,6 @@ class IuCurriculum(models.Model):
     # List of course
     course_ids = fields.Many2many('course', string='Course List')
     
-    
     # If PE courses needed to fix for Credit count, FIX HERE
     
     #

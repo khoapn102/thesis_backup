@@ -10,7 +10,7 @@
 		<!-- Department Section -->
 		<menuitem id="department_core_menu"
 			name="Department"
-			sequence="1"
+			sequence="0"
 			parent="university_root_menu"/>
 		
 		<menuitem id="department_main_menu"
@@ -51,9 +51,9 @@
 			
 		<!-- Academic Section -->
 		<menuitem id="academic_core_menu"
-			name="Academic"
+			name="University Academic"
 			sequence="0"
-			parent="university_root_menu"/>
+			parent="academic_root_menu"/>
 			
 		<!-- Academic Years Section -->
 		<menuitem id="academic_year_core_menu"

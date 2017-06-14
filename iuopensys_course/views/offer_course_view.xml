@@ -52,7 +52,7 @@
                             	name="%(iuopensys_course.student_course_addition_wizard_action)d"
                             	type="action"
                             	context="{'default_offer_course_id':active_id}"
-                            	icon="fa-bars"/>
+                            	icon="fa-plus-square"/>
                             <button string="Add Student"
                             	class="oe_stat_button"
                             	name="%(iuopensys_course.one_student_course_addition_wizard_action)d"
@@ -116,18 +116,7 @@
                         </group>
                         <notebook>
                         	<page string="Course Schedule">
-                        		<div>
-	                        		<!-- <group>
-	                        			<field name="session_one_id"/>
-	                        			<field name="course_start_date"/>
-	                        			<field name="course_end_date"/>
-	                        			<field name="is_summer"/>	                        			
-	                        		</group>
-                        			<group>                        				
-                        				<field name="session_two_id" attrs="{'invisible':[('is_summer','=',False)]}"/>
-                        				<field name="second_start_date" attrs="{'invisible':[('is_summer','=',False)]}"/>
-                        				<field name="second_end_date" attrs="{'invisible':[('is_summer','=',False)]}"/>
-                        			</group> -->
+                        		<div>	                        		
                         			<field name="study_session_ids" nolabel="1" context="{'default_offer_course_id':active_id}">
                         				<tree editable="bottom">
                         					<field name="name"/>
@@ -194,17 +183,17 @@
        										<field name="student_lname" fg_color="red:exam_status==False"/>
        										<field name="student_fname" fg_color="red:exam_status==False"/>
        										<field string="Class Code" name="student_class_code"/> 
-       										<field name="assignment_score" string="Assign. Score"/>    										       										
-       										<field name="mid_score" string="Midterm Score"/>
-       										<field name="final_score" string="Final Score"/>
-       										<field name="course_gpa" string="GPA"/>
-       										<field name="is_complete"/>     										
-       										<field name="exam_status" string="Exam Eligibility"/>
+       										<field name="assignment_score" string="Assign. Score" groups="iuopensys_core.group_staff"/>    										       										
+       										<field name="mid_score" string="Midterm Score" groups="iuopensys_core.group_staff"/>
+       										<field name="final_score" string="Final Score" groups="iuopensys_core.group_staff"/>
+       										<field name="course_gpa" string="GPA" groups="iuopensys_core.group_staff"/>
+       										<field name="is_complete" groups="iuopensys_core.group_staff"/>     										
+       										<field name="exam_status" string="Exam Eligibility" groups="iuopensys_core.group_staff"/>
        									</tree>
        								</field>
        							</group>
        						</page>
-       						<page string="Attendance">
+       						<page string="Attendance" groups="iuopensys_core.group_staff">
        							<group>
        								<field name="student_attendance_ids" nolabel="1">
        									<tree create="false" editable="bottom">

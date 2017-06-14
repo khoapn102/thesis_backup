@@ -6,12 +6,32 @@
 			<field name="model">year.batch</field>
 			<field name="inherit_id" ref="iuopensys_core.year_batch_form_view"/>
 			<field name="arch" type="xml">
+				<header>
+					<button string="Update Graduation List"
+						name="update_graduating_student"
+						type="object"
+						class="oe_highlight"
+						icon="fa-bars"/>
+				</header>
+				<xpath expr="//div[1]" position="before">
+					<div class="oe_button_box" name="my_new_button_box" groups="iuopensys_core.group_staff">
+						<button class="oe_stat_button" icon="fa-male" name="" type="">
+							<field name="number_intake_students" widget="statinfo" string="New Students"/>
+						</button>
+						<button class="oe_stat_button" icon="fa-users" 
+							name="print_graduating_student_list" 
+							type="object" 
+							groups="iuopensys_core.group_staff">
+							<field name="number_students_ready_graduate" widget="statinfo" string="Graduating"/>
+						</button>
+					</div>
+				</xpath>
 				<notebook position="inside">
-					<page string="Students">
+					<page string="Intake Students">
 						<group>
 							<field name="student_ids" nolabel="1">
 								<tree edit="false" create="false">
-									<field name="studentId"/>
+									<field name="studentId" string="ID"/>
 									<field name="last_name"/>
 									<field name="name"/>
 									<field name="birthdate" string="Dob"/>
@@ -20,14 +40,27 @@
 									<field name="student_class_code" string="Class Code"/>
 									<field name="major_id"/>
 									<field name="country_id"/>
-									<field name="graduation_status"/>
+									<field name="graduation_status" string="Grad. Status"/>
 								</tree>
 							</field>
 						</group>
 					</page>
-					<page string="Graduating Students">
+					<page string="Graduating Students">						
 						<group>
-							<field name="graduating_student_ids" nolabel="1"/>
+							<field name="graduate_student_ids" nolabel="1">
+								<tree edit="false" create="false">
+									<field name="studentId" string="ID"/>
+									<field name="last_name"/>
+									<field name="name"/>
+									<field name="birthdate" string="Dob"/>
+									<field name="department_id"/>
+									<field name="academic_year_id"/>
+									<field name="student_class_code" string="Class Code"/>
+									<field name="major_id"/>
+									<field name="country_id"/>
+									<field name="graduation_status" string="Grad. Status"/>
+								</tree>
+							</field>
 						</group>
 					</page>
 				</notebook>

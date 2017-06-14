@@ -60,6 +60,8 @@ class Semester(models.Model):
             for std_sem in std_sem_ids:
                 if not std_sem.calculate_gpa:
                     std_sem.write({'calculate_gpa': True})
+                else:
+                    std_sem.write({'calculate_gpa': False})
                 
         
             

@@ -43,7 +43,7 @@
 											<td>Class: </td>
 											<td><t t-esc="o.student_class_code"/></td>
 											<td>Program: </td>
-											<td><t t-esc="o.academic_year_id.year_batch_id.name"/></td>
+											<td><t t-esc="o.academic_year_id.year_batch_id.program_year"/></td>
 										</tr>
 									</tbody>
 								</table>

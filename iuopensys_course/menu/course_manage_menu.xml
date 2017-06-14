@@ -48,7 +48,7 @@
 			parent="iuopensys_core.academic_root_menu"/>
 		
 		<menuitem id="course_registration_main_menu"
-			name="Course Registration"
+			name="Registration Management"
 			sequence="0"
 			parent="course_registration_core_menu"
 			action="course_registration_main_action"/>
@@ -84,14 +84,14 @@
 		<menuitem id="student_academic_program_menu"
 			name="Academic Program"
 			sequence="2"
-			parent="iuopensys_core.academic_core_menu"
+			parent="iuopensys_core.major_core_menu"
 			action="student_academic_program_main_action"/>
 		
 		<!-- Miscellaneous -->
 		<menuitem id="miscellaneous_core_menu"
 			name="Misc."
 			sequence="4"	
-			parent="iuopensys_core.academic_root_menu"/>
+			parent="iuopensys_core.university_root_menu"/>
 		
 		<!-- Partner University -->
 		<menuitem id="partner_university_main_menu"
@@ -140,19 +140,19 @@
 			parent="iuopensys_core.student_core_menu"
 			action="student_behavior_point_main_action"/> -->
 			
+		<!-- Student Semester -->
+		<menuitem id="academic_management_core_menu"
+			name="Student Academic"
+			sequence="0"
+			parent="iuopensys_core.academic_root_menu"/>
+			
 		<!-- Student Behavior System -->
 		<menuitem id="student_semester_behavior_point_main_menu"
 			name="Behavior Point"
-			sequence="1"
-			parent="iuopensys_core.student_core_menu"
+			sequence="2"
+			parent="academic_management_core_menu"
 			groups="iuopensys_core.group_staff"
 			action="student_semester_behavior_point_main_action"/>
-			
-		<!-- Student Semester -->
-		<menuitem id="academic_management_core_menu"
-			name="Academic Management"
-			sequence="0"
-			parent="iuopensys_core.academic_root_menu"/>
 		
 		<menuitem id="student_semester_main_menu"
 			name="Semester Transcript"
@@ -160,7 +160,7 @@
 			parent="academic_management_core_menu"
 			action="student_semester_main_action"/>	
 			
-		<delete model="ir.ui.menu" id="mail.mail_channel_menu_root_chat"/>
+		<!-- <delete model="ir.ui.menu" id="mail.mail_channel_menu_root_chat"/> -->
 		
 	</data>
 </openerp>

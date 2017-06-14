@@ -35,7 +35,7 @@ class Lecturer(models.Model):
                                  domain=[('name', '=', 'IU Lecturer/Staff')])
     
     # Automatically set Security when create Lecturer
-    @api.onchange('title')
+    @api.onchange('title','name')
     def onchange_title(self):
         group_id = self.env['res.groups'].search([('name','=', 'IU Lecturer/Staff')])
         self.groups_id = group_id

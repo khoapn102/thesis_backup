@@ -2,6 +2,7 @@
 <openerp>
 	<data>
 		
+		<!-- Add Multiple Students -->
 		<record id="student_course_addition_wizard_form_view" model="ir.ui.view">
 			<field name="name">Add Students</field>
 			<field name="model">student.course.addition.wizard</field>
@@ -51,7 +52,7 @@
 			<field name="act_window_id" ref="student_course_addition_wizard_action"/>
 		</record>
 		
-		
+		<!-- Add 1 student -->
 		<record id="one_student_course_addition_wizard_form_view" model="ir.ui.view">
 			<field name="name">Add Student</field>
 			<field name="model">student.course.addition.wizard</field>

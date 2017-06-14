@@ -7,7 +7,7 @@
 			<field name="inherit_id" ref="iuopensys_core.student_main_tree_view"/>
 			<field name="arch" type="xml">
 				<tree>
-					<field name="graduation_status" fg_color="green:graduation_status in ['graduated']"/>
+					<field name="graduation_status" fg_color="green:graduation_status in ['graduated']" groups="iuopensys_core.group_staff"/>
 				</tree>
 			</field>
 		</record>
@@ -17,14 +17,45 @@
 			<field name="inherit_id" ref="iuopensys_core.student_main_form_view"/>
 			<field name="arch" type="xml">
 				<header>
+					<button string="Complete Major"
+							type="object"
+							name="set_complete_major"
+							class="oe_highlight"
+							attrs="{'invisible':[('graduation_status', 'in',['ie','complete','readygrad','graduated'])]}"
+							groups="iuopensys_core.group_staff"/>
+					<button string="Ready to Graduate"
+							type="object"
+							name="set_ready_to_graduate"
+							class="oe_highlight"
+							attrs="{'invisible':[('graduation_status', 'in',['ie','ontrack','readygrad','graduated'])]}"
+							groups="iuopensys_core.group_staff"/>
+					<button string="Graduated"
+							type="action"
+							name="%(iuopensys_studentlog.add_graduation_date_wizard_action)d"
+							class="oe_highlight"
+							attrs="{'invisible':[('graduation_status', 'in',['ie','ontrack','complete','graduated'])]}"
+							context="{'default_student_id':active_id}"
+							groups="iuopensys_core.group_staff"/>
+					<button string="Cancel"
+							type="object"
+							name="set_ontrack"
+							attrs="{'invisible':[('graduation_status', 'in',['ie','ontrack'])]}"
+							groups="iuopensys_core.group_staff"/>
+							
 					<field name="graduation_status" widget="statusbar"/>
+					
 				</header>
 				<xpath expr="//div[1]" position="inside">
 					<button string="Print Transcript"
 						class="oe_stat_button"
 						icon="fa-print"
 						type="object"
-						name="print_student_transcript"/>
+						name="print_student_transcript"
+						groups="iuopensys_core.group_staff"/>
+				</xpath>
+				<xpath expr="//field[@name='max_grad_date']" position="after">
+					<field name="graduation_date" attrs="{'invisible':[('graduation_status','in',('ie','ontrack'))]}"
+						groups="iuopensys_core.group_staff"/>
 				</xpath>
 				<xpath expr="//page[7]" position="after">
 					<page string="Student Progress">
@@ -75,14 +106,15 @@
 							<page string="English and IU Programs">
 								<group string="English Program">
 									<group>
-										<field name="is_eng_req" string="Require IE Program"
-											attrs="{'readonly':['|', ('eng_curriculum_id', '!=', False),('is_eng_complete','=',True)]}"/>	
+										<field name="is_eng_req" string="Require IE Program"/>
+											<!-- attrs="{'invisible':['|', ('eng_curriculum_id', '!=', False),('is_eng_complete','=',True)]}"/> -->	
 										<field name="is_eng_complete" attrs="{'invisible':[('eng_curriculum_id','=',False)]}"/>					
 									</group>
 									<group>
-										<field name="eng_curriculum_id" attrs="{'invisible':[('is_eng_req','=',False)],
-																				'readonly':[('is_eng_complete','=',True)]}"
+										<field name="eng_curriculum_id" 
 											domain="[('is_eng_req','=',True)]" options="{'no_create':True}"/>
+											<!-- attrs="{'invisible':[('is_eng_req','!=',False)],
+													'readonly':[('is_eng_complete','=',True)]}" -->
 									</group>
 								</group>
 								<group string="IU Programs">
@@ -116,7 +148,7 @@
 							</page>
 						</notebook>
 					</page>
-					<page string="Progress Logs">
+					<page string="Progress Logs" groups="iuopensys_core.group_staff">
 						<field name="student_log_ids" context="{'default_student_id':active_id}">
 							<tree edit="false" create="false">
 								<field name="field_change_name" string="Change"/>
@@ -127,6 +159,67 @@
 						</field>
 					</page>					
 				</xpath>
+			</field>
+		</record>
+		
+		<!-- English Curriculum Readonly -->
+		<record id="student_form_view_readonly" model="ir.ui.view">
+			<field name="name">student.form.view.readonly</field>
+			<field name="model">student</field>
+			<field name="inherit_id" ref="iuopensys_core.student_main_form_view"/>
+			<field name="groups_id" eval="[(6,0,[ref('iuopensys_core.group_student')])]"/>
+			<field name="arch" type="xml">
+				<field name="is_eng_req" position="attributes">
+					<attribute name="readonly">1</attribute>
+				</field>
+				<field name="eng_curriculum_id" position="attributes">
+					<attribute name="readonly">1</attribute>
+				</field>
+				<field name="is_eng_complete" position="attributes">
+					<attribute name="readonly">1</attribute>
+				</field>
+				<field name="student_balance" position="attributes">
+					<attribute name="readonly">1</attribute>
+				</field>
+				<field name="exam_status" position="attributes">
+					<attribute name="readonly">1</attribute>
+				</field>
+				<field name="login" position="attributes">
+					<attribute name="readonly">1</attribute>
+				</field>
+				<field name="department_id" position="attributes">
+					<attribute name="readonly">1</attribute>
+				</field>
+				<field name="major_id" position="attributes">
+					<attribute name="readonly">1</attribute>
+				</field>
+				<field name="image" position="attributes">
+					<attribute name="readonly">1</attribute>
+				</field>
+				<field name="last_name" position="attributes">
+					<attribute name="readonly">1</attribute>
+				</field>
+				<field name="name" position="attributes">
+					<attribute name="readonly">1</attribute>
+				</field>
+				<field name="academic_year_id" position="attributes">
+					<attribute name="readonly">1</attribute>
+				</field>
+				<field name="year_batch_id" position="attributes">
+					<attribute name="readonly">1</attribute>
+				</field>
+				<field name="studentId" position="attributes">
+					<attribute name="readonly">1</attribute>
+				</field>
+				<field name="financial_aid_id" position="attributes">
+					<attribute name="readonly">1</attribute>
+				</field>
+				<field name="academic_status" position="attributes">
+					<attribute name="readonly">1</attribute>
+				</field>
+				<field name="academic_program_course_complete_ids" position="attributes">
+					<attribute name="readonly">1</attribute>
+				</field>				
 			</field>
 		</record>
 	</data>
