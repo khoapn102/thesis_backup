@@ -185,7 +185,7 @@
 							</div>
 							<br/>							
 							<h5 style="font-weight:bold">IV. Extra-Curricular Activities Progress</h5>
-							<p>Incomplete Programs: </p>
+							<p><u>Incomplete Programs: </u></p>
 							<t t-if="o.academic_program_course_not_complete_ids != False">
 								<table class="table table-bordered" style="width:100%">
 									<tbody>
@@ -205,7 +205,7 @@
 									</tbody>
 								</table>
 							</t>
-							<p>Complete Programs: </p>
+							<p><u>Complete Programs: </u></p>
 							<t t-if="o.academic_program_course_complete_ids != False">
 								<table class="table table-bordered" style="width:100%">
 									<tbody>
@@ -226,9 +226,118 @@
 								</table>
 							</t>
 							<h5 style="font-weight:bold">V. Required Documents</h5>
-							<p>Unsubmitted Documents: </p>
-							
-							<p>Submitted Documents: </p>
+							<p><u>Unsubmitted Documents: </u></p>
+							<t t-if="o.student_document_not_submit_ids != False">
+								<table class="table table-bordered" style="width:100%">
+									<tbody>
+										<tr>
+											<td width="3%">No.</td>
+											<td width="35%">Document</td>
+											<td width="20%">Deadline</td>
+											<td width="42%">Note</td>
+										</tr>
+										<t t-set="i" t-value="1"/>
+										<t t-foreach="o.student_document_not_submit_ids" t-as="document">
+										<tr>
+											<td><t t-esc="i"/><t t-set="i" t-value="i+1"/></td>
+											<td><t t-esc="document.name"/></td>
+											<td><t t-esc="document.submit_deadline"/></td>
+											<td><t t-esc="document.note"/></td>
+										</tr>
+										</t>
+									</tbody>
+								</table>
+							</t>
+							<p><u>Submitted Documents: </u></p>
+							<t t-if="o.student_document_ids != False">
+								<table class="table table-bordered" style="width:100%">
+									<tbody>
+										<tr>
+											<td width="3%">No.</td>
+											<td width="35%">Document</td>
+											<td width="20%">Digital Stored</td>
+										</tr>
+										<t t-set="i" t-value="1"/>
+										<t t-foreach="o.student_document_ids" t-as="document">
+										<tr>
+											<td><t t-esc="i"/><t t-set="i" t-value="i+1"/></td>
+											<td><t t-esc="document.iu_doc_id.name"/></td>
+											<t t-if ="document.is_stored == True">
+												<td><p>Yes</p></td>
+											</t>
+											<t t-if ="document.is_stored == False">
+												<td><p>No</p></td>
+											</t>
+										</tr>
+										</t>
+									</tbody>
+								</table>
+							</t>
+							<br/>
+							<h5 style="font-weight:bold">VI. Financial Aid Information</h5>
+							<p><u>Financial Aids/Scholarship student received</u></p>
+							<t t-if="o.student_financial_aid_ids != False">
+								<table class="table table-bordered" style="width:100%">
+									<tbody>
+										<tr>
+											<td width="3%">No.</td>
+											<td width="30%">Financial Aid</td>
+											<td width="50%">Description</td>
+											<td width="17%">Note</td>
+										</tr>
+										<t t-set="i" t-value="1"/>
+										<t t-foreach="o.student_financial_aid_ids" t-as="std_financial_aid">
+										<tr>
+											<td><t t-esc="i"/><t t-set="i" t-value="i+1"/></td>
+											<td><t t-esc="std_financial_aid.financial_aid_id.name"/></td>
+											<td><t t-esc="std_financial_aid.financial_aid_id.description"/></td>
+											<td><t t-esc="std_financial_aid.financial_aid_id.note"/></td>
+										</tr>
+										</t>
+									</tbody>
+								</table>
+							</t>
+							<t t-if="o.student_financial_aid_ids == False">
+								<p>N/A</p>
+							</t> 
+							<br/>
+							<h5 style="font-weight:bold">VII. Student Progress at IU</h5>
+							<p><u>Changes have been made</u></p>
+							<t t-if="o.student_log_ids != False">
+								<table class="table table-bordered" style="width:100%">
+									<tbody>
+										<tr>
+											<td width="3%">No.</td>
+											<td width="18%">Change</td>
+											<td width="28%">From</td>
+											<td width="28%">To</td>
+											<td width="15">Complete on</td>
+										</tr>
+										<t t-set="i" t-value="1"/>
+										<t t-foreach="o.student_log_ids" t-as="std_log">
+										<t t-if="std_log.field_change != 'financial_aid_id'">
+										<tr>
+											<td><t t-esc="i"/><t t-set="i" t-value="i+1"/></td>
+											<td><t t-esc="std_log.field_change_name"/></td>
+											<t t-if="std_log.old_value == ''">
+												<td><p>N/A</p></td>
+											</t>
+											<t t-if="std_log.old_value != ''">
+												<td><t t-esc="std_log.old_value"/></td>
+											</t>
+											<t t-if="std_log.new_value == ''">
+												<td><p>N/A</p></td>
+											</t>
+											<t t-if="std_log.new_value != ''">
+												<td><t t-esc="std_log.new_value"/></td>
+											</t>
+											<td><t t-esc="std_log.modified_date"/></td>
+										</tr>
+										</t>
+										</t>
+									</tbody>
+								</table>
+							</t>
 							
 							<!-- <div>
 								<table class="table table-bordered" style="width:100%; text-align:center">

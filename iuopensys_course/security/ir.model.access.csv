@@ -14,6 +14,7 @@ access_student_document_student,access.student.document.student,model_student_do
 access_student_registration_student,access.student.registration.student,model_student_registration,iuopensys_core.group_student,1,1,0,0
 access_student_semester_student,access.student.semester.student,model_student_semester,iuopensys_core.group_student,1,0,0,0
 access_study_period_student,access.study.period.student,model_study_period,iuopensys_core.group_student,1,0,0,0
+access_student_financial_aid_student,access.student.financial.aid.student,model_student_financial_aid,iuopensys_core.group_student,1,0,0,0
 access_course_registration_staff,access.course.registration.staff,model_course_registration,iuopensys_core.group_staff,1,1,1,1
 access_course_tuition_staff,access.course.tuition.staff,model_course_tuition,iuopensys_core.group_staff,1,1,1,1
 access_course_staff,access.course.staff,model_course,iuopensys_core.group_staff,1,1,1,1
@@ -29,3 +30,4 @@ access_student_document_staff,access.student.document.staff,model_student_docume
 access_student_registration_staff,access.student.registration.staff,model_student_registration,iuopensys_core.group_staff,1,1,1,1
 access_student_semester_staff,access.student.semester.staff,model_student_semester,iuopensys_core.group_staff,1,1,1,1
 access_study_period_staff,access.study.period.staff,model_study_period,iuopensys_core.group_staff,1,1,1,1
+access_student_financial_aid_staff,access.student.financial.aid.staff,model_student_financial_aid,iuopensys_core.group_staff,1,1,1,1

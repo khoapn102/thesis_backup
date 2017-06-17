@@ -1,0 +1,68 @@
+<?xml version="1.0" ?>
+<openerp>
+	<data>
+		<record model="ir.actions.act_window" id="student_financial_aid_main_action">
+			<field name="name">Student Financial Aid</field>
+			<field name="res_model">student.financial.aid</field>
+			<field name="view_mode">tree,form</field>
+		</record>
+		
+		<record id="student_financial_aid_tree_view" model="ir.ui.view">
+			<field name="name">Student Financial Aid</field>
+			<field name="model">student.financial.aid</field>
+			<field name="type">tree</field>
+			<field name="arch" type="xml">
+				<tree>
+					<field name="student_id"/>
+					<field name="financial_aid_id"/>
+					<field name="is_active"/>							
+				</tree>
+			</field>
+		</record>
+		
+		<record id="student_financial_aid_form_view" model="ir.ui.view">
+			<field name="name">Student Financial Aid</field>
+			<field name="model">student.financial.aid</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<form>					
+					<sheet>
+						<div class="oe_button_box" name="button_box" groups="iuopensys_core.group_staff">
+                            <button name="set_is_active" type="object" class="oe_stat_button" icon="fa-check">
+                                <field name="is_active" widget="boolean_button" options='{"terminology": "active"}'/>
+                            </button>
+                        </div>
+						<group string="General Information">
+							<group>
+								<field name="student_id" options="{'no_create':True}"/>
+								<field name="start_date"/>
+							</group>
+							<group>
+								<field name="financial_aid_id" options="{'no_create':True}"/>
+								<field name="end_date"/>
+								<field name="finance_type" invisible="1"/>
+								<field name="finance_value" invisible="1"/>
+							</group>
+						</group>						
+					</sheet>
+				</form>
+			</field>
+		</record>
+		
+		<!-- Search View -->
+		<!--<record id="" model="ir.ui.view">
+			<field name="name"></field>
+			<field name="model"></field>
+			<field name="type">search</field>
+			<field name="arch" type="xml">
+				<search string="Search">
+					Search By
+					
+					Group By
+					<group expand="0" string="Group By">
+					</group>
+				</search>
+			</field>
+		</record>-->
+	</data>
+</openerp>

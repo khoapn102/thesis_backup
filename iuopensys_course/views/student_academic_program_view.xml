@@ -38,9 +38,21 @@
                         <group string="General Information">
                         	<group>
                         		<field name="program_type" style="width:60%%" required="1"/>
+                        		<field name="program_code" style="width:50%%"/>
                         	</group>
                         	<group>
-                        		<field name="program_code" style="width:50%%"/>
+                        		<label for="tuition_at_iu"  style="font-weight:bold"/>
+	                    		<div>
+	                				<field name="tuition_at_iu" class="oe_inline"/>
+	                				<span> USD</span>
+	                    		</div>
+	                    		<label for="tuition_at_iu"  style="font-weight:bold" attrs="{'invisible':[('program_type','=','iu')]}"/>
+	                    		<div attrs="{'invisible':[('program_type','=','iu')]}">
+	                    			
+	                				<field name="tuition_at_partner" class="oe_inline"/>
+	                				<span> USD</span>
+	                    		</div>
+                        		
                         	</group>
                         </group>
                         <notebook>

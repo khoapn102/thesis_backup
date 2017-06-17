@@ -3,7 +3,7 @@
 		
 		<!-- Student Log -->
 		<menuitem id="student_log_main_menu"
-			name="Student Historical Logs"
+			name="Historical Logs"
 			sequence="2"
 			parent="iuopensys_core.student_core_menu"
 			action="student_log_main_action"

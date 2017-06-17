@@ -1,0 +1,50 @@
+<?xml version="1.0" ?>
+<openerp>
+	<data>
+		
+		<!-- Update Student Balance -->
+		<record id="update_student_balance_wizard_form_view" model="ir.ui.view">
+			<field name="name">Balance Update</field>
+			<field name="model">student.balance.update.wizard</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<form>					
+					<sheet>
+						<group>
+							<group>
+								<field name="student_id" options="{'no_create':True}"/>
+							</group>
+							<group>
+								<label for="student_balance"  style="font-weight:bold"/>
+	                    		<div>
+	                				<field name="student_balance" class="oe_inline"/>
+	                				<span> USD</span>
+	                    		</div>
+	                    		<field name="tuition_discount"/>
+							</group>
+						</group>	
+						
+					</sheet>
+					<footer>
+						<button name="update_balance"
+							type="object"
+							class="btn-primary"
+							string="Update"/>
+						or
+						<button string="Cancel"
+							class="btn-default"
+							special="cancel"/>
+					</footer>
+				</form>
+			</field>
+		</record>
+		
+		<record model="ir.actions.act_window" id="student_balance_update_wizard_action">
+			<field name="name">Balance Update</field>
+			<field name="res_model">student.balance.update.wizard</field>
+			<field name="view_mode">form</field>
+			<field name="view_type">form</field>
+			<field name="target">new</field>
+		</record>
+	</data>
+</openerp>

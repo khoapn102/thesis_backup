@@ -16,6 +16,7 @@
 					<field name="name"/>
 					<field name="finance_type"/>
 					<field name="finance_value"/>
+					<field name="payment_type"/>
 					<field name="description"/>							
 				</tree>
 			</field>
@@ -48,11 +49,26 @@
                         	<group>
                         		<field name="finance_type"/>
                         		<field name="finance_value"/>
-                        		<field name="note"/>
+                        		<field name="payment_type"/>
                         	</group>
                         </group>
+                        <group>
+                        	<field name="note"/>
+                        </group>
                         <group string="List of Students">
-                        	<field name="student_ids" nolabel="1" context="{'default_financial_aid_id':active_id'}"/>
+                        	<field name="student_ids" nolabel="1" context="{'default_financial_aid_id':active_id'}"
+                        		options="{'no_create':True}">
+                        		<tree edit="false" create="false">
+                        			<field name="studentId"/>
+									<field name="student_lname"/>
+									<field name="student_fname"/>
+									<field name="student_dob"/>
+									<field name="student_dept_id"/>
+									<field name="student_academic_yr_id"/>
+									<field name="student_major_id"/>
+									<field name="student_country"/>
+                        		</tree>	
+                        	</field>
                         </group>						
 					</sheet>
 				</form>

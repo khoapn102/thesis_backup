@@ -33,6 +33,9 @@
 			<field name="arch" type="xml">
 				<form>
 					<header>
+							<button string="Update Scholarships" type="object"
+								name="update_student_financial_aid" class="oe_highlight"
+								groups="iuopensys_core.group_staff"/>
 							<button string="Update Semester GPA" type="object"
 								name="activate_calculate_gpa" class="oe_highlight"
 								groups="iuopensys_core.group_staff"/>

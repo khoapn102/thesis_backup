@@ -22,7 +22,9 @@ class Course(models.Model):
                                            ('vn', 'Vietnamese')],
                                 default='eng',
                                 string='Teaching Language')
-    tuition_id = fields.Many2one('course.tuition', string='Credit Cost')
+    
+#     tuition_id = fields.Many2one('course.tuition', string='Credit Cost')
+    
     offer_course_ids = fields.One2many('offer.course', 'course_id', 'Offering Courses')
     cred_count_type = fields.Selection(selection=[('count', 'Normal'),
                                                   ('nocount','Only Pass/No pass')],

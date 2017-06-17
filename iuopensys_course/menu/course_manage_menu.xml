@@ -161,6 +161,11 @@
 			action="student_semester_main_action"/>	
 			
 		<!-- <delete model="ir.ui.menu" id="mail.mail_channel_menu_root_chat"/> -->
+ 		<menuitem id="student_financial_aid_main_menu"
+			name="Student Financial Aid"
+			sequence="4"
+			parent="iuopensys_core.student_core_menu"
+			action="student_financial_aid_main_action"/>
 		
 	</data>
 </openerp>

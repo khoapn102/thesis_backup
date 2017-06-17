@@ -21,6 +21,9 @@ class Student(models.Model):
     financial_aid_id = fields.Many2one('financial.aid', string='Financial Aid')
     student_tuition_ids = fields.One2many('student.registration', 'student_id',
                                           string='Finance Info')
+    payment_note = fields.Char(compute='get_payment_note')
+    
+    tuition_discount_time = fields.Integer('Instant discount times', default=0)
     
     # Student Academic Program
     std_academic_prog_id = fields.Many2one('student.academic.program',string='Academic Program',
@@ -74,10 +77,29 @@ class Student(models.Model):
                                           string='Classification',
                                           compute = 'get_accumulated_gpa')
     
+    student_financial_aid_ids = fields.One2many('student.financial.aid','student_id','List of Financial Aids')
+    
 #     @api.onchange('academic_year_id')
 #     def onchange_academic_year_id(self):
 #         if self.academic_year_id:
 #             self.year_batch_id = self.academic_year_id.year_batch_id.id
+    
+    @api.depends('tuition_discount_time')
+    def get_payment_note(self):
+        for record in self:
+            if record.tuition_discount_time > 0:
+                payment_note = 'Student has received '
+                payment_note += str(record.tuition_discount_time)
+                payment_note += ' time(s) of instant discount of 10% for paying over 120 million VND (6000 USD) at once.'
+                record.payment_note = payment_note
+    
+    @api.onchange('student_balance')
+    def onchange_student_balance(self):
+        if self.student_balance and self.student_balance >= self.major_id.std_academic_prog_id.tuition_at_iu:
+            if not self.tuition_discount:
+                self.tuition_discount = True
+        else:
+            self.tuition_discount = False
     
     @api.depends('student_semester_ids','student_course_ids')
     def get_accumulated_gpa(self):
@@ -158,7 +180,39 @@ class Student(models.Model):
                     record.max_grad_date = int(record.year_batch_id.year) +\
                             int(record.std_academic_prog_id.study_year_first)*2
                 
-                
+    
+    @api.multi
+    def write(self, vals):
+        for record in self:
+            if vals:
+                if 'financial_aid_id' in vals and vals['financial_aid_id']:
+#                     print '======', vals['financial_aid_id']
+                    std_financial_id = self.env['student.financial.aid'].search([('student_id','=',record.id),
+                                                                         ('financial_aid_id','=',vals['financial_aid_id'])])
+                    # Create new rec student_financial_aid
+#                     check = False
+                    if not std_financial_id:
+                        new_vals = {'student_id':record.id,
+                                    'financial_aid_id': vals['financial_aid_id'],
+                                    'is_active':True,
+                                    }
+                        std_finance = self.env['student.financial.aid']
+                        std_finance.create(new_vals)
+#                         check = True
+                    # Thens set inactive of all the rest -> only 1 record activate at one time
+                    # Only 1 Scholarship is allowed to student at 1time
+                    std_financial_ids = self.env['student.financial.aid'].search([('student_id','=',record.id)])
+                    if std_financial_ids:
+                        for std_fin in std_financial_ids:
+                            if std_fin.financial_aid_id.id == vals['financial_aid_id']:
+                                if not std_fin.is_active:
+                                    std_fin.write({'is_active':True})
+                                continue
+                            if std_fin.is_active:
+                                std_fin.write({'is_active':False})
+                    
+        return super(Student,self).write(vals)
+                             
                 
                 
                 

@@ -62,6 +62,35 @@ class Semester(models.Model):
                     std_sem.write({'calculate_gpa': True})
                 else:
                     std_sem.write({'calculate_gpa': False})
+                    
+    @api.multi
+    def update_student_financial_aid(self):
+        for record in self:
+            std_reg_ids = self.env['student.registration'].search([('semester_id','=',record.id)])
+#             print '=====', std_reg_ids
+            for std_reg in std_reg_ids:
+                # Check if student has scholarship
+                if std_reg.student_id.financial_aid_id:
+                    # Check if scholarship still active or in period
+                    student_id = std_reg.student_id
+                    financial_aid_id = std_reg.student_id.financial_aid_id
+                    std_financial_aid_id = self.env['student.financial.aid'].search([('student_id','=',student_id.id),
+                                                                                      ('financial_aid_id','=',financial_aid_id.id)])
+#                     print '======== HERE ', std_financial_aid_id
+                    if std_financial_aid_id:
+                        start = datetime.strptime(std_financial_aid_id.start_date,"%Y-%m-%d")
+                        end = datetime.strptime(std_financial_aid_id.end_date,"%Y-%m-%d")
+                        result = 0
+                        if std_financial_aid_id.is_active and\
+                            (start <= datetime.now() <= end):
+                            if std_financial_aid_id.finance_type == 'percent':
+                                result = std_reg.amount_tuition * std_financial_aid_id.finance_value/100
+                            elif std_financial_aid_id.finance_type == 'amount':
+                                result = std_financial_aid_id.finance_value
+#                         print '==== NOW ', result
+                        std_reg.write({'amount_financial_aid':result})
+                                
+            
                 
         
             

@@ -6,6 +6,15 @@
 			<field name="model">student</field>
 			<field name="inherit_id" ref="iuopensys_core.student_main_form_view"/>
 			<field name="arch" type="xml">
+				<xpath expr="//div[1]" position="inside">
+					<button string="Balance Update"
+						class="oe_stat_button"
+						icon="fa-print"
+						type="action"
+						name="%(iuopensys_course.student_balance_update_wizard_action)d"
+						context="{'default_student_id':active_id}"
+						groups="iuopensys_core.group_staff"/>
+				</xpath>
 				<notebook position="inside">
 					<page string="Academic Info">
 						<group string="General Information">
@@ -64,6 +73,18 @@
 		               				</field>
 								</group>
 							</page>
+							<page string="Scholarships">
+								<group>
+									<field name="student_financial_aid_ids" nolabel="1">
+										<tree create="false" delete="false">
+											<field name="student_id"/>
+											<field name="financial_aid_id"/>
+											<field name="is_active"/>
+											<button name="set_is_active" type="object" string="Active/Inactive" groups="iuopensys_core.group_staff"/>
+										</tree>
+									</field>
+								</group>
+							</page>
 						</notebook>               			
                		</page>
                		<page string="Behavior Point">
@@ -89,7 +110,7 @@
 	                    		<div>
 	                				<field name="student_balance" class="oe_inline"/>
 	                				<span> USD</span>
-	                    		</div>
+	                    		</div>	                    		
 							</group>
 							<group>
 								<label for="student_debt"  style="font-weight:bold"/>
@@ -99,9 +120,13 @@
 	                    		</div>
 							</group>
                			</group>
+               			<group colspan="4">
+							<field name="tuition_discount_time" invisible="1"/>
+							<field name="payment_note" attrs="{'invisible':[('tuition_discount_time','==', 0)]}"/>
+						</group>
                			<group string="Tution Information" groups="iuopensys_core.group_staff">
                				<field name="student_tuition_ids" nolabel="1">
-               					<tree create="false" edit="false">
+               					<tree create="false">
                						<field name="semester_id"/>
                						<field name="amount_tuition"/>
                						<field name="amount_financial_aid"/>	
@@ -144,9 +169,9 @@
                		</page>               		
 				</notebook>
 			
-				<xpath expr="//field[@name='studentId']" position="after">
+				<!-- <xpath expr="//field[@name='studentId']" position="after">
 					<field name="student_balance" invisible="1"/>
-				</xpath>
+				</xpath> -->
 				<xpath expr="//field[@name='student_class_code']" position="after">
 					<field name="academic_status"/>
 					<field name="financial_aid_id"/>

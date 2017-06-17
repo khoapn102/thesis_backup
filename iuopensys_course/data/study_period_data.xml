@@ -13,5 +13,6 @@
 			<field name="key">iuopensys_course.period_length</field>
 			<field name="value">0.75</field>
 		</record>
+				
 	</data>
 </openerp>

@@ -50,9 +50,14 @@ class StudentRegistration(models.Model):
     stat_button_total_creds = fields.Integer('Credits', compute='get_tuition_info')
     stat_button_amount_tuition = fields.Char('Tuition', compute='get_tuition_info',)
     total_actual_creds = fields.Integer('Total actual credits', compute='get_tuition_info', default=0)
+    
     amount_tuition = fields.Float('Tuition amount', compute='get_tuition_info')
     
-    amount_financial_aid = fields.Float('Financial Aid amount', compute='get_tuition_info')
+#     amount_tuition_discount = fields.Float('Amount discount', compute='get_tuition_info')
+    
+    amount_financial_aid = fields.Float('Financial Aid amount')
+    
+#     amount_financial_aid_with_discount = fields.Float('Total discount amount', compute='get_tuition_info')
     
     amount_paid = fields.Float('Amount paid')
 
@@ -67,7 +72,7 @@ class StudentRegistration(models.Model):
     @api.onchange('offer_course_ids')
     def onchange_offer_course_ids(self):
         if self.offer_course_ids:
-            print '=======', self.total_creds
+#             print '=======', self.total_creds
             if self.total_creds < self.crs_reg_id.min_credits:
                 self.ext_note = 'Register under minimum credits required.'
         else:
@@ -83,7 +88,6 @@ class StudentRegistration(models.Model):
         else:
             self.write({'amount_paid': 0})
             
-    
     # Checkin Period - Register Time
     def _check_in_period(self):
         now = datetime.now()
@@ -115,7 +119,7 @@ class StudentRegistration(models.Model):
             cred = 0
             tuition = 0
             financial_aid_value = 0
-            
+#             tuition_disc_val = 0
             # Get Tuition for all Registered Courses
             if record.offer_course_ids:
                 for course in record.offer_course_ids:
@@ -126,26 +130,44 @@ class StudentRegistration(models.Model):
                     tuition += 0.3*(course.crs_tuition)
                     
             # Check if student has Financial Aid
-            if record.student_id.financial_aid_id:
-                financial_aid = record.student_id.financial_aid_id
-                start = datetime.strptime(financial_aid.start_date,"%Y-%m-%d")
-                end = datetime.strptime(financial_aid.end_date,"%Y-%m-%d")
-                
-                # Check if the financial aid is valid (is_active and in valid date range)
-                if financial_aid.is_active and (start <= datetime.now() <= end):
-                    if financial_aid.finance_type == 'percent':
-                        financial_aid_value = tuition * financial_aid.finance_value/100
-                    elif financial_aid.finance_type == 'amount':
-                        financial_aid_value = tuition - financial_aid.finance_value
-                                    
+#             if record.student_id.financial_aid_id:
+#                 financial_aid = record.student_id.financial_aid_id
+#                 start = datetime.strptime(financial_aid.start_date,"%Y-%m-%d")
+#                 end = datetime.strptime(financial_aid.end_date,"%Y-%m-%d")
+#                 
+#                 # Check if the financial aid is valid (is_active and in valid date range)
+#                 if financial_aid.is_active and (start <= datetime.now() <= end):
+#                     if financial_aid.finance_type == 'percent':
+#                         financial_aid_value = tuition * financial_aid.finance_value/100
+#                     elif financial_aid.finance_type == 'amount':
+#                         financial_aid_value = financial_aid.finance_value
+            
+            # Check student balance has money -> deduct from there:
+#             if record.student_id.student_balance > 0:
+#                 if record.student_id.tuition_discount:
+#                     tuition_disc_val = tuition * 0.1
+            
+#             total_discount_amt = financial_aid_value + tuition_disc_val
+                                  
             record.total_creds = cred
             record.total_actual_creds = cred
             record.amount_tuition = tuition
-            record.amount_financial_aid = financial_aid_value
-            record.amount_must_pay = tuition - financial_aid_value
+#             record.amount_tuition_discount = tuition_disc_val
+#             record.amount_financial_aid = financial_aid_value
+#             record.amount_financial_aid_with_discount = total_discount_amt
             
-            if record.amount_must_pay == 0:
-                record.is_full_paid = True
+#             amount_must_pay = tuition - total_discount_amt
+             
+#             record.amount_must_pay = 0 if total_discount_amt >= tuition else amount_must_pay
+            record.amount_must_pay = tuition
+            # Incase student's has financial aid cover 100% tuition no matter what
+#             if financial_aid_value == tuition:
+#                 record.amount_must_pay = tuition - financial_aid_value
+#             elif total_discount_amt >= tuition:
+#                 record.amount_must_pay = 
+#             
+#             if record.amount_must_pay == 0:
+#                 record.is_full_paid = True
             
             # Student debt is update
 #             student_debt = record.student_id.student_debt

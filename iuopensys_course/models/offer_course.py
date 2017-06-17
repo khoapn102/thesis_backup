@@ -90,9 +90,9 @@ class OfferCourse(models.Model):
     display_lecturer = fields.Text(string='Instructor(s)', compute='_get_display_details')
     display_room = fields.Text(string='Room(s)', compute='_get_display_details')
     
-    # Tuition
+    # Tuition - is separate for each of the courses
     tuition_id = fields.Many2one('course.tuition', string='Credit Cost',
-                                 related='course_id.tuition_id')
+                                 default=lambda self:self.env['course.tuition'].search([('id','=',1)]))
     
     crs_tuition = fields.Float('Cost', compute='_get_course_tuition')
     
@@ -129,7 +129,6 @@ class OfferCourse(models.Model):
                         if len(overlap_res) > 0:
                             raise ValidationError('Each session\'s date & time must be different.')
                         
-    
     @api.depends('tuition_id', 'number_credits')
     def _get_course_tuition(self):
         for record in self:
