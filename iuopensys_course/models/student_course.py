@@ -67,15 +67,6 @@ class StudentCourse(models.Model):
     is_complete = fields.Boolean('Completed')
      
     
-#     @api.onchange('course_gpa')
-#     def onchange_course_gpa(self):
-#         passing_grade = self.env['ir.config_parameter'].get_param('iuopensys_course.course_passing_grade')
-#         print '========', type(passing_grade), ' ', passing_grade
-#         if self.course_gpa and self.course_gpa >= float(passing_grade):
-#             print '+++++ True'
-#             if not self.is_complete:
-#                 self.is_complete = True
-    
     @api.multi
     @api.depends('final_score','mid_score','assignment_score')
     def _compute_course_gpa(self):
@@ -148,7 +139,7 @@ class StudentCourse(models.Model):
                     if event_ids:
                         for event in event_ids:
                             event.partner_ids = [(3, record.student_id.user_id.partner_id.id)]
-                            print '======Event Partner =====', event.partner_ids
+#                             print '======Event Partner =====', event.partner_ids
         return models.Model.unlink(self)
     
     

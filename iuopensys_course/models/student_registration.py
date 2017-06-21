@@ -69,6 +69,23 @@ class StudentRegistration(models.Model):
         
     in_period = fields.Boolean('In Reg Time', compute='_check_in_period')
     
+    @api.multi
+    def deduct_from_student_balance(self):
+        for record in self:
+            if not record.is_full_paid:
+                if record.amount_tuition >0 and record.student_balance > 0:
+                    new_balance = 0 if record.student_balance < record.amount_tuition else record.student_balance - record.amount_tuition
+                    amount_paid = record.student_balance if record.student_balance < record.amount_tuition else record.amount_tuition
+                    vals = {'amount_paid': amount_paid,
+                            'student_balance': new_balance}
+                    if amount_paid == record.amount_tuition:
+                        vals['is_full_paid'] = True
+                    
+                    record.write(vals)
+            else:
+                raise ValidationError('Cannot deduct from student balance. Please check again!') 
+                    
+    
     @api.onchange('offer_course_ids')
     def onchange_offer_course_ids(self):
         if self.offer_course_ids:
@@ -97,20 +114,6 @@ class StudentRegistration(models.Model):
             self.in_period = True
         else:
             self.in_period = False
-            
-#     @api.multi
-#     def edit_form_view(self):
-#         self.is_edit_mode = True
-#         return {
-#                 'name': "Registration Form",
-#                 'type': 'ir.actions.act_window',
-#                 'view_mode': 'form',
-#                 'view_type': 'form',
-#                 'res_model': 'student.registration',
-#                 'res_id': self.id,                
-#                 'target': 'inline',
-#                 'context': self._context,
-#                 }
 
     # Calculate Tuition base on Courses Registered
     @api.depends('offer_course_ids')
@@ -326,7 +329,7 @@ class StudentRegistration(models.Model):
                     sum_cred = 0
                     for course in offer_course_ids:
                         # Do not handle course that has no avaialble slots
-                        print '+++++ H', course.avail_students
+#                         print '+++++ Here', course.avail_students
                         if course.avail_students == 0:
                             # Student try to add unavail course, remove from VALS
                             if course.id in vals['offer_course_ids'][0][2]:

@@ -30,6 +30,11 @@
                             <button name="paid_in_full" type="object" class="oe_stat_button" icon="fa-check">
                             	<span>Paid Full</span>                            	
                             </button>
+                            <button name="deduct_from_student_balance" 
+                            	type="object"
+                            	class="oe_stat_button"
+                            	icon="fa-dollar"
+                            	string="Balance Deduct"/>
                         </div>
 						<group string="General Information">
 							<group>
@@ -166,7 +171,7 @@
                         </group>
                         <notebook>
                         	<page string="Register">
-                        		<group string="Registered Courses" attrs="{'invisible':[('student_debt', '>', 0)]}">
+                        		<group string="Registered Courses">
 		                       		<field name="offer_course_ids" nolabel="1" options="{'no_create':True}" 
 		                       			domain="[('semester_id','=',semester_id),('has_lab','=',False),('course_id','in', course_ids and course_ids[0][2])]">
 		                       			<tree edit="false">
@@ -305,7 +310,6 @@
 			<field name="arch" type="xml">
 				<search>
 					<!-- Search By -->
-					<field name="name"/>
 					<field name="student_id"/>
 					<field name="crs_reg_id"/>
 					

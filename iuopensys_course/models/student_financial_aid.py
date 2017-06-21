@@ -30,7 +30,7 @@ class StudentFinancialAid(models.Model):
     def set_is_active(self):
         for record in self:
             record.is_active = not record.is_active
-            
+          
     @api.multi
     def unlink(self):
         for record in self:

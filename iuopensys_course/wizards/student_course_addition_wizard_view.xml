@@ -60,14 +60,19 @@
 			<field name="arch" type="xml">
 				<form>					
 					<sheet>
-						<group>
+						<group string="General Information">
 							<group>
 								<field name="offer_course_id" options="{'no_create':True}"/>
+								<field name="has_lab" attrs="{'invisible':[('has_lab','=',False)]}"/>
 							</group>
 							<group>
 								<field name="student_id" options="{'no_create':True}"/>
 							</group>
 						</group>	
+						<group string="Lab List" attrs="{'invisible':[('has_lab','=',False)]}">
+							<field name="lab_course_ids" nolabel="1"
+								domain="[('theory_course_id','=',offer_course_id)]"/>
+						</group>
 					</sheet>
 					<footer>
 						<button name="add_a_student_to_course"

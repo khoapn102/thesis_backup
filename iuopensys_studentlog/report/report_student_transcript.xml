@@ -73,6 +73,42 @@
 									</tr>
 									</t>
 								</table>
+								<table width="100%">
+									<tbody>
+										<tr>
+											<td style="font-weight:bold" width="20%">Number of cummulative credits: </td>
+											<td width="30%"><t t-esc="o.major_accumulated_credits"/></td>
+										</tr>
+										<tr>
+											<td style="font-weight:bold" width="20%">Accumulated GPA (10/100): </td>
+											<td width="30%"><t t-esc="o.accumulated_gpa"/></td>											
+										</tr>
+										<tr>
+											<td style="font-weight:bold">Classification: </td>
+											<t t-if="o.accumulated_gpa &gt;= 90 and o.accumulated_gpa &lt;= 100">
+												<td><p>Excellent</p></td>
+											</t>
+											<t t-if="o.accumulated_gpa &gt;= 80 and o.accumulated_gpa &lt; 90">
+												<td><p>Very Good</p></td>
+											</t>
+											<t t-if="o.accumulated_gpa &gt;= 70 and o.accumulated_gpa &lt; 80">
+												<td><p>Good</p></td>
+											</t>
+											<t t-if="o.accumulated_gpa &gt;= 60 and o.accumulated_gpa &lt; 70">
+												<td><p>Fair</p></td>
+											</t>
+											<t t-if="o.accumulated_gpa &gt;= 50 and o.accumulated_gpa &lt; 60">
+												<td><p>Average</p></td>
+											</t>
+											<t t-if="o.accumulated_gpa &gt;= 40 and o.accumulated_gpa &lt; 50">
+												<td><p>Weak</p></td>
+											</t>
+											<t t-if="o.accumulated_gpa &lt; 40">
+												<td><p>Very Weak</p></td>
+											</t>
+										</tr>
+									</tbody>
+								</table>
 							</div>
 						</div>
 					</t>

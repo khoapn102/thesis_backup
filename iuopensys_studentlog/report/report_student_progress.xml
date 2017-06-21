@@ -48,7 +48,6 @@
 										</tr>										
 									</tbody>
 								</table>
-								<br/>
 								<h5 style="font-weight:bold">II. Academic Information</h5>
 								<table width="100%">
 									<tbody>
@@ -108,7 +107,6 @@
 										</tr>									
 									</tbody>
 								</table>
-								<br/>
 								<h5 style="font-weight:bold">III. Academic Progress</h5>
 								<table width="100%">
 									<tbody>
@@ -183,7 +181,6 @@
 									</tbody>
 								</table>
 							</div>
-							<br/>							
 							<h5 style="font-weight:bold">IV. Extra-Curricular Activities Progress</h5>
 							<p><u>Incomplete Programs: </u></p>
 							<t t-if="o.academic_program_course_not_complete_ids != False">
@@ -273,7 +270,6 @@
 									</tbody>
 								</table>
 							</t>
-							<br/>
 							<h5 style="font-weight:bold">VI. Financial Aid Information</h5>
 							<p><u>Financial Aids/Scholarship student received</u></p>
 							<t t-if="o.student_financial_aid_ids != False">

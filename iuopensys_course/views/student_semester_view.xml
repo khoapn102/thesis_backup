@@ -163,20 +163,23 @@
 			<field name="view_id" ref="student_semester_behavior_point_form_view"/>
 			<field name="act_window_id" ref="student_semester_behavior_point_main_action"/>
 		</record>
+		
 		<!-- Search View -->
-		<!--<record id="" model="ir.ui.view">
-			<field name="name"></field>
-			<field name="model"></field>
+		<record id="student_semester_search_view" model="ir.ui.view">
+			<field name="name">Search</field>
+			<field name="model">student.semester</field>
 			<field name="type">search</field>
 			<field name="arch" type="xml">
 				<search string="Search">
-					Search By
+					<!-- Search By -->
+					<field name="student_id"/>
+					<field name="semester_id"/>
 					
-					Group By
+					<!-- Group By
 					<group expand="0" string="Group By">
-					</group>
+					</group> -->
 				</search>
 			</field>
-		</record>-->
+		</record>
 	</data>
 </openerp>

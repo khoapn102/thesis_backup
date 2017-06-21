@@ -25,6 +25,7 @@
         'views/student_log_view.xml',
         'views/student_inherit_view.xml',
         'views/year_batch_inherit_view.xml',
+        'views/academic_year_inherit_view.xml',
         
         # =========================================
         # MENU
