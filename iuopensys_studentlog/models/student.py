@@ -52,6 +52,16 @@ class Student(models.Model):
     
     graduation_date = fields.Date(string='Graduation Date')
     
+    trigger_grad_status = fields.Boolean('Trigger', compute='calculate_grad_status')
+    
+    @api.multi
+    def calculate_grad_status(self):
+        for record in self:
+            if record.major_incomplete_credits:
+                record.trigger_grad_status = False
+            else:
+                record.trigger_grad_status = True
+    
     @api.multi
     def write(self, vals):
         """
@@ -209,32 +219,6 @@ class Student(models.Model):
                         self.graduation_status = 'ontrack'
             else:
                 self.graduation_status = 'ie'
-                    
-    # Student Graduatino Status -> Check on following
-    # 1. Complete all Majors
-    # 2. Complete all required Programs
-    # 3. Complete Behavior Point -> Need Behavior Point Standard
-    # 4. Submit all Documents
-    # 5. No Debt 
-#     @api.depends('student_course_ids', 'major_course_not_complete_ids',
-#                  'major_course_complete_ids',
-#                  'academic_program_course_not_complete_ids',
-#                  'student_document_not_submit_ids')
-#     def get_graduation_status(self):
-#         for record in self:
-#             # 3 Stage for each Student
-#             # Complete major
-#             # 1. For each curriculum -> satisfied max credit ?
-#             # 2. If any elective not complete -> cant graduate
-#             
-#             if record.major_accumulated_credits == record.major_id.major_total_credits:
-#                 record.graduation_status = 'donemajor'
-#                 if not record.academic_program_course_not_complete_ids:
-#                     if not record.student_document_not_submit_ids:
-#                         if record.student_debt == 0.0:
-#                             record.graduation_status = 'complete'                
-#             else:
-#                 record.graduation_status = 'ontrack'
                 
     # Manage IU Programs / Extra Curriculars Courses
     @api.depends('academic_program_course_complete_ids')
@@ -414,6 +398,32 @@ class Student(models.Model):
 #     @api.model
 #     def create(self, vals):
 #         curr_student = super(Student, self).create(vals)
+
+    # Student Graduatino Status -> Check on following
+    # 1. Complete all Majors
+    # 2. Complete all required Programs
+    # 3. Complete Behavior Point -> Need Behavior Point Standard
+    # 4. Submit all Documents
+    # 5. No Debt 
+#     @api.depends('student_course_ids', 'major_course_not_complete_ids',
+#                  'major_course_complete_ids',
+#                  'academic_program_course_not_complete_ids',
+#                  'student_document_not_submit_ids')
+#     def get_graduation_status(self):
+#         for record in self:
+#             # 3 Stage for each Student
+#             # Complete major
+#             # 1. For each curriculum -> satisfied max credit ?
+#             # 2. If any elective not complete -> cant graduate
+#             
+#             if record.major_accumulated_credits == record.major_id.major_total_credits:
+#                 record.graduation_status = 'donemajor'
+#                 if not record.academic_program_course_not_complete_ids:
+#                     if not record.student_document_not_submit_ids:
+#                         if record.student_debt == 0.0:
+#                             record.graduation_status = 'complete'                
+#             else:
+#                 record.graduation_status = 'ontrack'
         
           
                         

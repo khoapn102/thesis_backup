@@ -74,8 +74,15 @@ class StudentRegistration(models.Model):
         for record in self:
             if not record.is_full_paid:
                 if record.amount_tuition >0 and record.student_balance > 0:
+                    
                     new_balance = 0 if record.student_balance < record.amount_tuition else record.student_balance - record.amount_tuition
-                    amount_paid = record.student_balance if record.student_balance < record.amount_tuition else record.amount_tuition
+                     
+                    if record.student_balance < record.amount_tuition and\
+                        record.student_balance < record.amount_must_pay:
+                        amount_paid = record.student_balance
+                    else:
+                        amount_paid = record.amount_must_pay
+                    
                     vals = {'amount_paid': amount_paid,
                             'student_balance': new_balance}
                     if amount_paid == record.amount_tuition:
@@ -201,6 +208,8 @@ class StudentRegistration(models.Model):
     def _get_amt_leftover(self):
         for record in self:
             record.amount_leftover = record.amount_must_pay - record.amount_paid
+            # Update amount must pay now
+            record.amount_must_pay = record.amount_leftover
 #             student_id = self.env['student'].search([('id','=',record.student_id.id)])
 #             if student_id:
 #                 student_id.write({'student_debt':record.amount_leftover})
@@ -385,6 +394,7 @@ class StudentRegistration(models.Model):
                             
                             # Then add to Dropped courses if out side reg period, Only Faculty/admin allow to do
                             if (not start <= now <= end):
+                                # Only add back the lab course to calculate money
                                 vals['drop_course_ids'] = [(4, course.id)]                           
 
                     vals['reg_state'] = 'confirm'

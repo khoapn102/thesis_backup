@@ -132,6 +132,9 @@ class OfferCourse(models.Model):
     @api.depends('tuition_id', 'number_credits')
     def _get_course_tuition(self):
         for record in self:
+#             if record.is_lab and record.lab_type == 'combine':
+#                 record.crs_tuition = 0.0
+#             else:
             record.crs_tuition = (record.tuition_id.credit_cost * record.number_credits_actual) or 0.0                             
                                           
     @api.multi

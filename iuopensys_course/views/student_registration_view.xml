@@ -7,7 +7,7 @@
 			<field name="model">student.registration</field>
 			<field name="type">tree</field>
 			<field name="arch" type="xml">
-				<tree>
+				<tree default_order="id DESC">
 					<field name="student_id"/>
 					<field name="student_balance" string="Balance"/>
 					<field name="semester_id"/>

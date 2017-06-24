@@ -66,12 +66,13 @@ class StudentSemester(models.Model):
                 no_count_cred = 0
                 for std_crs in record.student_course_ids:
                     # Check if course_gpa is counted (normal)
-                    if std_crs.offer_course_id.course_id.cred_count_type == 'count':
-                        total_gpa += std_crs.course_gpa * std_crs.course_credits
-                        achieved_cred += std_crs.course_credits
-                        
-                    elif std_crs.offer_course_id.course_id.cred_count_type == 'nocount':
-                        no_count_cred += std_crs.course_credits
+                    if std_crs.is_complete:
+                        if std_crs.offer_course_id.course_id.cred_count_type == 'count':
+                            total_gpa += std_crs.course_gpa * std_crs.course_credits
+                            achieved_cred += std_crs.course_credits
+                            
+                        elif std_crs.offer_course_id.course_id.cred_count_type == 'nocount':
+                            no_count_cred += std_crs.course_credits
                     
                     total_cred += std_crs.course_credits
                 

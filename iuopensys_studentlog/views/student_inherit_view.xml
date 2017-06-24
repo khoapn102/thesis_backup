@@ -8,6 +8,7 @@
 			<field name="arch" type="xml">
 				<tree>
 					<field name="graduation_status" fg_color="green:graduation_status in ['graduated']" groups="iuopensys_core.group_staff"/>
+					<field name="trigger_grad_status" invisible="1" groups="iuopensys_core.group_staff"/>
 				</tree>
 			</field>
 		</record>
@@ -41,10 +42,16 @@
 							name="set_ontrack"
 							attrs="{'invisible':[('graduation_status', 'in',['ie','ontrack'])]}"
 							groups="iuopensys_core.group_staff"/>
-							
+					
 					<field name="graduation_status" widget="statusbar"/>
 					
 				</header>
+				
+				<!-- For Trigger Grad status UI only -->
+				<xpath expr="//field[@name='financial_aid_id']" position="after">
+					<field name="trigger_grad_status" groups="iuopensys_core.group_staff" invisible="1"/>
+				</xpath>
+				
 				<xpath expr="//div[1]" position="inside">
 					<button string="Print Transcript"
 						class="oe_stat_button"

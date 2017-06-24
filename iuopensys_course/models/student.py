@@ -107,16 +107,22 @@ class Student(models.Model):
             accum_cred = 0
             total_gpa = 0
             avg_gpa = 0
+            total_creds = 0 # all credits of all semester even failed courses
             if record.student_semester_ids:
                 for std_semester in record.student_semester_ids:
                     accum_cred += std_semester.achieved_credits
+                    total_creds += std_semester.total_credits - std_semester.no_count_credits
                     for std_crs in std_semester.student_course_ids:
                         if std_crs.offer_course_id.course_id.cred_count_type == 'count':
                             total_gpa += std_crs.course_gpa * std_crs.course_credits
                         else:
                             continue
-                if accum_cred:
+#                 print '===== total', total_creds, ' ---- accum', accum_cred 
+                if accum_cred and accum_cred == total_creds:
                     avg_gpa = total_gpa/accum_cred
+                elif accum_cred < total_creds:
+                    avg_gpa = total_gpa/total_creds
+                    
             record.accumulated_credits = accum_cred
             record.accumulated_gpa = round(avg_gpa,1)
                     
