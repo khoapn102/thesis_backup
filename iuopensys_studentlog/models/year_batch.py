@@ -57,4 +57,17 @@ class YearBatch(models.Model):
         for record in self:
             record.number_intake_students = len(record.student_ids.ids)
             
-    
+    @api.multi
+    def name_get(self):
+        res = super(YearBatch,self).name_get()
+        data = []
+        for record in self:
+            val = ''
+            val += record.name or ''
+            val += ' (' + record.year_code + ')'
+            data.append((record.id, val))
+        return data
+        
+        
+        
+        

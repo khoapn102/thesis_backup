@@ -21,6 +21,7 @@
 					<field name="name"/>
 					<field name="course_id" invisible="1"/>
 					<field name="department_id" invisible="1"/>
+					<field name="prereq_course_id" invisible="1"/>
 					<field name="dept_academic_code"/>					
 					<field name="course_group"/>
 					<field name="number_credits_actual" string="Crds Tuition"/>
@@ -32,6 +33,7 @@
 					<field name="display_room"/>
 					<field name="display_lecturer"/>
 					<field name="display_course_period"/>
+					<field name="ext_note" string="Note"/>
 				</tree>
 			</field>
 		</record>
@@ -86,6 +88,7 @@
           					<group string="Course Information">
           						<group>
           							<field name="course_id" options="{'no_create':True}"/>
+          							<field name="prereq_course_id" invisible="1"/>
           							<field name="department_id" options="{'no_create':True}"/>
           							<field name="academic_year_id" options="{'no_create':True}"/>
           							<field name="semester_id" options="{'no_create':True}"/>
@@ -217,6 +220,12 @@
        										<field name="s15"/>
        									</tree>
        								</field>
+       							</group>
+       						</page>
+       						<page string="Course Note" groups="iuopensys_core.group_staff">
+       							<group>
+       								<label for="ext_note" string="Note"/>
+       								<field name="ext_note" nolabel="1"/>
        							</group>
        						</page>      						
        					</notebook>	

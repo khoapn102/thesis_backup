@@ -106,23 +106,41 @@ class Student(models.Model):
         for record in self:
             accum_cred = 0
             total_gpa = 0
-            avg_gpa = 0
+            avg_gpa = 0            
             total_creds = 0 # all credits of all semester even failed courses
+            
+            complete_crs_ids = {} # Keeps track of courses which repeat to improve gpa
+            
             if record.student_semester_ids:
                 for std_semester in record.student_semester_ids:
                     accum_cred += std_semester.achieved_credits
                     total_creds += std_semester.total_credits - std_semester.no_count_credits
                     for std_crs in std_semester.student_course_ids:
+#                         print '====== HERE', complete_crs_ids,  '=====', total_gpa, '---- course', std_crs.offer_course_id.course_id.id
                         if std_crs.offer_course_id.course_id.cred_count_type == 'count':
-                            total_gpa += std_crs.course_gpa * std_crs.course_credits
+                            total_gpa += std_crs.course_gpa * std_crs.course_credits # Add gpa first then check after
+                            # If course is completed, save the course_id, credits, gpa into the dict
+                            # in dict form: {'course_id': (credits, gpa)}
+#                             if std_crs.is_complete:
+                            if std_crs.offer_course_id.course_id.id not in complete_crs_ids: # course is new
+                                complete_crs_ids[std_crs.offer_course_id.course_id.id] = (std_crs.offer_course_id.number_credits, std_crs.course_gpa)
+                            elif std_crs.offer_course_id.course_id.id in complete_crs_ids: # found repeat course
+                                curr_creds = complete_crs_ids[std_crs.offer_course_id.course_id.id][0]
+                                curr_gpa = complete_crs_ids[std_crs.offer_course_id.course_id.id][1]
+                                total_gpa -= curr_creds * curr_gpa # Remove previous course gpa
+                                accum_cred -= curr_creds # remove accumulated credits
+                                total_creds -= curr_creds
+                                complete_crs_ids[std_crs.offer_course_id.course_id.id] = (std_crs.offer_course_id.number_credits, std_crs.course_gpa)
                         else:
                             continue
+#                         print '======= NOW', complete_crs_ids, '-----', total_gpa,' ', accum_cred, ' ', total_creds
+                        
 #                 print '===== total', total_creds, ' ---- accum', accum_cred 
                 if accum_cred and accum_cred == total_creds:
                     avg_gpa = total_gpa/accum_cred
                 elif accum_cred < total_creds:
                     avg_gpa = total_gpa/total_creds
-                    
+            
             record.accumulated_credits = accum_cred
             record.accumulated_gpa = round(avg_gpa,1)
                     

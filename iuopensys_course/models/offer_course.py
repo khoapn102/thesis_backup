@@ -19,6 +19,7 @@ class OfferCourse(models.Model):
     # Course Info
     name = fields.Char(string='Title')
     course_id = fields.Many2one('course', string='Parent Course', ondelete='cascade')
+    prereq_course_id = fields.Many2one(related='course_id.prereq_course_id')
     
     course_type = fields.Selection(related='course_id.course_type')
     crs_lang = fields.Selection(related='course_id.crs_lang')
@@ -271,6 +272,50 @@ class OfferCourse(models.Model):
             record.display_lecturer = temp_lect or ''
             record.display_room = temp_room or ''
             record.display_course_period = temp_date or ''
+            
+    @api.multi
+    def write(self, vals):
+        for record in self:
+            if 'student_course_ids' in vals:
+                old_ids = [a.id for a in record.student_course_ids]
+                ids = [b[1] for b in vals['student_course_ids'] if b[0] == 2]
+                
+                not_remove_ids = [c for c in vals['student_course_ids'] if c[0] != 2]
+                                
+                # Since create has been disable -> only opt delete is used
+                # So different ids here are the deleted ones
+                student_ids = []
+                for student_course in record.student_course_ids:
+                    if student_course.id in ids:
+                        student_ids.append(student_course.student_id.id)
+                
+                remove_student_ids = self.env['student'].search([('id','in',student_ids)])
+                if remove_student_ids:
+                    # Remove each crs registration for student
+                    for student in remove_student_ids:
+                        std_reg_id = self.env['student.registration'].search([('student_id','=',student.id),
+                                                                              ('semester_id','=',record.semester_id.id)])
+                        if std_reg_id:
+                            offer_crs_ids = std_reg_id.offer_course_ids.ids
+                            # Loop through each course in registration form
+                            # If found a course that match with the record.id
+                            # or course that in record.lab_course_ids
+                            # Remove course from the registration
+                            for offer_course in std_reg_id.offer_course_ids:
+#                                 if record.has_lab:
+#                                     if offer_course.id in record.lab_course_ids.ids:
+                                if offer_course.id == record.id or\
+                                    offer_course.id in record.lab_course_ids.ids:
+                                    offer_crs_ids.remove(offer_course.id)
+                            
+                            new_vals = {'offer_course_ids': [(6,0,offer_crs_ids)]}
+                            std_reg_id.write(new_vals)
+                            
+                vals['student_course_ids'] = not_remove_ids # To avoid scenario when removing_ids cant be found 
+                # since std_regstration have removed it first
+        
+        return super(OfferCourse,self).write(vals)
+                            
             
 #     @api.multi
 #     def call_student_course_addition_wizard(self):

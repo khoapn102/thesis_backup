@@ -17,9 +17,10 @@
 					<field name="reg_semester_id"/>
 					<field name="year_batch_id"/>
 					<field name="start_datetime"/>
-					<field name="end_datetime"/>					
-					<field name="min_credits"/>
-					<field name="max_credits"/>
+					<field name="end_datetime"/>
+					<field name="drop_deadline_datetime"/>					
+					<field name="min_credits" string="Min. Credits"/>
+					<field name="max_credits" string="Max Credits"/>
 				</tree>
 			</field>
 		</record>
@@ -42,11 +43,12 @@
                         		<field name="reg_semester_id" options="{'no_create':True}"/>
                         		<field name="year_batch_id" options="{'no_create':True}"/>
                         		<field name="min_credits"/>
+                        		<field name="max_credits"/>
                         	</group>
                         	<group>
                         		<field name="start_datetime"/>
                         		<field name="end_datetime"/>
-                        		<field name="max_credits"/>
+                        		<field name="drop_deadline_datetime"/>
                         	</group>
                         </group>
                         <!-- <group string="Course List">

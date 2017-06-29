@@ -325,7 +325,7 @@ class Student(models.Model):
         for record in self:
             if record.major_id:
                 curr_major = record.major_id
-                course_ids = curr_major.course_ids.ids
+                course_ids = curr_major.course_ids.ids # majors' courses
                 
                 # Curriculum for Major checking 
                 curriculum_crs = {}
@@ -338,12 +338,15 @@ class Student(models.Model):
                     for curriculum in curr_major.iu_curriculum_ids:
                         if curriculum.course_ids:
                             curriculum_crs[tuple(curriculum.course_ids.ids)] = curriculum.max_cred_require
-                                                                  
+                    
+                complete_crs = []
+                                                              
                 if record.student_course_ids:
-                    course_ids_copy = course_ids[:]
+                    course_ids_copy = course_ids[:] # Copy course list
                     for student_course in record.student_course_ids:
+
                         if student_course.is_complete:
-                            
+                                                        
                             # Check completed course with curriculum. If selection is made between courses, 
                             # Whichever courses completed first will be counted towards the credits.
                             # Curriculum must be well designed to work.
@@ -353,15 +356,24 @@ class Student(models.Model):
                                 
                                 # Count achieved Major Credits
                                 if student_course.offer_course_id.course_id.cred_count_type == 'count':
-                                    achieved_creds += student_course.offer_course_id.course_id.number_credits
+                                    
+                                    # Only new course, passed repeat course will not be counted
+                                    if student_course.offer_course_id.course_id.id not in complete_crs:
+                                        achieved_creds += student_course.offer_course_id.course_id.number_credits
                                     
                                     for item in curriculum_crs:
                                         # Check if course in curriculum and also max_cred is still available
                                         if student_course.offer_course_id.course_id.id in item and curriculum_crs[item] > 0:
                                             curriculum_crs[item] -= student_course.offer_course_id.course_id.number_credits
-                                            accumulated_creds += student_course.offer_course_id.course_id.number_credits
+                                            
+                                            # Only new course, passed repeat course will not be counted
+                                            if student_course.offer_course_id.course_id.id not in complete_crs:
+                                                accumulated_creds += student_course.offer_course_id.course_id.number_credits
                                 
-                                course_ids.remove(student_course.offer_course_id.course_id.id)
+                                if student_course.offer_course_id.course_id.id in course_ids:
+                                    course_ids.remove(student_course.offer_course_id.course_id.id)
+                            
+                            complete_crs.append(student_course.offer_course_id.course_id.id)
                                                                 
                 record.major_course_not_complete_ids = course_ids
                 record.major_achieved_credits = achieved_creds

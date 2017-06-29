@@ -4,7 +4,7 @@ from openerp.exceptions import ValidationError, Warning
 from openerp import SUPERUSER_ID
 
 class StudentRegistration(models.Model):
-    
+
     _name = 'student.registration'
     _description = 'Student Registration Form'
     
@@ -14,21 +14,30 @@ class StudentRegistration(models.Model):
                                      related='crs_reg_id.start_datetime')
     end_datetime = fields.Datetime(string='End at',
                                    related='crs_reg_id.end_datetime')
+    drop_deadline = fields.Datetime(related='crs_reg_id.drop_deadline_datetime')
     
     # Student Related Info
     student_id = fields.Many2one('student', string='Student')
     user_id = fields.Many2one(related='student_id.user_id')
+    accumulated_creds = fields.Integer(related='student_id.accumulated_credits')  # store=True # Add when DEMO
     major_id = fields.Many2one('major', related='student_id.major_id')
     course_ids = fields.Many2many('course', related='major_id.course_ids')
     
     exam_status = fields.Boolean(string='Exam Status', related='student_id.exam_status')
     semester_id = fields.Many2one('semester', string='Semester')
+    dept_academic_sem = fields.Char('Dept-Semester', compute='get_dept_academic_semester',
+                                    store=True,
+                                    help='Search by Department-Year-Semester. e.g: IT1320131')
     
     offer_course_ids = fields.Many2many('offer.course', string='Offer Courses',)
     drop_course_ids = fields.Many2many('offer.course', 'offer_course_student_registration_drop_rel', 
                                     'student_registration_id',
                                     'offer_course_id',
                                     string='Dropped Courses')
+    temporary_drop_crs_ids = fields.Many2many('offer.course', 'offer_course_student_registration_temporary_rel',
+                                              'student_registration_id',
+                                              'offer_course_id',
+                                              string='Temporary Drops',)
     
     # To set other field to be readonly
     is_created = fields.Boolean(string='Created', default=False)
@@ -39,7 +48,7 @@ class StudentRegistration(models.Model):
                                             ], string='State',
                                  default='draft')
     
-    ext_note = fields.Char('Note')
+    ext_note = fields.Text('Note')
     advisor_note = fields.Text('Advisor\'s Note')
     
     # Student Tuition per Semester with Financial Aid calculation
@@ -69,6 +78,24 @@ class StudentRegistration(models.Model):
         
     in_period = fields.Boolean('In Reg Time', compute='_check_in_period')
     
+    toggle_view_temp = fields.Boolean('Toggle', compute='toggle_view')
+    
+    @api.depends('temporary_drop_crs_ids')
+    def toggle_view(self):
+        for record in self:
+            if len(record.temporary_drop_crs_ids) > 0:
+                record.toggle_view_temp = True
+            else:
+                record.toggle_view_temp = False
+
+    @api.depends('student_id','semester_id')
+    def get_dept_academic_semester(self):
+        for record in self:
+            record.dept_academic_sem = record.student_id.department_id.dept_academic_code +\
+                                            str(int(record.student_id.year_batch_id.year or 0)%100) +\
+                                            record.semester_id.semester_code
+    
+    
     @api.multi
     def deduct_from_student_balance(self):
         for record in self:
@@ -97,8 +124,27 @@ class StudentRegistration(models.Model):
     def onchange_offer_course_ids(self):
         if self.offer_course_ids:
 #             print '=======', self.total_creds
+            # Check Course prerequesite
+#             print '====', self.ext_note
+            self.ext_note = 'Courses needs Prereq. completion:'
+            check = False
+            for course in self.offer_course_ids:
+                if course.prereq_course_id: # Found Course prereq
+                    prereq_offer_ids = course.prereq_course_id.offer_course_ids
+#                     print '====== PRE', prereq_offer_ids
+                    # Search Student_course to check if satisfied requirements
+                    student_course_ids = self.env['student.course'].search([('student_id','=', self.student_id.id),
+                                                                            ('offer_course_id','in',prereq_offer_ids.ids),
+                                                                            ('is_complete','=',True)])
+#                     print '======= STD', student_course_ids
+                    if not student_course_ids: # Cant find prereq completed
+                        check = True
+                        self.ext_note += '\n\t- ' + course.name + ' (' + course.prereq_course_id.name +')'
+            if not check:
+                self.ext_note += ' N/A'
+            
             if self.total_creds < self.crs_reg_id.min_credits:
-                self.ext_note = 'Register under minimum credits required.'
+                self.ext_note += '\nRegister under minimum credits required.'
         else:
             self.ext_note = ''
     
@@ -250,6 +296,7 @@ class StudentRegistration(models.Model):
                 for key in reg_sched:
                     temp_lst = reg_sched[key]
                     overlapping = [[x,y] for x in temp_lst for y in temp_lst if x is not y and x[1]>=y[0] and x[0]<=y[0]]
+                    print '=======', overlapping
                     if len(overlapping) > 0:
                         check_overlap = 1
                         break
@@ -259,21 +306,7 @@ class StudentRegistration(models.Model):
                     raise ValidationError('Cannot register for more than ' + str(record.crs_reg_id.max_credits) + ' credits.')
                 if check_overlap == 1:
                     raise ValidationError('Overlap schedule. Please check again.')
-    
-#     @api.onchange('offer_course_ids')
-#     def _onchange_offer_course(self):
-#         if self.offer_course_ids:
-#             course_ids = []
-#             for course in self.offer_course_ids:
-#                 if course.avail_students == 0:
-#                     course_ids.append((3,course.id))
-# #                     print '++++++', self.offer_course_ids
-# #                     print '++++++', self.offer_course_ids
-# #                     raise Warning('Course is not available (in Red). Please remove selection')
-#                     print '+++++', self.offer_course_ids
-#                     self.offer_course_ids = [(3,course.id)]
-#                     print '++++++', self.offer_course_ids
-#             return {'value': {'offer_course_ids': course_ids}}                           
+                             
                     
     @api.model
     def create(self, vals):
@@ -298,11 +331,42 @@ class StudentRegistration(models.Model):
             now = datetime.now()
             start = datetime.strptime(record.start_datetime, '%Y-%m-%d %H:%M:%S')
             end = datetime.strptime(record.end_datetime,'%Y-%m-%d %H:%M:%S')
+            drop_deadline = datetime.strptime(record.drop_deadline,'%Y-%m-%d %H:%M:%S')
             # Must be student and Out of Registration period -> Error
             if (not start <= now <= end) and (self.env.user.id in student_user_ids):
                 raise ValidationError('Out of Registration Period. Please try again later !')
             # Not a student, or in Reg period, or other ..
             else:
+                if 'reg_state' in vals:
+#                     print vals
+                    if vals['reg_state'] == 'deny':
+                        print '===== Deny'
+                        if record.offer_course_ids:
+                            # Student already registered for course -> set to temporary_drop
+                            record.temporary_drop_crs_ids = record.offer_course_ids.ids
+#                             print '========', record.temporary_drop_crs_ids
+                            
+                            crs_ids = record.offer_course_ids.ids
+                            lab_only_ids = self.env['offer.course'].search([('id', 'in', crs_ids), ('is_lab','=',True)])
+                            if lab_only_ids:
+                                for course in lab_only_ids:
+                                    crs_ids.append(course.theory_course_id.id)
+                            new_offer_course_ids = self.env['offer.course'].search([('id', 'in', crs_ids)])
+                            
+                            print '====== COURSE', new_offer_course_ids
+                            
+                            for course in new_offer_course_ids:
+#                                 new_std_crs_id = self.env['student.course'].search([('student_id','=',record.student_id.id),
+#                                                                                     ('offer_course_id','=', course.id)])
+#                                 print '======= NOW', new_std_crs_id
+# #                                 new_std_crs_id.unlink()
+#                                 print 'HERE 2'
+                                if course.id in record.offer_course_ids.ids:
+                                    record.offer_course_ids = [(3, course.id)]
+                            record.drop_course_ids = [(6,0,[])]
+                    else:
+                        continue
+                
                 if 'offer_course_ids' in vals:
                     # Create Registration if there is none
                     """
@@ -312,7 +376,7 @@ class StudentRegistration(models.Model):
                     **** Must check for course theory schedule if it has
                     3. Compare with current record. If current ids from vals different
                     4. Adapt the change. The unlink will be deleted and the extra will be added 
-                    """                    
+                    """                                
                     ids = vals['offer_course_ids'][0][2] # Current courses reg (at onchange)
 #                     # Remove course has 0 avail students
 #                     remv_crs_ids = self.env['offer.course'].search([('id','in',ids),('avail_students', '>', 0)])
@@ -326,16 +390,23 @@ class StudentRegistration(models.Model):
 #                     print '+++++++ old: ', old_ids, ' ===== curr: ' , ids
                     onchange_crs_ids = [x for x in (old_ids+ids) if\
                                          (x not in old_ids) or (x not in ids)] # After onchange
-#                     print '========== onchange: ', onchange_crs_ids
+#                     print '========== onchange: ', onchange_crs_ids # Include lab only or single course
+                    
+                    onchange_crs_ids_copy = onchange_crs_ids[:] # Only includes what course in the form (not theory, etc.)
                     
                     lab_only_ids = self.env['offer.course'].search([('id', 'in', onchange_crs_ids), ('is_lab','=',True)])
                     if lab_only_ids:
                         for course in lab_only_ids:
                             onchange_crs_ids.append(course.theory_course_id.id)
                     offer_course_ids = self.env['offer.course'].search([('id', 'in', onchange_crs_ids)])
-#                     print '------ updated-onchange: ', offer_course_ids
+#                     print '------ updated-onchange: ', offer_course_ids # Include lab + thoery for add
                     
                     sum_cred = 0
+                    
+                    drop_crs = []
+                    
+                    remove_temp_crs = []
+                    
                     for course in offer_course_ids:
                         # Do not handle course that has no avaialble slots
 #                         print '+++++ Here', course.avail_students
@@ -347,7 +418,8 @@ class StudentRegistration(models.Model):
                         sum_cred += course.number_credits
                         std_crs_id = self.env['student.course'].search([('student_id','=',record.student_id.id),
                                                                  ('offer_course_id','=', course.id)])
-                        print '-------', std_crs_id
+#                         print '------- New HERE', std_crs_id
+                        
                         if not std_crs_id:
                             # New course for reg
                             new_vals = {
@@ -359,6 +431,9 @@ class StudentRegistration(models.Model):
                             # Re added dropped course. In case
                             if course.id in drop_ids:
                                 vals['drop_course_ids'] = [(3, course.id)]
+                                
+                            if course.id in record.temporary_drop_crs_ids.ids:
+                                vals['temporary_drop_crs_ids'] = [(3, course.id)]
 
 #                             if course.study_session_ids:
 #                                 # Add student to calendar
@@ -390,16 +465,20 @@ class StudentRegistration(models.Model):
 #                                             event.partner_ids = [(3, std_crs_id.student_id.user_id.partner_id.id)]
 #                                             print '======Event Partner =====', event.partner_ids
 
+                            if course.id in onchange_crs_ids_copy:
+                                drop_crs.append(course.id)
+#                             print '======== DROP', drop_crs
+                            
                             std_crs_id.unlink()
                             
-                            # Then add to Dropped courses if out side reg period, Only Faculty/admin allow to do
-                            if (not start <= now <= end):
-                                # Only add back the lab course to calculate money
-                                vals['drop_course_ids'] = [(4, course.id)]                           
+                        # Then add to Dropped courses if out side reg period, Only Faculty/admin allow to do
+                        # Drop courses got charged if drop after the DEADLINE
+                        if (not start <= now <= end) and (now > drop_deadline):
+                            # Only add back the lab course to calculate money
+                            vals['drop_course_ids'] = [(6, 0, drop_crs)]                           
 
                     vals['reg_state'] = 'confirm'
-#                     if sum_cred < record.crs_reg_id.min_credits:
-#                         vals['ext_note'] = 'Register under minimum credits required.'
                     
         return super(StudentRegistration,self).write(vals)
         
+

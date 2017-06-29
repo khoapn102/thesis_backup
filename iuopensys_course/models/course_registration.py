@@ -24,6 +24,8 @@ class CourseRegistration(models.Model):
                                      default=lambda self: datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
     end_datetime = fields.Datetime(string='End at',
                                    default=lambda self: datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
+    drop_deadline_datetime = fields.Datetime(string='Drop Deadline', default=lambda self: datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+                                             help='Deadline for latest dropping course without getting charged 30% fee')
     max_credits = fields.Integer(string='Maximum Credits', default=24)
     min_credits = fields.Integer(string='Minimum Credits', default=12)
         
@@ -46,7 +48,8 @@ class CourseRegistration(models.Model):
     def create(self, vals):
         curr_reg = super(CourseRegistration,self).create(vals)
         # Search for all students in this batch and assign Registration Form
-        student_ids = self.env['student'].search([('year_batch_id','=',curr_reg.year_batch_id.id)])
+        student_ids = self.env['student'].search([('year_batch_id','=',curr_reg.year_batch_id.id),
+                                                  ('graduation_status','in',['ie','ontrack','complete'])])
         for student in student_ids:
             # Student Registration
             new_vals = {'crs_reg_id':curr_reg.id,

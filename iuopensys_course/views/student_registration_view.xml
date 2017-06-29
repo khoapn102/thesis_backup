@@ -89,6 +89,7 @@
 			<field name="name">Student Tuition</field>
 			<field name="res_model">student.registration</field>
 			<field name="view_mode">tree,form</field>
+			<field name="context">{'search_default_group_by_semester_id':1}</field>
 		</record>
  		<record model="ir.actions.act_window.view" id="student_registration_tuition_tree_view">
 			<field name="sequence" eval="1"/>
@@ -119,7 +120,8 @@
 					<field name="crs_reg_id"/>
 					<field name="start_datetime"/>
 					<field name="end_datetime"/>
-					<field name="reg_state"/>					
+					<field name="reg_state"/>
+					<field name="dept_academic_sem" string="Reg. Code" groups="iuopensys_core.group_staff"/>
 				</tree>
 			</field>
 		</record>
@@ -131,7 +133,7 @@
 			<field name="arch" type="xml">
 				<form>
 					<header>						
-						<field name="reg_state" widget="statusbar" clickable="1"  groups="iuopensys_core.group_staff"/>
+						<field name="reg_state" widget="statusbar" clickable="1" on_change="onchange_reg_state"  groups="iuopensys_core.group_staff"/>
 					</header>
 					<sheet>
 						<div class="oe_button_box" name="my_button_box">
@@ -154,14 +156,18 @@
                         		<field name="create_uid" invisible="1"/>
                         		<field name="crs_reg_id" attrs="{'readonly':[('is_created','=',True)]}" invisible="1"/>
                         		<field name="student_id" attrs="{'readonly':[('is_created','=',True)]}"/>
+                        		<field name="accumulated_creds" string="Accumulated Creds." groups="iuopensys_core.group_staff"/>
                         		<field name="course_ids" invisible="1"/>
                         		<field name="user_id" invisible="1"/>                        		                        		 
                         	</group>                        	
                         	<group>
                         		<field name="semester_id" attrs="{'readonly':[('is_created','=',True)]}"/>
+                        		<field name="dept_academic_sem" invisible="1"/>
                         		<field name="start_datetime" invisible="1"/>
                         		<field name="end_datetime" invisible="1"/>
+                        		<field name="drop_deadline" invisible="1"/>
                         		<field name="in_period" invisible="1"/>
+                        		<field name="toggle_view_temp" invisible="1"/>
                         	</group>
                         </group>
                         <group>
@@ -191,13 +197,34 @@
 											<field name="display_lecturer"/>
 											<field name="display_course_period"/>
 											<field name="crs_tuition" sum="Total Tuition"/>
+											<field name="ext_note" string="Note"/>
 		                       			</tree>	
 		                       		</field>                       		
 		                       	</group>
-		                       	<group string="Dropped Courses" attrs="{'invisible':[('in_period','=', True)]}">		                       		
+		                       	<group string="Dropped Courses (Charged)" attrs="{'invisible':[('in_period','=', True)]}">		                       		
 		                       		<field name="drop_course_ids" nolabel="1" options="{'no_create':True}" 
 		                       			domain="[('semester_id','=',semester_id),('has_lab','=',False)]">
-		                       			<tree edit="false" create="false">
+		                       			<tree edit="false" create="false" delete="false">
+		                       				<field name="course_code" string="Crs Code"/>
+											<field name="name"/>
+											<field name="course_id" invisible="1"/>
+											<field name="department_id" invisible="1"/>
+											<field name="dept_academic_code" string="Dept."/>					
+											<field name="course_group" string="T. Grp"/>
+											<field name="number_credits" string="Credits" sum="Total Credits: "/>
+											<field name="academic_year_id" string="Class"/>
+											<field name="semester_id" invisible="1"/>					
+											<field name="display_study_daytime"/>
+											<field name="display_lecturer"/>
+											<field name="display_course_period"/>
+											<field name="crs_tuition" sum="Total Tuition"/>
+		                       			</tree>	
+		                       		</field>		                       				
+		                       	</group>
+		                       	<group string="Dropped Courses (Not Charge)" attrs="{'invisible':[('toggle_view_temp','=', False)]}">		                       		
+		                       		<field name="temporary_drop_crs_ids" nolabel="1" options="{'no_create':True}" 
+		                       			domain="[('semester_id','=',semester_id),('has_lab','=',False)]">
+		                       			<tree edit="false" create="false" delete="false">
 		                       				<field name="course_code" string="Crs Code"/>
 											<field name="name"/>
 											<field name="course_id" invisible="1"/>
@@ -265,6 +292,7 @@
 			<field name="name">Registration Form</field>
 			<field name="res_model">student.registration</field>
 			<field name="view_mode">tree,form</field>
+			<field name="context">{'search_default_group_by_semester_id':1}</field>
 		</record>
 		<record model="ir.actions.act_window.view" id="student_registration_main_tree_view">
 			<field name="sequence" eval="1"/>
@@ -311,23 +339,24 @@
 				<search>
 					<!-- Search By -->
 					<field name="student_id"/>
-					<field name="crs_reg_id"/>
+					<!-- <field name="crs_reg_id"/> -->
+					<field name="dept_academic_sem" string="Reg. Code" groups="iuopensys_core.group_staff"/>
 					
 					<!-- Group By -->
 					<group expand="0" string="Group By">
 						<filter string="Course Registration"
-							context="{'group_by':'crs_reg_id'}"/>				
-						<filter string="Semester"
-							context="{'group_by':'semester_id'}"/>					
+							context="{'group_by':'crs_reg_id'}" groups="iuopensys_core.group_staff"/>				
+						<filter name="group_by_semester_id" string="Semester"
+							context="{'group_by':'semester_id'}" groups="iuopensys_core.group_staff"/>					
 						<filter string="State"
-							context="{'group_by':'reg_state'}"/>
+							context="{'group_by':'reg_state'}" groups="iuopensys_core.group_staff"/>
 					</group>
 					
 					<!-- Filter -->
 					<filter string="Exam Eligible"
-						domain="[('exam_status','=',True)]"/>
+						domain="[('exam_status','=',True)]" groups="iuopensys_core.group_staff"/>
 					<filter string="Exam not Eligible"
-						domain="[('exam_status','=',False)]"/>
+						domain="[('exam_status','=',False)]" groups="iuopensys_core.group_staff"/>
 					
 				</search>
 			</field>
