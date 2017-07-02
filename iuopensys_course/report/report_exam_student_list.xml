@@ -57,8 +57,12 @@
 										<td><t t-esc="student.student_fname"/></td>
 										<td><t t-esc="student.student_class_code"/></td>
 										<td></td>
-										<t t-if="student.exam_status == False"/>
-										<td><t t-esc="Prohibited"/></td>
+										<t t-if="student.exam_status == False">
+											<td>Unpaid</td>
+										</t>
+										<t t-if="student.exam_status == True">
+											<td></td>
+										</t>
 									</tr>
 									</t>
 								</table>

@@ -47,6 +47,6 @@ class FinancialAid(models.Model):
             
             record.is_active = not record.is_active
             
-            if record.is_active:
-                if datetime.now() < start or datetime.now() > end:
-                    raise Warning('Out of valid period for activation.')
+#             if record.is_active:
+#                 if datetime.now() < start or datetime.now() > end:
+#                     raise Warning('Out of valid period for activation.')

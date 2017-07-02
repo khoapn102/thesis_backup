@@ -58,15 +58,17 @@
                         <group string="List of Students">
                         	<field name="student_ids" nolabel="1" context="{'default_financial_aid_id':active_id'}"
                         		options="{'no_create':True}">
-                        		<tree edit="false" create="false">
+                        		<tree create="false">
                         			<field name="studentId"/>
 									<field name="student_lname"/>
 									<field name="student_fname"/>
 									<field name="student_dob"/>
 									<field name="student_dept_id"/>
 									<field name="student_academic_yr_id"/>
-									<field name="student_major_id"/>
+									<!-- <field name="student_major_id"/> -->
 									<field name="student_country"/>
+									<field name="is_active"/>
+									<button name="set_is_active" type="object" string="Active/Inactive" groups="iuopensys_core.group_staff"/>
                         		</tree>	
                         	</field>
                         </group>						

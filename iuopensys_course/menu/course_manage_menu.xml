@@ -165,7 +165,8 @@
 			name="Student Financial Aid"
 			sequence="4"
 			parent="iuopensys_core.student_core_menu"
-			action="student_financial_aid_main_action"/>
+			action="student_financial_aid_main_action"
+			groups="iuopensys_core.group_staff"/>
 		
 	</data>
 </openerp>

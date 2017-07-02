@@ -7,7 +7,7 @@ class IuCurriculum(models.Model):
     
     name = fields.Char(string='Name')
     department_id = fields.Many2one('department', string='Department')
-    max_cred_require = fields.Integer('Max Credits Requires')
+    max_cred_require = fields.Integer('Max Credits Requires', required=True)
     total_cred = fields.Integer('Total Credits', compute='get_total_cred',
                                 help='Course with P/F option will not be counted toward total Credits.')
     # Get P/F course credits

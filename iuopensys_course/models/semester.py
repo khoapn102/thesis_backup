@@ -9,7 +9,7 @@ class Semester(models.Model):
     _description = 'Semester'
     _order = 'semester_year, semester_type, id'
     
-    name = fields.Char(string='Semester', compute='_get_semester_name')
+    name = fields.Char(string='Semester', compute='_get_semester_name_and_code',store=True)
     semester_year = fields.Char(string='Year',required=True,
                        default=(str(datetime.now().year) + '-' + str(datetime.now().year + 1)))
     semester_type = fields.Selection(selection=[('1', 'Semester 1'),
@@ -17,7 +17,7 @@ class Semester(models.Model):
                                                 ('3', 'Semester 3')],
                                      string='Semester Type', required=True)
     semester_code = fields.Char(string='Semester Code',
-                                compute='_get_semester_code')
+                                compute='_get_semester_name_and_code', store=True)
     start_date = fields.Date(string='Starting Date', required=True,
                              default=datetime.now().strftime("%Y-%m-%d"))
     end_date = fields.Date(string='Ending Date', required=True,
@@ -30,13 +30,20 @@ class Semester(models.Model):
     def _onchange_semester_type(self):
         self.checkfield = self.semester_year + (self.semester_type or "")
         
-    @api.multi
-    def _get_semester_name(self):
+#     @api.multi
+#     def _get_semester_name(self):
+#         for record in self:
+#             record.name = record.semester_type + '-' + record.semester_year.split('-')[0]
+#             
+#     @api.multi
+#     def _get_semester_code(self):
+#         for record in self:
+#             record.semester_code = record.semester_year.split('-')[0] + (record.semester_type or "")
+    
+    @api.depends('semester_year','semester_type')
+    def _get_semester_name_and_code(self):
         for record in self:
-            record.name = record.semester_type + '-' + record.semester_year.split('-')[0]
-    @api.multi
-    def _get_semester_code(self):
-        for record in self:
+            record.name = (record.semester_type or '') + '-' + record.semester_year.split('-')[0]
             record.semester_code = record.semester_year.split('-')[0] + (record.semester_type or "")
     
     @api.onchange('start_date')
@@ -90,7 +97,5 @@ class Semester(models.Model):
 #                         print '==== NOW ', result
                         std_reg.write({'amount_financial_aid':result})
                                 
-            
-                
-        
+                    
             

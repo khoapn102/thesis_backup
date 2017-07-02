@@ -59,6 +59,12 @@
 						type="object"
 						name="print_student_transcript"
 						groups="iuopensys_core.group_staff"/>
+					<button string="Print Progress"
+						class="oe_stat_button"
+						icon="fa-print"
+						type="object"
+						name="print_student_progress"
+						groups="iuopensys_core.group_staff"/>
 				</xpath>
 				<xpath expr="//field[@name='max_grad_date']" position="after">
 					<field name="graduation_date" attrs="{'invisible':[('graduation_status','in',('ie','ontrack'))]}"

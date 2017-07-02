@@ -46,7 +46,7 @@
 	                				<field name="tuition_at_iu" class="oe_inline"/>
 	                				<span> USD</span>
 	                    		</div>
-	                    		<label for="tuition_at_iu"  style="font-weight:bold" attrs="{'invisible':[('program_type','=','iu')]}"/>
+	                    		<label for="tuition_at_partner"  style="font-weight:bold" attrs="{'invisible':[('program_type','=','iu')]}"/>
 	                    		<div attrs="{'invisible':[('program_type','=','iu')]}">
 	                    			
 	                				<field name="tuition_at_partner" class="oe_inline"/>

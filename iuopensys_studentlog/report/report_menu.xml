@@ -32,7 +32,7 @@
 			report_type="qweb-pdf"
 			name="iuopensys_studentlog.report_student_progress"
 			file="iuopensys_studentlog.report_student_progress"
-			
+			menu="False"
 		/>
 		
 	</data>

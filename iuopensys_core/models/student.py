@@ -84,7 +84,7 @@ class Student(models.Model):
             dept_code += str(self.department_id.dept_academic_code).lower()
             self.student_sequence = self.env['ir.sequence'].get(dept_code)
             self.studentId = self.department_id.dept_academic_code +\
-                            self.major_id.major_code +\
+                            (self.major_id.major_code or '')+\
                             str(int(self.academic_year_id.year_batch_id.year)%100)+\
                             self.student_sequence
             

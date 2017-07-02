@@ -376,13 +376,12 @@ class StudyPeriod(models.Model):
                         new_vals['final_date'] = rec_end_dt
                         
                     self.env['calendar.event'].create(new_vals)
-                    
                     planned_ids = self.env['calendar.event'].search([('is_planned_event','=', True),
                                                              ('start_date', '>=', record.start_date),
                                                              ('start_date', '<=', record.end_date)])
-    #                 print '++++ Planned', planned_ids
+                    print '++++ Planned', planned_ids
                     planned_dates = [(p_event.start_date, p_event.stop_date) for p_event in planned_ids]
-    #                 print '------ Holiday', planned_dates
+                    print '------ Holiday', planned_dates
                     # For each planned date, find the session that overlap with this. -> delete those sessions
                     # Also must check if the Exam period is fit for Which Student Academic year
                     if planned_ids:

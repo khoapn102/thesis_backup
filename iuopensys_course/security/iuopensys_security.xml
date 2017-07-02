@@ -10,11 +10,21 @@
 			<field name="domain_force">[('user_id','=',user.id)]</field>
 		</record>
 		
+		<!-- Student Semester -->
 		<record id="group_student_rule_semester" model="ir.rule">
 			<field name="name">Student Registration Rule</field>
 			<field name="model_id" ref="model_student_semester"/>
 			<field name="groups" eval="[(4, ref('iuopensys_core.group_student'))]"/>
 			<field name="domain_force">[('user_id','=',user.id)]</field>
 		</record>
+		
+		<!-- Student Document -->
+		<record id="group_student_rule_document" model="ir.rule">
+			<field name="name">Student Document Rule</field>
+			<field name="model_id" ref="model_student_document"/>
+			<field name="groups" eval="[(4, ref('iuopensys_core.group_student'))]"/>
+			<field name="domain_force">[('student_id.user_id','=',user.id)]</field>
+		</record>
+		
 	</data>
 </odoo>

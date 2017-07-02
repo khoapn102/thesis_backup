@@ -198,6 +198,12 @@ class Student(models.Model):
         report_name = 'iuopensys_studentlog.report_student_transcript'
         return self.env['report'].get_action(self, report_name)
     
+    # Button Print Student Progress
+    @api.multi
+    def print_student_progress(self):
+        report_name = 'iuopensys_studentlog.report_student_progress'
+        return self.env['report'].get_action(self, report_name)
+    
     # Change status from IE to Ontrack/Complete
     @api.onchange('is_eng_req')
     def onchange_is_eng_req(self):
@@ -385,10 +391,9 @@ class Student(models.Model):
                     if record.graduation_status == 'ontrack':
                         record.write({'graduation_status':'complete'})
                         
-#                 elif record.major_incomplete_credits > 0:
-#                     print '========HERE'
-#                     if record.graduation_status != 'ontrack':
-#                         record.write({'graduation_status':'ontrack'})
+                elif record.major_incomplete_credits > 0:
+                    if record.graduation_status != 'ontrack':
+                        record.write({'graduation_status':'ontrack'})
     
 #     @api.onchange('is_complete_major')
 #     def onchange_is_complete_major(self):
