@@ -11,7 +11,8 @@
 						name="update_graduating_student"
 						type="object"
 						class="oe_highlight"
-						icon="fa-bars"/>
+						icon="fa-bars"
+						groups="iuopensys_core.group_staff"/>
 				</header>
 				<xpath expr="//div[1]" position="before">
 					<div class="oe_button_box" name="my_new_button_box" groups="iuopensys_core.group_staff">
@@ -27,7 +28,7 @@
 					</div>
 				</xpath>
 				<notebook position="inside">
-					<page string="Intake Students">
+					<page string="Intake Students" groups="iuopensys_core.group_staff">
 						<group>
 							<field name="student_ids" nolabel="1">
 								<tree edit="false" create="false">
@@ -45,7 +46,7 @@
 							</field>
 						</group>
 					</page>
-					<page string="Graduating Students">						
+					<page string="Graduating Students" groups="iuopensys_core.group_staff">						
 						<group>
 							<field name="graduate_student_ids" nolabel="1">
 								<tree edit="false" create="false">
@@ -66,5 +67,6 @@
 				</notebook>
 			</field>
 		</record>
+		
 	</data>
 </openerp>

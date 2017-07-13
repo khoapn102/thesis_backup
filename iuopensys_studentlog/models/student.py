@@ -19,6 +19,8 @@ class Student(models.Model):
     major_course_not_complete_ids = fields.Many2many('course', string='Incompleted Courses',
                                                compute='get_all_course_details')
     major_total_credits = fields.Integer(related='major_id.major_total_credits')
+    major_total_not_count_credits = fields.Integer(related='major_id.major_total_not_count_credits')
+    major_not_count_achieved_credits = fields.Integer(string='Achieved P/F', compute='get_all_course_details')
     major_incomplete_credits = fields.Integer(string='Missing Credits', compute='get_all_course_details')
     major_achieved_credits = fields.Integer(string='Achieved Credits', compute='get_all_course_details',
                                             help='Total achieved credits during studying duration.')
@@ -33,6 +35,9 @@ class Student(models.Model):
     academic_program_course_complete_ids = fields.One2many('student.course', 'student_id', string='Completed Programs',
                                                            domain=[('offer_course_id.course_id.is_extra_curricular','=',True),
                                                                    ('is_complete','=',True)])
+    
+    empty_major_course_ids = fields.Many2many('course', string='Empty',
+                                              help='If student has completed all major courses, no more course will be shown here.')
     
     # New - Graduation 
 #     major_course_not_complete_ids = fields.Many2many('course',string='Incompleted Courses',
@@ -92,12 +97,12 @@ class Student(models.Model):
                         major = self.env['major'].search([('id','=',vals['major_id'])]).name                    
                     
                     student_logs = self.env['student.log'].search([('student_id','=',record.id)])
-                    print '======', student_logs
+#                     print '======', student_logs
                     if student_logs:
                         for log in student_logs:
                             # Any log with old value is the current changing value in VALS -> Stop
                             if log.old_value == (dept or major):
-                                print '++++++ No change Dept/Major.'
+#                                 print '++++++ No change Dept/Major.'
                                 raise ValidationError('Student cannot change back to this Department/Major.')                            
                 
                 tf_map = {True:'Yes',
@@ -339,6 +344,7 @@ class Student(models.Model):
                 incomplete_creds = curr_major.major_total_credits
                 achieved_creds = 0
                 accumulated_creds = 0
+                achieved_pf_creds = 0 # achieved P/F
                 
                 if curr_major.iu_curriculum_ids:
                     for curriculum in curr_major.iu_curriculum_ids:
@@ -375,6 +381,9 @@ class Student(models.Model):
                                             # Only new course, passed repeat course will not be counted
                                             if student_course.offer_course_id.course_id.id not in complete_crs:
                                                 accumulated_creds += student_course.offer_course_id.course_id.number_credits
+                                                
+                                elif student_course.offer_course_id.course_id.cred_count_type == 'nocount':
+                                    achieved_pf_creds += student_course.offer_course_id.course_id.number_credits
                                 
                                 if student_course.offer_course_id.course_id.id in course_ids:
                                     course_ids.remove(student_course.offer_course_id.course_id.id)
@@ -383,11 +392,13 @@ class Student(models.Model):
                                                                 
                 record.major_course_not_complete_ids = course_ids
                 record.major_achieved_credits = achieved_creds
+                record.major_not_count_achieved_credits = achieved_pf_creds
                 record.major_accumulated_credits = accumulated_creds
                 record.major_incomplete_credits = record.major_total_credits - record.major_accumulated_credits
                 
                 # Must f5 the page -> get new effect after
-                if record.major_incomplete_credits == 0 and record.major_total_credits > 0:
+                if record.major_incomplete_credits == 0 and record.major_total_credits > 0 and\
+                    record.major_not_count_achieved_credits >= record.major_total_not_count_credits:
                     if record.graduation_status == 'ontrack':
                         record.write({'graduation_status':'complete'})
                         

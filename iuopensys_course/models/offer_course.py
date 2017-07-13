@@ -82,6 +82,7 @@ class OfferCourse(models.Model):
                                         domain=[('is_exam','=',False)])
     exam_session_ids = fields.One2many('study.period', 'offer_course_id', string='Examination',
                                        domain=[('is_exam','=',True)])
+    has_exam = fields.Boolean('Has Exam')
     
     # For Attendance Purpose (each sess/week or multiple sessions/week)
     amount_session = fields.Integer('Amt. Sessions', compute='_get_display_details')
@@ -91,6 +92,16 @@ class OfferCourse(models.Model):
     display_lecturer = fields.Text(string='Instructor(s)', compute='_get_display_details')
     display_room = fields.Text(string='Room(s)', compute='_get_display_details')
     
+    # For Examination Schedule
+    display_exam_date_midterm = fields.Text(string='Exam Date', compute='_get_exam_display_details')
+    display_exam_time_midterm = fields.Text(string='Start Time', compute='_get_exam_display_details')
+    display_duration_midterm = fields.Text(string='Duration', compute='_get_exam_display_details')
+    display_room_midterm = fields.Text(string='Room', compute='_get_exam_display_details')
+    display_exam_date_final = fields.Text(string='Exam Date', compute='_get_exam_display_details')
+    display_exam_time_final = fields.Text(string='Start Time', compute='_get_exam_display_details')
+    display_duration_final = fields.Text(string='Duration', compute='_get_exam_display_details')
+    display_room_final = fields.Text(string='Room', compute='_get_exam_display_details')
+    
     # Tuition - is separate for each of the courses
     tuition_id = fields.Many2one('course.tuition', string='Credit Cost',
                                  default=lambda self:self.env['course.tuition'].search([('id','=',1)]))
@@ -99,10 +110,23 @@ class OfferCourse(models.Model):
     
     # Note
     ext_note = fields.Text('Note')
+    
+    @api.onchange('exam_session_ids')
+    def onchange_exam_session_ids(self):
+        if self.exam_session_ids:
+            if not self.has_exam:
+                self.has_exam = True
+        else:
+            self.has_exam = False
                     
     @api.multi
     def print_exam_student_list(self):
         report_name = 'iuopensys_course.report_exam_student_list'
+        return self.env['report'].get_action(self, report_name)
+    
+    @api.multi
+    def print_student_attendance_check(self):
+        report_name = 'iuopensys_course.report_student_attendance_check'
         return self.env['report'].get_action(self, report_name)
     
     @api.constrains('mid_exam_percent','final_exam_percent','assignment_percent')
@@ -273,6 +297,33 @@ class OfferCourse(models.Model):
             record.display_room = temp_room or ''
             record.display_course_period = temp_date or ''
             
+    @api.depends('exam_session_ids')
+    def _get_exam_display_details(self):
+        for record in self:
+            if record.exam_session_ids:
+                for session in record.exam_session_ids:
+                    temp_date = ''
+                    temp_time = ''
+                    temp_room = ''
+                    temp_duration = ''
+                    start_d = datetime.strptime(session.start_date, '%Y-%m-%d')
+                    temp_date += datetime.strftime(start_d,'%d/%m/%y')
+                    start_t = session._get_time(session.start_time)
+                    temp_time += start_t
+                    duration = session._get_time(session.duration)
+                    temp_duration += duration
+                    temp_room += session.exam_room or ''
+                    if session.exam_type == 'mid':
+                        record.display_exam_date_midterm = temp_date or ''
+                        record.display_exam_time_midterm = temp_time or ''
+                        record.display_duration_midterm = temp_duration or ''
+                        record.display_room_midterm = temp_room or ''
+                    elif session.exam_type == 'final':
+                        record.display_exam_date_final = temp_date or ''
+                        record.display_exam_time_final = temp_time or ''
+                        record.display_duration_final = temp_duration or ''
+                        record.display_room_final = temp_room or ''
+                        
     @api.multi
     def write(self, vals):
         for record in self:

@@ -26,6 +26,9 @@ class Semester(models.Model):
     
     _sql_constraints = [('checkfield_unique', 'unique(checkfield)', 'There is existing Semester')]
     
+    # List Offering courses in semester
+    offer_course_ids = fields.One2many('offer.course', 'semester_id', string='Offering Courses')
+    
     @api.onchange('semester_type','semester_year')
     def _onchange_semester_type(self):
         self.checkfield = self.semester_year + (self.semester_type or "")
@@ -97,5 +100,5 @@ class Semester(models.Model):
 #                         print '==== NOW ', result
                         std_reg.write({'amount_financial_aid':result})
                                 
-                    
+                                  
             

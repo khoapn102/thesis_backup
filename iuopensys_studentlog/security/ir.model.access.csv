@@ -1,3 +1,4 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_student_log_student,access.student.log.student,model_student_log,iuopensys_core.group_student,1,0,0,0
 access_student_log_staff,access.student.log.staff,model_student_log,iuopensys_core.group_staff,1,1,1,1
+access_student_log_financial_staff,access.student.log.financial.staff,model_student_log,iuopensys_core.group_financial_staff,1,0,0,0

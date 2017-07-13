@@ -70,7 +70,7 @@
 					<field name="graduation_date" attrs="{'invisible':[('graduation_status','in',('ie','ontrack'))]}"
 						groups="iuopensys_core.group_staff"/>
 				</xpath>
-				<xpath expr="//page[7]" position="after">
+				<xpath expr="//page[6]" position="after">
 					<page string="Student Progress">
 						<notebook>							
 							<page string="Major Program">
@@ -78,17 +78,31 @@
 									<group>
 										<field name="major_total_credits"/>
 										<field name="major_accumulated_credits"/>
+										<field name="major_total_not_count_credits"/>
 									</group>
 									<group>
 										<field name="major_achieved_credits"/>
 										<field name="major_incomplete_credits"/>
+										<field name="major_not_count_achieved_credits"/>
 									</group>
 								</group>
 								<notebook>
 									<page string="Incompleted Courses">
-										<group>
+										<group attrs="{'invisible':[('major_incomplete_credits','=',0)]}">
 											<field name="major_course_not_complete_ids" nolabel="1">
 												<tree edit="false">
+													<field name="name"/>
+													<field name="department_id"/>
+													<field name="number_credits"/>
+													<field name="prereq_course_id" string='Pre-req. Course'/>
+													<field name="course_type" string="Type"/>
+													<field name="crs_lang" string="Language"/>
+												</tree>
+											</field>
+										</group>
+										<group attrs="{'invisible':[('major_incomplete_credits','>',0)]}">
+											<field name="empty_major_course_ids" nolabel="1">
+												<tree edit="false" create="false" delete="false">
 													<field name="name"/>
 													<field name="department_id"/>
 													<field name="number_credits"/>
@@ -114,7 +128,6 @@
 										</group>
 									</page>
 								</notebook>								
-								
 							</page>
 							<page string="English and IU Programs">
 								<group string="English Program">
@@ -157,6 +170,47 @@
 											</group>
 										</page>
 									</notebook>
+								</group>
+							</page>
+							<page string="Documents">
+		               			<notebook>
+		               				<page string="Uncompleted Documents">
+		               					<group>
+		               						<field name="student_document_not_submit_ids" nolabel="1">
+		               							<tree edit="false">
+		               								<field name="name"/>
+		               								<field name="doc_type"/>
+		               								<field name="submit_deadline"/>
+		               								<field name="note"/>
+		               								<field name="is_optional"/>
+		               							</tree>
+		               						</field>
+		               					</group>
+		               				</page>
+		               				<page string="Submitted Documents">
+		               					<group string="Document List">
+				               				<field name="student_document_ids" nolabel="1">
+				               					<tree edit="false" create="false">
+				               						<field name="iu_doc_id"/>
+				               						<field name="is_submit"/>
+				               						<field name="is_stored"/>
+				               						<field name="submit_deadline"/>
+				               					</tree>
+				               				</field>
+				               			</group>
+		               				</page>
+		               			</notebook>
+		               		</page>
+		               		<page string="Scholarships">
+								<group>
+									<field name="student_financial_aid_ids" nolabel="1">
+										<tree create="false" delete="false">
+											<field name="student_id"/>
+											<field name="financial_aid_id"/>
+											<field name="is_active"/>
+											<button name="set_is_active" type="object" string="Active/Inactive" groups="iuopensys_core.group_staff"/>
+										</tree>
+									</field>
 								</group>
 							</page>
 						</notebook>
@@ -231,6 +285,15 @@
 					<attribute name="readonly">1</attribute>
 				</field>
 				<field name="academic_program_course_complete_ids" position="attributes">
+					<attribute name="readonly">1</attribute>
+				</field>
+				<field name="gender" position="attributes">
+					<attribute name="readonly">1</attribute>
+				</field>
+				<field name="birthdate" position="attributes">
+					<attribute name="readonly">1</attribute>
+				</field>
+				<field name="ethnic" position="attributes">
 					<attribute name="readonly">1</attribute>
 				</field>				
 			</field>

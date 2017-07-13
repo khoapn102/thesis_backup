@@ -46,7 +46,7 @@
                         <group colspan="4">
                         	<group colspan="4" string="Basic Information">
                         		<group>
-                        			<field name="email"/>
+                        			<field name="email" required="1"/>
                         			<field name="phone"/>
                         		</group>
                         		<group>

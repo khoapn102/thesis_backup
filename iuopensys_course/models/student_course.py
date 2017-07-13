@@ -26,6 +26,17 @@ class StudentCourse(models.Model):
                                   store=True)
     prereq_course_id = fields.Many2one(related='offer_course_id.course_id.prereq_course_id')
     
+    # Course Examination Info
+    has_exam = fields.Boolean(related='offer_course_id.has_exam')
+    display_exam_date_midterm = fields.Text(related='offer_course_id.display_exam_date_midterm')
+    display_exam_time_midterm = fields.Text(related='offer_course_id.display_exam_time_midterm')
+    display_duration_midterm = fields.Text(related='offer_course_id.display_duration_midterm')
+    display_room_midterm = fields.Text(related='offer_course_id.display_room_midterm')
+    display_exam_date_final = fields.Text(related='offer_course_id.display_exam_date_final')
+    display_exam_time_final = fields.Text(related='offer_course_id.display_exam_time_final')
+    display_duration_final = fields.Text(related='offer_course_id.display_duration_final')
+    display_room_final = fields.Text(related='offer_course_id.display_room_final')
+    
     # GPA
     mid_exam_percent = fields.Float(string="Mid %", related="offer_course_id.mid_exam_percent")
     final_exam_percent = fields.Float(string="Final %", related="offer_course_id.final_exam_percent")

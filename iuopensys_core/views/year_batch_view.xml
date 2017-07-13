@@ -52,9 +52,9 @@
 		                        	<field name="academic_year_ids" nolabel="1" context="{'default_year_batch_id':active_id}">
 		                        		<tree editable="bottom">                        			
 		                        			<field name="year_batch_id" string="School Year" invisible="1"/>
-		                        			<field name="department_id"/>
+		                        			<field name="department_id" options="{'no_create':True}"/>
 		                        			<field name="name"/>
-		                        			<field name="lecturer_id"/>
+		                        			<field name="lecturer_id" options="{'no_create':True}"/>
 		                        			<field name="class_code"/>
 		                        			<field name="start_date"/>
 		                        			<field name="end_date"/>

@@ -72,6 +72,12 @@
 			parent="student_registration_core_menu"
 			action="student_registration_main_action"/>
 		
+		<!-- Exam Schedule -->
+		<menuitem id="student_examination_schedule_main_menu"
+			name="Exam Schedule"
+			sequence="1"
+			parent="student_registration_core_menu"
+			action="student_examination_schedule_main_action"/>
 			
 		<!-- Student Tuition -->
 		<menuitem id="student_registration_tuition_menu"
@@ -154,6 +160,7 @@
 			groups="iuopensys_core.group_staff"
 			action="student_semester_behavior_point_main_action"/>
 		
+		<!-- Semester Transcript Menu -->
 		<menuitem id="student_semester_main_menu"
 			name="Semester Transcript"
 			sequence="1"
@@ -161,6 +168,8 @@
 			action="student_semester_main_action"/>	
 			
 		<!-- <delete model="ir.ui.menu" id="mail.mail_channel_menu_root_chat"/> -->
+		
+		<!-- Financial aid -->
  		<menuitem id="student_financial_aid_main_menu"
 			name="Student Financial Aid"
 			sequence="4"

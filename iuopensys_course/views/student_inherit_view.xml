@@ -73,18 +73,6 @@
 		               				</field>
 								</group>
 							</page>
-							<page string="Scholarships">
-								<group>
-									<field name="student_financial_aid_ids" nolabel="1">
-										<tree create="false" delete="false">
-											<field name="student_id"/>
-											<field name="financial_aid_id"/>
-											<field name="is_active"/>
-											<button name="set_is_active" type="object" string="Active/Inactive" groups="iuopensys_core.group_staff"/>
-										</tree>
-									</field>
-								</group>
-							</page>
 						</notebook>               			
                		</page>
                		<page string="Behavior Point">
@@ -137,36 +125,6 @@
                				</field>
                			</group>
                		</page>
-               		<page string="Documents">
-               			<notebook>
-               				<page string="Uncompleted Documents">
-               					<group>
-               						<field name="student_document_not_submit_ids" nolabel="1">
-               							<tree edit="false">
-               								<field name="name"/>
-               								<field name="doc_type"/>
-               								<field name="submit_deadline"/>
-               								<field name="note"/>
-               								<field name="is_optional"/>
-               							</tree>
-               						</field>
-               					</group>
-               				</page>
-               				<page string="Submitted Documents">
-               					<group string="Document List">
-		               				<field name="student_document_ids" nolabel="1">
-		               					<tree edit="false" create="false">
-		               						<field name="iu_doc_id"/>
-		               						<field name="is_submit"/>
-		               						<field name="is_stored"/>
-		               						<field name="submit_deadline"/>
-		               					</tree>
-		               				</field>
-		               			</group>
-               				</page>
-               			</notebook>
-               			
-               		</page>               		
 				</notebook>
 			
 				<!-- <xpath expr="//field[@name='studentId']" position="after">

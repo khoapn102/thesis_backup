@@ -1,0 +1,14 @@
+<?xml version="1.0" ?>
+<odoo>
+	<data noupdate="0">
+		
+		<!-- Student can only see the year -->
+		<record id="group_student_rule_academic_year" model="ir.rule">
+			<field name="name">Student Academic Year Rule</field>
+			<field name="model_id" ref="model_academic_year"/>
+			<field name="groups" eval="[(4, ref('iuopensys_core.group_student'))]"/>
+			<field name="domain_force">[('user_ids','in',[user.id])]</field>
+		</record>
+		
+	</data>
+</odoo>

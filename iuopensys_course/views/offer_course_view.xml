@@ -66,6 +66,11 @@
                             	name="print_exam_student_list"
                             	type="object"
                             	icon="fa-print"/>
+                            <button string="Attendance Sheet"
+                            	class="oe_stat_button"
+                            	name="print_student_attendance_check"
+                            	type="object"
+                            	icon="fa-print"/>
                             <!-- <button string="Add Students"
                             	class="oe_stat_button"
                             	name="call_student_course_addition_wizard"
@@ -94,6 +99,7 @@
           							<field name="semester_id" options="{'no_create':True}"/>
           							<field name="course_group"/>
           							<field name="lab_sect_display" invisible="1"/>
+          							<field name="has_exam" string="Requires Exam"/>
           							<field name="has_lab" attrs="{'invisible':[('lab_sect_display','=',True),('is_lab','=',True)]}"/>
           							<field name="is_lab" 
           								attrs="{'invisible':[('lab_sect_display','=',False)]}"/>
@@ -114,6 +120,14 @@
           							<field name="display_room" invisible="1"/>
           							<field name="display_course_period" invisible="1"/>
           							<field name="crs_tuition" invisible="1"/>
+          							<field name="display_exam_date_midterm" invisible="1"/>
+          							<field name="display_exam_time_midterm" invisible="1"/>
+          							<field name="display_duration_midterm" invisible="1"/>
+          							<field name="display_room_midterm" invisible="1"/>
+          							<field name="display_exam_date_final" invisible="1"/>
+          							<field name="display_exam_time_final" invisible="1"/>
+          							<field name="display_duration_final" invisible="1"/>
+          							<field name="display_room_final" invisible="1"/>
           						</group>
           					</group>          					
                         </group>
@@ -161,6 +175,7 @@
                         					<field name="duration" widget="float_time"/>                        					
                         					<field name="is_exam"/> 
                         					<field name="exam_type" attrs="{'invisible': [('is_exam','=',False)]}"/>
+                        					<field name="exam_room" string="Room" attrs="{'invisible': [('is_exam','=',False)]}"/>
                         					<field name="proctor_one_id"/>
                         					<field name="proctor_two_id"/>                      					
                         				</tree>

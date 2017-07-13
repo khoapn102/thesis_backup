@@ -38,7 +38,7 @@
 			parent="university_root_menu"/>
 		
 		<menuitem id="lecturer_main_menu"
-			name="Lecturers"
+			name="Lecturers/Staff"
 			sequence="0"
 			parent="faculty_core_menu"
 			action="lecturer_main_action"/>

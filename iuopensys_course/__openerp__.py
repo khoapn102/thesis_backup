@@ -24,6 +24,7 @@
         # =========================================
         'wizards/student_course_addition_wizard_view.xml',
         'wizards/student_balance_update_wizard_view.xml',
+        'wizards/exam_schedule_update_wizard_view.xml',
         
         # =========================================
         # VIEWS
@@ -48,6 +49,7 @@
 #         'views/student_behavior_point_view.xml',
         'views/student_semester_view.xml',
         'views/student_financial_aid_view.xml',
+        'views/student_examination_schedule_view.xml',
         
         # =========================================
         # MENU
@@ -59,6 +61,7 @@
         # =========================================
         'report/report_menu.xml',
         'report/report_exam_student_list.xml',
+        'report/report_student_attendance_check.xml',
         'views/web_custom_assets.xml',
         ],
 }

@@ -52,6 +52,14 @@
 								<field name="final_score"/>
 								<field name="course_gpa"/>
 								<field name="letter_grade"/>
+								<field name="display_exam_date_midterm" invisible="1"/>
+       							<field name="display_exam_time_midterm" invisible="1"/>
+       							<field name="display_duration_midterm" invisible="1"/>
+       							<field name="display_room_midterm" invisible="1"/>
+       							<field name="display_exam_date_final" invisible="1"/>
+       							<field name="display_exam_time_final" invisible="1"/>
+       							<field name="display_duration_final" invisible="1"/>
+       							<field name="display_room_final" invisible="1"/>
 							</group>
 						</group>
 						<div>

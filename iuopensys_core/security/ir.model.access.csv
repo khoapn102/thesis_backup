@@ -11,3 +11,9 @@ access_lecturer_staff,access.lecturer.staff,model_lecturer,group_staff,1,1,1,1
 access_major_staff,access.major.staff,model_major,group_staff,1,1,1,1
 access_student_staff,access.student.staff,model_student,group_staff,1,1,1,1
 access_year_batch_staff,access.year.batch.staff,model_year_batch,group_staff,1,1,1,1
+access_academic_year_financial_staff,access.academic.year.financial.staff,model_academic_year,group_financial_staff,1,1,0,0
+access_department_financial_staff,access.department.financial.staff,model_department,group_financial_staff,1,1,0,0
+access_lecturer_financial_staff,access.lecturer.financial.staff,model_lecturer,group_financial_staff,1,1,0,0
+access_major_financial_staff,access.major.financial.staff,model_major,group_financial_staff,1,1,0,0
+access_student_financial_staff,access.student.financial.staff,model_student,group_financial_staff,1,1,1,1
+access_year_batch_financial_staff,access.year.batch.financial.staff,model_year_batch,group_financial_staff,1,1,0,0

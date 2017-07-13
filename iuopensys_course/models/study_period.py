@@ -57,6 +57,9 @@ class StudyPeriod(models.Model):
                                             ('final','Final'),
                                             ('other','Other')],
                                  string='Exam Type', default='mid')
+    
+    exam_room = fields.Char('Exam Room')
+    
     crs_day = fields.Char(string='Start Day', compute='_get_course_day')
     
     is_recurrency = fields.Boolean(string='Recurrent Session', default=True)

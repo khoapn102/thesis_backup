@@ -66,7 +66,8 @@
                         			<field name="amount_period"/>                     			
                         			<field name="start_time" widget="float_time"/>
                         			<field name="end_time" widget="float_time"/>
-                        			<field name="duration" widget="float_time"/>                    			
+                        			<field name="duration" widget="float_time"/> 
+                        			<field name="exam_room" attrs="{'invisible': [('is_exam','=',False)]}"/>               			
                         			<field name="is_summer"/>
                         			
                         		</group>

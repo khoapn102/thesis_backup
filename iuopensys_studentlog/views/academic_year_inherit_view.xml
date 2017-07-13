@@ -11,6 +11,7 @@
 						<page string="Student List">
 							<group>
 								<field name="student_ids" nolabel="1"/>
+								<field name="user_ids" nolabel="1" invisible="1"/>
 							</group>
 						</page>
 					</notebook>

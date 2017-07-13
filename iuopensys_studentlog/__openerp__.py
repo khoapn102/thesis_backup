@@ -13,6 +13,7 @@
         # SECURITY
         # =========================================
         'security/ir.model.access.csv',
+        'security/iuopensys_security.xml',
         
         # =========================================
         # WIZARDS

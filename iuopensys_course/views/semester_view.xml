@@ -36,9 +36,15 @@
 							<button string="Update Scholarships" type="object"
 								name="update_student_financial_aid" class="oe_highlight"
 								groups="iuopensys_core.group_staff"/>
+							<button string="Update Exam Schedule"
+                            	name="%(iuopensys_course.exam_schedule_update_wizard_action)d"
+                            	type="action" class="oe_highlight"
+                            	context="{'default_semester_id':active_id}"
+                            	groups="iuopensys_core.group_staff"/>
 							<button string="Update Semester GPA" type="object"
 								name="activate_calculate_gpa" class="oe_highlight"
 								groups="iuopensys_core.group_staff"/>
+							
 					</header>
 					<sheet>
 						<div class="oe_title">
@@ -57,6 +63,27 @@
 								<field name="start_date"/>
 								<field name="end_date"/>
 								<field name="checkfield" invisible="1"/>
+							</group>
+						</group>
+						<group string="Offering Courses">
+							<group>
+								<field name="offer_course_ids" nolabel="1">
+       								<tree edit="false" create="false" delete="false">
+	     								<field name="course_code"/>
+										<field name="name"/>
+										<field name="course_id" invisible="1"/>
+										<field name="dept_academic_code" invisible="1"/>
+										<field name="semester_id"/>				
+										<field name="course_group"/>											
+										<field name="numb_students"/>
+										<field name="avail_students"/>
+										<field name="academic_year_id"/>
+										<field name="display_room"/>
+										<field name="display_lecturer"/>
+										<field name="display_course_period"/>
+										<field name="is_lab" string="Lab"/>
+       								</tree>
+       							</field>
 							</group>
 						</group>
 					</sheet>

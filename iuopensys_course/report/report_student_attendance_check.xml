@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+		<template id="report_student_attendance_check">
+			<t t-call="report.html_container">
+				<t t-foreach="docs" t-as="o">
+					<t>
+						<div class="page" style="font-size: 14px">
+							<div>
+								<img class="image"
+								src="/iuopensys_studentlog/static/src/img/logo_small.png"
+								align="left" vertical-align="middle"/>							
+								<div>
+									<p class="text-center" vertical-align="middle"><br/>INTERNATIONAL UNIVERSITY<br/>
+										<hr size="100"/>
+									</p>
+								</div>
+							</div>
+							<div>
+								<h4 class="text-center" style="font-weight:bold">ATTENDANCE CHECKING SHEET</h4>
+								<table width="100%">
+									<tbody>
+										<tr>
+											<td width="14%">Course: </td>
+											<td width="35%" style="font-size: 15px"><b><t t-esc="o.name"/></b></td>
+											<td width="14%">Semester: </td>
+											<td width="35%"><t t-esc="o.semester_id.name"/></td>
+										</tr>
+										<tr>
+											<td>Lecturer: </td>
+											<td><t t-esc="o.lecturer_id.name"/></td>
+											<td>Date: </td>
+											<td></td>
+										</tr>										
+									</tbody>
+								</table>
+							</div>
+							<br/>
+							<br/>
+							<div>
+								<table class="table table-bordered" style="width:100%; text-align:center">
+									<tr>
+										<td width="1%">No.</td>
+										<td width="5%">Student ID</td>
+										<td width="9%">Last Name</td>
+										<td width="9%">First Name</td>
+										<td width="7%">Class</td>
+										<t t-foreach="[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]" t-as="j">
+											<td width="4.2%">S<t t-esc="j"/></td>
+										</t>										
+									</tr>
+									<t t-set="i" t-value="1"/>
+									<t t-foreach="o.student_course_ids" t-as="student">
+									<tr>
+										<td><t t-esc="i"/><t t-set="i" t-value="i+1"/></td>
+										<td><t t-esc="student.studentId"/></td>
+										<td  style="text-align:left"><t t-esc="student.student_lname"/></td>
+										<td><t t-esc="student.student_fname"/></td>
+										<td><t t-esc="student.student_class_code"/></td>
+										
+										<t t-foreach="[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]" t-as="k">
+											<td></td>
+										</t>
+									</tr>
+									</t>
+								</table>
+							</div>
+						</div>
+					</t>
+				</t>
+			</t>
+		</template>
+				
+	</data>
+</odoo>

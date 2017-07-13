@@ -10,5 +10,23 @@
 			file="iuopensys_course.report_exam_student_list"
 			menu="False"
 		/>
+		
+		<!-- Attendance Sheet and Paper Format -->
+		<report
+			id="action_report_student_attendance_check"
+			model="offer.course"
+			string="Attendance Checking Sheet"
+			report_type="qweb-pdf"
+			name="iuopensys_course.report_student_attendance_check"
+			file="iuopensys_course.report_student_attendance_check"
+			menu="False"
+		/>
+		<record id="paper_format_attendance" model="report.paperformat">
+			<field name="name">Attendance Sheet</field>
+			<field name="orientation">Landscape</field>
+		</record>
+		<record id="iuopensys_course.action_report_exam_student_list" model="ir.actions.report.xml">
+			<field name="paperformat_id" ref="iuopensys_course.paper_format_attendance"/>
+		</record>
 	</data>
 </odoo>

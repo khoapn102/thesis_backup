@@ -4,7 +4,7 @@ class Lecturer(models.Model):
     
     _name = 'lecturer'
     _inherits = {'res.users': 'user_id'}
-    _description = 'IU Lecturers'
+    _description = 'IU Lecturers/Staffs'
     _order = 'department_id, id'
     
     # Fields
@@ -26,7 +26,8 @@ class Lecturer(models.Model):
                                    related='department_id.vice_dept_id')
     position = fields.Selection(selection=[('dean', 'Dean'),
                                            ('vice', 'Vice Dean'),
-                                           ('lecturer', 'Lecturer')],
+                                           ('lecturer', 'Lecturer'),
+                                           ('staff', 'Staff')],
                                 string='Position', default='lecturer')
     office_room = fields.Char(string='Office Room', size=10)
     

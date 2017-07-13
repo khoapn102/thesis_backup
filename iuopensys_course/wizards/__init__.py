@@ -1,2 +1,3 @@
 import student_course_addition_wizard
 import student_balance_update_wizard
+import exam_schedule_update_wizard

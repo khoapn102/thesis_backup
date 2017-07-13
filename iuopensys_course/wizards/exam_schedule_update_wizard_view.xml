@@ -1,0 +1,50 @@
+<?xml version="1.0" ?>
+<openerp>
+	<data>
+		
+		<record id="exam_schedule_update_wizard_form_view" model="ir.ui.view">
+			<field name="name">Update Schedule Wizard</field>
+			<field name="model">exam.schedule.update.wizard</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<form>					
+					<sheet>
+						<group>
+							<group>
+								<field name="semester_id" options="{'no_create':True}"/>
+							</group>
+							<group>
+								<field name="exam_type"/>
+							</group>
+						</group>
+						<group>
+							<field name="student_ids"/>
+						</group>
+						<div>
+							<p style="font-weight:bold;font-size:10px;">(*)Student list will be empty if there are no course in the current semester has examination</p>
+						</div>						
+					</sheet>
+					<footer>
+						<button name="update_schedule"
+							type="object"
+							class="btn-primary"
+							string="Proceed"/>
+						or
+						<button string="Cancel"
+							class="btn-default"
+							special="cancel"/>
+					</footer>
+				</form>
+			</field>
+		</record>
+		
+		<record model="ir.actions.act_window" id="exam_schedule_update_wizard_action">
+			<field name="name">Update Schedule Wizard</field>
+			<field name="res_model">exam.schedule.update.wizard</field>
+			<field name="view_mode">form</field>
+			<field name="view_type">form</field>
+			<field name="target">new</field>
+		</record>
+		
+	</data>
+</openerp>
