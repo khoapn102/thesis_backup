@@ -192,7 +192,7 @@ class Student(models.Model):
     def _check_eng_curriculum(self):
         for record in self:
             if record.is_eng_req:
-                if not record.eng_curriculum_id:
+                if not record.eng_curriculum_id and not record.is_eng_complete:
                     raise ValidationError('IE Curriculum cannot be left empty')
     
     @api.model

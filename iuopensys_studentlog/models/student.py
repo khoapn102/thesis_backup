@@ -228,6 +228,7 @@ class Student(models.Model):
                         self.graduation_status = 'complete'
                     else:
                         self.graduation_status = 'ontrack'
+#                 self.eng_curriculum_id = False # Empty curriculum
             else:
                 self.graduation_status = 'ie'
                 
@@ -394,7 +395,11 @@ class Student(models.Model):
                 record.major_achieved_credits = achieved_creds
                 record.major_not_count_achieved_credits = achieved_pf_creds
                 record.major_accumulated_credits = accumulated_creds
-                record.major_incomplete_credits = record.major_total_credits - record.major_accumulated_credits
+                
+                if record.major_accumulated_credits > record.major_total_credits:
+                    record.major_incomplete_credits = 0
+                else:
+                    record.major_incomplete_credits = record.major_total_credits - record.major_accumulated_credits
                 
                 # Must f5 the page -> get new effect after
                 if record.major_incomplete_credits == 0 and record.major_total_credits > 0 and\
@@ -403,7 +408,7 @@ class Student(models.Model):
                         record.write({'graduation_status':'complete'})
                         
                 elif record.major_incomplete_credits > 0:
-                    if record.graduation_status != 'ontrack':
+                    if record.graduation_status != 'ontrack' and record.graduation_status != 'ie':
                         record.write({'graduation_status':'ontrack'})
     
 #     @api.onchange('is_complete_major')

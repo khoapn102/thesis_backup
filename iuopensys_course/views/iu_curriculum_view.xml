@@ -43,7 +43,7 @@
                         		<field name="max_cred_require"/>
                         	</group>
                         	<group>
-                        		<field name="is_eng_req"/>
+                        		<field name="is_eng_curr"/>
                         		<field name="max_course_require"/>
                         		<field name="total_cred_not_count"/>
                         	</group>
@@ -84,7 +84,7 @@
 						<filter string="Department" 
 							context="{'group_by':'department_id'}"/>
 						<filter string="Require English"
-							context="{'group_by':'is_eng_req'}"/>
+							context="{'group_by':'is_eng_curr'}"/>
 					</group>
 				</search>
 			</field>

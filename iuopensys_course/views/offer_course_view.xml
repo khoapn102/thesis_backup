@@ -66,11 +66,17 @@
                             	name="print_exam_student_list"
                             	type="object"
                             	icon="fa-print"/>
+                            <button string="Synchronize Grade"
+                            	class="oe_stat_button"
+                            	name="synchronize_student_course_gpa"
+                            	type="object"
+                            	icon="fa-refresh"/>
                             <button string="Attendance Sheet"
                             	class="oe_stat_button"
                             	name="print_student_attendance_check"
                             	type="object"
                             	icon="fa-print"/>
+                            
                             <!-- <button string="Add Students"
                             	class="oe_stat_button"
                             	name="call_student_course_addition_wizard"

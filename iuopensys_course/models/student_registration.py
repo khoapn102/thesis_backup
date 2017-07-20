@@ -33,11 +33,13 @@ class StudentRegistration(models.Model):
     drop_course_ids = fields.Many2many('offer.course', 'offer_course_student_registration_drop_rel', 
                                     'student_registration_id',
                                     'offer_course_id',
-                                    string='Dropped Courses')
+                                    string='Dropped Courses',
+                                    help='Student will be charged 30% tuition.')
     temporary_drop_crs_ids = fields.Many2many('offer.course', 'offer_course_student_registration_temporary_rel',
                                               'student_registration_id',
                                               'offer_course_id',
-                                              string='Temporary Drops',)
+                                              string='Temporary Drops',
+                                              help='Re-register for courses that are allowed by advisor. No-charge')
     
     # To set other field to be readonly
     is_created = fields.Boolean(string='Created', default=False)
@@ -119,7 +121,7 @@ class StudentRegistration(models.Model):
             else:
                 raise ValidationError('Cannot deduct from student balance. Please check again!') 
                     
-    
+    # Update Registration note for Advisor
     @api.onchange('offer_course_ids')
     def onchange_offer_course_ids(self):
         if self.offer_course_ids:
@@ -140,6 +142,7 @@ class StudentRegistration(models.Model):
                     if not student_course_ids: # Cant find prereq completed
                         check = True
                         self.ext_note += '\n\t- ' + course.name + ' (' + course.prereq_course_id.name +')'
+                    
             if not check:
                 self.ext_note += ' N/A'
             
@@ -267,7 +270,11 @@ class StudentRegistration(models.Model):
         for record in self:
             sum = 0
             check_overload = 0
-            check_overlap = 0           
+            check_overlap = 0
+            
+#             check_prereq = 0
+#             check_avail = 0
+                       
             if record.offer_course_ids:
                 reg_sched = {}
                 for course in record.offer_course_ids:
@@ -286,17 +293,28 @@ class StudentRegistration(models.Model):
                                 reg_sched[session.crs_day].append((session.start_time, session.end_time))
                             else:
                                 reg_sched[session.crs_day] = [(session.start_time, session.end_time)]
+                    
+#                     # Check Prereq if being asked            
+#                     if course.prereq_course_id: # Found Course prereq
+#                         prereq_offer_ids = course.prereq_course_id.offer_course_ids
+#                         # Search Student_course to check if satisfied requirements
+#                         student_course_ids = self.env['student.course'].search([('student_id','=', self.student_id.id),
+#                                                                                 ('offer_course_id','in',prereq_offer_ids.ids),
+#                                                                                 ('is_complete','=',True)])
+#                         if not student_course_ids:
+#                             check_prereq = 1
                                                             
                     # Check if course added is unvail
 #                     if course.avail_students == 0:
-#                         raise ValidationError('Some courses are not available (in Red).')
+#                         check_avail = 1
+
                     # Check for max credits
                     sum += course.course_id.number_credits
                 
                 for key in reg_sched:
                     temp_lst = reg_sched[key]
                     overlapping = [[x,y] for x in temp_lst for y in temp_lst if x is not y and x[1]>=y[0] and x[0]<=y[0]]
-                    print '=======', overlapping
+#                     print '=======', overlapping
                     if len(overlapping) > 0:
                         check_overlap = 1
                         break
@@ -306,6 +324,12 @@ class StudentRegistration(models.Model):
                     raise ValidationError('Cannot register for more than ' + str(record.crs_reg_id.max_credits) + ' credits.')
                 if check_overlap == 1:
                     raise ValidationError('Overlap schedule. Please check again.')
+                
+#                 if check_prereq == 1:
+#                     raise ValidationError('Some Prerequesites are not completed.')
+#                 if check_avail == 1:
+#                         raise ValidationError('Some courses are not available (in Red).')
+
                              
                     
     @api.model

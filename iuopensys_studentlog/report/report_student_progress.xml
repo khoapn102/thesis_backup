@@ -112,8 +112,11 @@
 									<tbody>
 										<tr>
 											<td>IE required: </td>
-											<t t-if="o.is_eng_req == True">
+											<t t-if="o.is_eng_req == True and o.is_eng_complete == False">
 												<td><t t-esc="o.eng_curriculum_id.name"/></td>
+											</t>
+											<t t-if="o.is_eng_req == True and o.is_eng_complete == True">
+												<td>Required</td>
 											</t>
 											<t t-if="o.is_eng_req == False">
 												<td><p>No</p></td>

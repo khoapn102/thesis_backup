@@ -33,7 +33,7 @@ class Lecturer(models.Model):
     
     groups_id = fields.Many2many('res.groups', string='Security Level',
                                  related='user_id.groups_id',
-                                 domain=[('name', '=', 'IU Lecturer/Staff')])
+                                 domain=[('name', 'in', ['IU Lecturer/Staff','IU Financial Staff'])])
     
     # Automatically set Security when create Lecturer
     @api.onchange('title','name')

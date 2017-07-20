@@ -5,7 +5,7 @@
 		<menuitem id="student_root_menu"
 			name="Student Management"
 			sequence="2"
-			groups="group_student,group_staff"
+			groups="group_student,group_staff,group_financial_staff"
 		/>
 			
 		<menuitem id="student_core_menu"

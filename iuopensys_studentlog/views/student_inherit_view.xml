@@ -7,7 +7,7 @@
 			<field name="inherit_id" ref="iuopensys_core.student_main_tree_view"/>
 			<field name="arch" type="xml">
 				<tree>
-					<field name="graduation_status" fg_color="green:graduation_status in ['graduated']" groups="iuopensys_core.group_staff"/>
+					<field name="graduation_status" fg_color="green:graduation_status in ['graduated']" groups="iuopensys_core.group_staff" string="Status"/>
 					<field name="trigger_grad_status" invisible="1" groups="iuopensys_core.group_staff"/>
 				</tree>
 			</field>
@@ -132,15 +132,15 @@
 							<page string="English and IU Programs">
 								<group string="English Program">
 									<group>
-										<field name="is_eng_req" string="Require IE Program"/>
-											<!-- attrs="{'invisible':['|', ('eng_curriculum_id', '!=', False),('is_eng_complete','=',True)]}"/> -->	
-										<field name="is_eng_complete" attrs="{'invisible':[('eng_curriculum_id','=',False)]}"/>					
+										<field name="is_eng_req" string="Require IE Program"
+											attrs="{'readonly':[('is_eng_complete','=',True)]}"/>	
 									</group>
 									<group>
-										<field name="eng_curriculum_id" 
-											domain="[('is_eng_req','=',True)]" options="{'no_create':True}"/>
+										<field name="eng_curriculum_id" attrs="{'invisible':['|',('is_eng_req','=',False),('is_eng_complete','=',True)]}"
+											domain="[('is_eng_curr','=',True)]" options="{'no_create':True}"/>
 											<!-- attrs="{'invisible':[('is_eng_req','!=',False)],
 													'readonly':[('is_eng_complete','=',True)]}" -->
+										<field name="is_eng_complete" attrs="{'invisible':[('eng_curriculum_id','=',False),('is_eng_req','=',False)]}"/>
 									</group>
 								</group>
 								<group string="IU Programs">
@@ -295,8 +295,25 @@
 				</field>
 				<field name="ethnic" position="attributes">
 					<attribute name="readonly">1</attribute>
-				</field>				
+				</field>							
 			</field>
 		</record>
+		
+		<!-- Extend Search view -->
+		<record id="student_inherit_search_view" model="ir.ui.view">
+			<field name="name">Search Student</field>
+			<field name="model">student</field>
+			<field name="inherit_id" ref="iuopensys_core.student_main_search_view"/>
+			<field name="arch" type="xml">
+				<xpath expr="//search" position="inside">
+					<filter string="IE Students" name="filter_ie_student" domain="[('graduation_status','=','ie')]"/>
+					<filter string="Complete Major" name='filter_complete_student' domain="[('graduation_status','=','complete')]"/>
+					<filter string="Ready to Graduate" name='filter_ready_student' domain="[('graduation_status','=','readygrad')]"/>
+					<filter string="Alumni" name="filter_grad_student" domain="[('graduation_status','=','grad')]"/>
+					<filter string="Current Students" name="filter_current_student" domain="[('graduation_status','in',['ie','ontrack','complete'])]"/>
+				</xpath>
+			</field>
+		</record>
+		
 	</data>
 </openerp>

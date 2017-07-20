@@ -14,7 +14,7 @@ class IuCurriculum(models.Model):
     total_cred_not_count = fields.Integer('Total P/F Credits', compute='get_total_cred',
                                           help='Total credits for P/F Courses')
     max_course_require = fields.Integer('Max Courses Requires')
-    is_eng_req = fields.Boolean('Intensive English')
+    is_eng_curr = fields.Boolean('Intensive English')
     note = fields.Text('Note')
     
     # List of course

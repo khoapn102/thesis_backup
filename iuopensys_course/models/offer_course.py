@@ -111,6 +111,18 @@ class OfferCourse(models.Model):
     # Note
     ext_note = fields.Text('Note')
     
+    @api.multi
+    def synchronize_student_course_gpa(self):
+        if self.student_course_ids:
+            for student in self.student_course_ids:
+                if student.final_score or student.mid_score or student.assignment_score:
+                    passing_grade = self.env['ir.config_parameter'].get_param('iuopensys_course.course_passing_grade')
+                    if student.course_gpa >= float(passing_grade):
+                        if not student.is_complete:
+                            student.is_complete = True
+                    else:
+                        student.is_complete = False
+    
     @api.onchange('exam_session_ids')
     def onchange_exam_session_ids(self):
         if self.exam_session_ids:

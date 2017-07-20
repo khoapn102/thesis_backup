@@ -47,7 +47,7 @@ class CourseRegistration(models.Model):
     @api.model
     def create(self, vals):
         curr_reg = super(CourseRegistration,self).create(vals)
-        # Search for all students in this batch and assign Registration Form
+        # Search for all students in this batch and assign Registration Form - Only student still studying
         student_ids = self.env['student'].search([('year_batch_id','=',curr_reg.year_batch_id.id),
                                                   ('graduation_status','in',['ie','ontrack','complete'])])
         for student in student_ids:

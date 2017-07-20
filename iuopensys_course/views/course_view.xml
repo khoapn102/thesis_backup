@@ -110,6 +110,10 @@
 						<filter string="Prerequisite Course"
 							context="{'group_by':'prereq_course_id'}"/>
 					</group>
+					
+					<!-- Filter -->
+					<filter name="filter_course_extra_curricular" string="Filter Extracurriculars"
+						domain="[('is_extra_curricular','=', True)]"/>
 				</search>
 			</field>
 		</record>

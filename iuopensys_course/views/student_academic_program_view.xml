@@ -96,7 +96,7 @@
                         			</field>
                         		</group>
                         	</page>
-                        	<page string="Required Curriculums" attrs="{'invisible':[('program_type','not in', ['iu','foreign'])]}">
+                        	<page string="Required Extracurriculars" attrs="{'invisible':[('program_type','not in', ['iu','foreign'])]}">
                         		<group string="Curriculums">
                         			<field name="req_curriculum_ids" nolabel="1">
                         				<tree edit="false" editable="bottom">

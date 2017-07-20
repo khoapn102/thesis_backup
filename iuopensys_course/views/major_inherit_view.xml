@@ -21,6 +21,7 @@
 								<field name="name"/>
 								<field name="department_id"/>
 								<field name="max_cred_require"/>
+								<field name="total_cred_not_count"/>
 								<field name="total_cred"/>
 								<field name="note"/>
 							</tree>

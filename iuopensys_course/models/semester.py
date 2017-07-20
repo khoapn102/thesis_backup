@@ -90,13 +90,20 @@ class Semester(models.Model):
                     if std_financial_aid_id:
                         start = datetime.strptime(std_financial_aid_id.start_date,"%Y-%m-%d")
                         end = datetime.strptime(std_financial_aid_id.end_date,"%Y-%m-%d")
+                        
+                        sem_start = datetime.strptime(record.start_date,"%Y-%m-%d")
+                        sem_end = datetime.strptime(record.end_date,"%Y-%m-%d")
+                        
+#                         print '======== Here', start, ' ',sem_start,' ', sem_end,' ', end
                         result = 0
                         if std_financial_aid_id.is_active and\
-                            (start <= datetime.now() <= end):
+                            (start <= sem_start and end >= sem_end): #Scholarship start before semester start, and end after semester end
                             if std_financial_aid_id.finance_type == 'percent':
                                 result = std_reg.amount_tuition * std_financial_aid_id.finance_value/100
                             elif std_financial_aid_id.finance_type == 'amount':
                                 result = std_financial_aid_id.finance_value
+                        else:
+                            result = 0
 #                         print '==== NOW ', result
                         std_reg.write({'amount_financial_aid':result})
                                 

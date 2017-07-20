@@ -1,8 +1,0 @@
-import department
-import lecturer
-import course
-import student_transcript_line
-import student
-import gpa_classify
-import res_partner
-import test_inherit_lect

@@ -22,7 +22,7 @@ class FinancialAid(models.Model):
     payment_type = fields.Selection(selection=[('deduct','Deduct from Tuition'),
                                                ('paystudent','Pay to Student')],
                                     string='Payment Type',
-                                    default='deduct')
+                                    default='paystudent')
     
     # List of student with same Financial Aid Type
     student_ids = fields.One2many('student.financial.aid','financial_aid_id', string='Students')
@@ -35,9 +35,9 @@ class FinancialAid(models.Model):
             diff = int((end-start).days)
             if diff < 0:
                 raise ValidationError('End Date must be larger than Start Date')
-            if datetime.now() < start or datetime.now() > end:
-                if record.is_active:
-                    raise ValidationError('Out of valid period for activation.')
+#             if datetime.now() < start or datetime.now() > end: # Not neccessary
+#                 if record.is_active:
+#                     raise ValidationError('Out of valid period for activation.')
         
     @api.multi
     def toggle_active_opt(self):

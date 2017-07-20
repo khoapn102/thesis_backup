@@ -42,7 +42,7 @@ class Major(models.Model):
                         for course in curriculum.course_ids:
                             ids_res.append(course.id)
                     # IE Curriculum will be ignored. Only added For registration
-                    if curriculum.is_eng_req:
+                    if curriculum.is_eng_curr:
                         continue
                     total_cred += curriculum.max_cred_require
                     total_cred_no_count += curriculum.total_cred_not_count

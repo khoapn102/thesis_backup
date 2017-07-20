@@ -35,6 +35,13 @@
                             	class="oe_stat_button"
                             	icon="fa-dollar"
                             	string="Balance Deduct"/>
+                            <button string="Balance Update"
+								class="oe_stat_button"
+								icon="fa-plus"
+								type="action"
+								name="%(iuopensys_course.student_balance_update_wizard_action)d"
+								context="{'default_student_id':student_id}"
+								groups="iuopensys_core.group_staff"/>
                         </div>
 						<group string="General Information">
 							<group>
@@ -325,6 +332,9 @@
 					<attribute name="readonly">1</attribute>
 				</field>
 				<field name="advisor_note" position="attributes">
+					<attribute name="readonly">1</attribute>
+				</field>
+				<field name="amount_financial_aid" position="attributes">
 					<attribute name="readonly">1</attribute>
 				</field>
 			</field>

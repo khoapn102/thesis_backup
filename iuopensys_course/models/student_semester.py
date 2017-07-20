@@ -80,7 +80,7 @@ class StudentSemester(models.Model):
                     avg_gpa = total_gpa/achieved_cred
                 else:
                     avg_gpa = total_gpa
-                                
+                                                
                 record.average_gpa = round(avg_gpa,1)
                 record.achieved_credits = achieved_cred
                 record.total_credits = total_cred
