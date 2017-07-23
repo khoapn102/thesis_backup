@@ -18,6 +18,7 @@ class StudentRegistration(models.Model):
     
     # Student Related Info
     student_id = fields.Many2one('student', string='Student')
+    department_id = fields.Many2one(related='student_id.department_id')
     user_id = fields.Many2one(related='student_id.user_id')
     accumulated_creds = fields.Integer(related='student_id.accumulated_credits')  # store=True # Add when DEMO
     major_id = fields.Many2one('major', related='student_id.major_id')
@@ -43,10 +44,14 @@ class StudentRegistration(models.Model):
     
     # To set other field to be readonly
     is_created = fields.Boolean(string='Created', default=False)
+#     reg_state = fields.Selection(selection=[('draft', 'Draft'),
+#                                             ('confirm', 'Confirmed'),
+#                                             ('approve', 'Approved'),
+#                                             ('deny', 'Denied'),                                          
+#                                             ], string='State',
+#                                  default='draft')
     reg_state = fields.Selection(selection=[('draft', 'Draft'),
                                             ('confirm', 'Confirmed'),
-                                            ('approve', 'Approved'),
-                                            ('deny', 'Denied'),                                          
                                             ], string='State',
                                  default='draft')
     
@@ -93,10 +98,9 @@ class StudentRegistration(models.Model):
     @api.depends('student_id','semester_id')
     def get_dept_academic_semester(self):
         for record in self:
-            record.dept_academic_sem = record.student_id.department_id.dept_academic_code +\
-                                            str(int(record.student_id.year_batch_id.year or 0)%100) +\
-                                            record.semester_id.semester_code
-    
+            record.dept_academic_sem = record.student_id.department_id.dept_academic_code or '' +\
+                                            str(int(record.student_id.year_batch_id.year or 0)%100) or '' +\
+                                            record.semester_id.semester_code or ''
     
     @api.multi
     def deduct_from_student_balance(self):
@@ -124,30 +128,33 @@ class StudentRegistration(models.Model):
     # Update Registration note for Advisor
     @api.onchange('offer_course_ids')
     def onchange_offer_course_ids(self):
+        self.ext_note = ''
         if self.offer_course_ids:
 #             print '=======', self.total_creds
             # Check Course prerequesite
 #             print '====', self.ext_note
-            self.ext_note = 'Courses needs Prereq. completion:'
-            check = False
-            for course in self.offer_course_ids:
-                if course.prereq_course_id: # Found Course prereq
-                    prereq_offer_ids = course.prereq_course_id.offer_course_ids
-#                     print '====== PRE', prereq_offer_ids
-                    # Search Student_course to check if satisfied requirements
-                    student_course_ids = self.env['student.course'].search([('student_id','=', self.student_id.id),
-                                                                            ('offer_course_id','in',prereq_offer_ids.ids),
-                                                                            ('is_complete','=',True)])
-#                     print '======= STD', student_course_ids
-                    if not student_course_ids: # Cant find prereq completed
-                        check = True
-                        self.ext_note += '\n\t- ' + course.name + ' (' + course.prereq_course_id.name +')'
-                    
-            if not check:
-                self.ext_note += ' N/A'
+#             self.ext_note = 'Courses needs Prereq. completion:'
+#             
+#             check = False
+#             
+#             for course in self.offer_course_ids:
+#                 if course.prereq_course_id: # Found Course prereq
+#                     prereq_offer_ids = course.prereq_course_id.offer_course_ids
+# #                     print '====== PRE', prereq_offer_ids
+#                     # Search Student_course to check if satisfied requirements
+#                     student_course_ids = self.env['student.course'].search([('student_id','=', self.student_id.id),
+#                                                                             ('offer_course_id','in',prereq_offer_ids.ids),
+#                                                                             ('is_complete','=',True)])
+# #                     print '======= STD', student_course_ids
+#                     if not student_course_ids: # Cant find prereq completed
+#                         check = True
+#                         self.ext_note += '\n\t- ' + course.name + ' (' + course.prereq_course_id.name +')'
+#                     
+#             if not check:
+#                 self.ext_note += ' N/A'
             
             if self.total_creds < self.crs_reg_id.min_credits:
-                self.ext_note += '\nRegister under minimum credits required.'
+                self.ext_note += 'Register under minimum credits required.'
         else:
             self.ext_note = ''
     
@@ -268,15 +275,33 @@ class StudentRegistration(models.Model):
     @api.constrains('offer_course_ids')
     def _validate_registered_course(self):
         for record in self:
+            
+            # Check for tuition debt
+            student_reg_ids = self.env['student.registration'].search([('student_id','=',record.student_id.id),
+                                                                       ('is_full_paid','=',False)])
+#             print 'NOOOOWWWW', student_reg_ids, ' ', record.id
+            tuition_debt = student_reg_ids.ids
+            if tuition_debt:
+                if record.id in tuition_debt:
+                    tuition_debt.remove(record.id) # Remove itself record
+                
+            if tuition_debt:    
+                raise ValidationError('Student must pay tuition debt before registering this semster.')
+            
             sum = 0
             check_overload = 0
             check_overlap = 0
             
-#             check_prereq = 0
+            check_prereq = 0
+            check_under_minimum = 0
+            check_extra_constraints = 0
 #             check_avail = 0
-                       
+                        
             if record.offer_course_ids:
                 reg_sched = {}
+                
+                pre_req_note = ''                
+                
                 for course in record.offer_course_ids:
                     # Check if any course has same reg time
                     if course.is_lab:
@@ -294,15 +319,22 @@ class StudentRegistration(models.Model):
                             else:
                                 reg_sched[session.crs_day] = [(session.start_time, session.end_time)]
                     
-#                     # Check Prereq if being asked            
-#                     if course.prereq_course_id: # Found Course prereq
-#                         prereq_offer_ids = course.prereq_course_id.offer_course_ids
-#                         # Search Student_course to check if satisfied requirements
-#                         student_course_ids = self.env['student.course'].search([('student_id','=', self.student_id.id),
-#                                                                                 ('offer_course_id','in',prereq_offer_ids.ids),
-#                                                                                 ('is_complete','=',True)])
-#                         if not student_course_ids:
-#                             check_prereq = 1
+#                   # Check Prereq if being asked            
+                    if course.prereq_course_id: # Found Course prereq
+                        prereq_offer_ids = course.prereq_course_id.offer_course_ids
+                        # Search Student_course to check if satisfied requirements
+                        student_course_ids = self.env['student.course'].search([('student_id','=', self.student_id.id),
+                                                                                ('offer_course_id','in',prereq_offer_ids.ids),
+                                                                                ('is_complete','=',True)])
+                        if not student_course_ids:
+                            check_prereq = 1
+                            pre_req_note += course.name + ' (' + course.prereq_course_id.name +')' +' - Incomplete Prerequesites.\n'
+                    
+                    # Check if extra constraints satisfied (> accum. creds)
+                    if course.req_extra_constraints:
+                        if record.accumulated_creds < course.accum_cred_gt_value:
+                            check_extra_constraints = 1
+                            pre_req_note += course.name + ' - Must have more than ' + str(course.accum_cred_gt_value) + ' credits to register.'
                                                             
                     # Check if course added is unvail
 #                     if course.avail_students == 0:
@@ -325,8 +357,19 @@ class StudentRegistration(models.Model):
                 if check_overlap == 1:
                     raise ValidationError('Overlap schedule. Please check again.')
                 
-#                 if check_prereq == 1:
-#                     raise ValidationError('Some Prerequesites are not completed.')
+                student_ids = self.env['student'].search([])
+                student_user_ids = [x.user_id.id for x in student_ids]
+                
+                if (check_prereq == 1) and (self.env.user.id in student_user_ids):
+#                     pre_req_note += '\n' + 'Prerequesites are not completed.'
+                    raise ValidationError(pre_req_note)
+                if (check_extra_constraints == 1) and (self.env.user.id in student_user_ids):
+                    raise ValidationError(pre_req_note)
+                
+                # Check Min reg
+                if (record.total_creds < record.crs_reg_id.min_credits) and (self.env.user.id in student_user_ids):
+                    raise ValidationError('Register less than minimum requirements.')
+                
 #                 if check_avail == 1:
 #                         raise ValidationError('Some courses are not available (in Red).')
 
@@ -356,6 +399,7 @@ class StudentRegistration(models.Model):
             start = datetime.strptime(record.start_datetime, '%Y-%m-%d %H:%M:%S')
             end = datetime.strptime(record.end_datetime,'%Y-%m-%d %H:%M:%S')
             drop_deadline = datetime.strptime(record.drop_deadline,'%Y-%m-%d %H:%M:%S')
+            
             # Must be student and Out of Registration period -> Error
             if (not start <= now <= end) and (self.env.user.id in student_user_ids):
                 raise ValidationError('Out of Registration Period. Please try again later !')

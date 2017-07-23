@@ -64,6 +64,8 @@ class StudentSemester(models.Model):
                 total_cred = 0
                 achieved_cred = 0
                 no_count_cred = 0
+                total_count_cred_fail = 0
+                
                 for std_crs in record.student_course_ids:
                     # Check if course_gpa is counted (normal)
                     if std_crs.is_complete:
@@ -73,13 +75,25 @@ class StudentSemester(models.Model):
                             
                         elif std_crs.offer_course_id.course_id.cred_count_type == 'nocount':
                             no_count_cred += std_crs.course_credits
+                    # Course doesnt passed
+                    else:
+                        if std_crs.offer_course_id.course_id.cred_count_type == 'count':
+                            total_gpa += std_crs.course_gpa * std_crs.course_credits
+                            total_count_cred_fail += std_crs.course_credits
                     
                     total_cred += std_crs.course_credits
                 
-                if achieved_cred:
-                    avg_gpa = total_gpa/achieved_cred
-                else:
-                    avg_gpa = total_gpa
+                # Count all credits that 'count' -> even complete/not complete
+                total_cred_count = total_cred - no_count_cred
+                if total_cred_count:
+                    avg_gpa = total_gpa/total_cred_count
+                else: # total_cred_count = 0 -> taking all p/f courses
+                    avg_gpa = 0
+                    
+#                 if achieved_cred:
+#                     avg_gpa = total_gpa/achieved_cred
+#                 else:
+#                     avg_gpa = total_gpa
                                                 
                 record.average_gpa = round(avg_gpa,1)
                 record.achieved_credits = achieved_cred

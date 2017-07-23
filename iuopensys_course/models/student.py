@@ -110,7 +110,7 @@ class Student(models.Model):
             total_creds = 0 # all credits of all semester even failed courses
             
             complete_crs_ids = {} # Keeps track of courses which repeat to improve gpa
-            
+                        
             if record.student_semester_ids:
                 for std_semester in record.student_semester_ids:
                     
@@ -139,21 +139,27 @@ class Student(models.Model):
                                 total_gpa -= curr_creds * curr_gpa # Remove previous course gpa
                                 
                                 # Previous course Pass -> take out the credits. because the repeat course will be counted
-                                if prev_crs_id and prev_crs_id.is_complete:
+#                                 if prev_crs_id and prev_crs_id.is_complete:
+#                                     accum_cred -= curr_creds # remove accumulated credits
+#                                     total_creds -= curr_creds
+
+                                if prev_crs_id:
                                     accum_cred -= curr_creds # remove accumulated credits
                                     total_creds -= curr_creds
+                                    
                                     
                                 complete_crs_ids[std_crs.offer_course_id.course_id.id] = (std_crs.offer_course_id.number_credits, std_crs.course_gpa)
                         else:
                             continue
 #                         print '======= NOW', complete_crs_ids, '-----', total_gpa,' ', accum_cred, ' ', total_creds
                         
-#                 print '===== total', total_creds, ' ---- accum', accum_cred 
+#                 print '===== total', total_creds, ' ---- gpa', total_gpa 
 #                 if accum_cred and accum_cred == total_creds:
-                if accum_cred:
-                    avg_gpa = total_gpa/accum_cred
-                elif total_creds:
+                if total_creds:
                     avg_gpa = total_gpa/total_creds
+                elif accum_cred:
+                    avg_gpa = total_gpa/accum_cred
+                
 #                 elif total_creds and accum_cred < total_creds:
 #                     avg_gpa = total_gpa/total_creds
             

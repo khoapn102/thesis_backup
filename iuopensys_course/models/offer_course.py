@@ -108,6 +108,10 @@ class OfferCourse(models.Model):
     
     crs_tuition = fields.Float('Cost', compute='_get_course_tuition')
     
+    # Extra constraints
+    req_extra_constraints = fields.Boolean('Extra Requirements')
+    accum_cred_gt_value = fields.Integer('Accum. Credits greater than')
+    
     # Note
     ext_note = fields.Text('Note')
     

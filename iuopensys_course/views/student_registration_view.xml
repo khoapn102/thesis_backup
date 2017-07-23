@@ -121,7 +121,7 @@
 			<field name="model">student.registration</field>
 			<field name="type">tree</field>
 			<field name="arch" type="xml">
-				<tree default_order="id DESC">
+				<tree default_order="id DESC" create="false">
 					<field name="semester_id"/>
 					<field name="student_id"/>
 					<field name="crs_reg_id"/>
@@ -138,9 +138,9 @@
 			<field name="model">student.registration</field>
 			<field name="type">form</field>
 			<field name="arch" type="xml">
-				<form>
+				<form create="false">
 					<header>						
-						<field name="reg_state" widget="statusbar" clickable="1" on_change="onchange_reg_state"  groups="iuopensys_core.group_staff"/>
+						<field name="reg_state" widget="statusbar" groups="iuopensys_core.group_staff"/>
 					</header>
 					<sheet>
 						<div class="oe_button_box" name="my_button_box">
@@ -161,19 +161,20 @@
                         	<group>
                         		<field name="is_created" invisible="1"/>
                         		<field name="create_uid" invisible="1"/>
-                        		<field name="crs_reg_id" attrs="{'readonly':[('is_created','=',True)]}" invisible="1"/>
                         		<field name="student_id" attrs="{'readonly':[('is_created','=',True)]}"/>
                         		<field name="accumulated_creds" string="Accumulated Creds." groups="iuopensys_core.group_staff"/>
                         		<field name="course_ids" invisible="1"/>
-                        		<field name="user_id" invisible="1"/>                        		                        		 
+                        		<field name="user_id" invisible="1"/>
+                        		<field name="department_id" invisible="1"/>                       		                        		 
                         	</group>                        	
                         	<group>
                         		<field name="semester_id" attrs="{'readonly':[('is_created','=',True)]}"/>
+                        		<field name="crs_reg_id" attrs="{'readonly':[('is_created','=',True)]}" groups="iuopensys_core.group_staff" invisible="1"/>
                         		<field name="dept_academic_sem" invisible="1"/>
                         		<field name="start_datetime" invisible="1"/>
                         		<field name="end_datetime" invisible="1"/>
                         		<field name="drop_deadline" invisible="1"/>
-                        		<field name="in_period" invisible="1"/>
+                        		<field name="in_period" groups="iuopensys_core.group_staff"/>
                         		<field name="toggle_view_temp" invisible="1"/>
                         	</group>
                         </group>
@@ -348,9 +349,12 @@
 			<field name="arch" type="xml">
 				<search>
 					<!-- Search By -->
+					
+					<!-- Search By Registration Code -->
+					<field name="dept_academic_sem" string="Registration Code" groups="iuopensys_core.group_staff"/>
+					
 					<field name="student_id"/>
 					<!-- <field name="crs_reg_id"/> -->
-					<field name="dept_academic_sem" string="Reg. Code" groups="iuopensys_core.group_staff"/>
 					
 					<!-- Group By -->
 					<group expand="0" string="Group By">
@@ -360,6 +364,8 @@
 							context="{'group_by':'semester_id'}" groups="iuopensys_core.group_staff"/>					
 						<filter string="State"
 							context="{'group_by':'reg_state'}" groups="iuopensys_core.group_staff"/>
+						<filter string="Registration Code"
+							context="{'group_by':'dept_academic_sem'}" groups="iuopensys_core.group_staff"/>
 					</group>
 					
 					<!-- Filter -->

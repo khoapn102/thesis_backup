@@ -245,6 +245,14 @@
        						</page>
        						<page string="Course Note" groups="iuopensys_core.group_staff">
        							<group>
+       								<group>
+       									<field name="req_extra_constraints"/>
+       								</group>
+       								<group>
+       									<field name="accum_cred_gt_value" attrs="{'invisible':[('req_extra_constraints','=',False)]}"/>
+       								</group>       								
+       							</group>
+       							<group>
        								<label for="ext_note" string="Note"/>
        								<field name="ext_note" nolabel="1"/>
        							</group>
