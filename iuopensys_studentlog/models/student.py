@@ -260,80 +260,7 @@ class Student(models.Model):
     # Manage only Major courses             
     @api.depends('student_course_ids')
     def get_all_course_details(self):
-#         for record in self:
-#             # Retrieve curriculum
-#             if record.major_id:
-#                 curr_major = record.major_id
-#                 crs_ids = []
-#                 accum_crs_ids = []
-#                 accum_crs_track = []
-# #                 prog_ids = []
-#                 complete_crs_ids = []
-#                 
-#                 # Get Academic Program Curriculum (Sinh hoat cong dan, etc.)
-# #                 if curr_major.std_academic_prog_id:
-# #                     if curr_major.std_academic_prog_id.req_curriculum_ids:
-# #                         curr_curriculum = curr_major.std_academic_prog_id.req_curriculum_ids
-# #                         for curriculum in curr_curriculum:
-# #                             if curriculum.course_ids:
-# #                                 for course in curriculum.course_ids:
-# #                                     prog_ids.append(course.id)
-#                 
-#                 crs_ids = record.major_id.course_ids.ids
-#                 
-#                 # Get Major Curriculum - All Courses in Major's
-#                 if curr_major.iu_curriculum_ids:
-#                     for curriculum in curr_major.iu_curriculum_ids:
-#                         if curriculum.course_ids:
-#                             accum_crs_ids.append((curriculum.course_ids.ids, curriculum.max_cred_require))
-#                             accum_crs_track.append((curriculum.course_ids.ids, 0))
-#                 print '======== Curr', crs_ids, ' ', accum_crs_ids
-#         
-#             # Starting, incomplete credits = total major credits
-#             incomplete_creds = record.major_total_credits 
-#             achieved_creds = 0           
-#             passing_grade = self.env['ir.config_parameter'].get_param('iuopensys_course.course_passing_grade')
-#             
-#             if record.student_course_ids:
-#                 # 1. Retrieve all courses in Curriculum of Major
-#                 # 2. Compare with the current courses -> which one complete
-#                     # Update incomplete_credits
-#                     # Update the incomplete course list
-#                 # 3. Remove the course from the list. Display           
-#             
-#                 crs_ids_copy = crs_ids[:] # make copy of major curriculum
-#                 
-#                 # course_gpa is computed field vs passing_grade ->
-#                 # if there is error, check here
-#                 # Moreover, course must be in Curriculum to be counted
-#                 for student_course in record.student_course_ids:
-#                     # Only check course that is complete or with passing grade
-#                     if student_course.is_complete or student_course.course_gpa >= float(passing_grade):
-#                         
-# #                         print 'ID ', student_course.offer_course_id.course_id.id, ' ', student_course.offer_course_id.course_id.name
-#                         
-#                         if student_course.offer_course_id.course_id.id in crs_ids:
-#                             crs_ids.remove(student_course.offer_course_id.course_id.id) # -> update Curriculum list
-#                             
-#                             complete_crs_ids.append(student_course.offer_course_id.course_id.id)
-#                         
-#                         # If not Major courses, check with the Academic Program Courses -> remove if needed
-# #                         if student_course.offer_course_id.course_id.id in prog_ids:
-# #                             prog_ids.remove(student_course.offer_course_id.course_id.id) # -> update IU Program List
-#                         
-#                         # Only count Course that has Credit option. P/F option will be ignored
-#                         # Course that belongs to the curriculum will be counted ->Transferred made
-#                         if student_course.offer_course_id.course_id.cred_count_type == 'count' and\
-#                             student_course.offer_course_id.course_id.id in crs_ids_copy:
-#                             
-#                             incomplete_creds -= student_course.offer_course_id.course_id.number_credits
-#                             achieved_creds += student_course.offer_course_id.course_id.number_credits
-#             
-#             record.major_course_not_complete_ids = crs_ids
-#             record.major_course_complete_ids = complete_crs_ids
-#             record.major_incomplete_credits = incomplete_creds
-#             record.major_achieved_credits = achieved_creds 
-# #             record.academic_program_course_not_complete_ids = prog_ids       
+    
         for record in self:
             if record.major_id:
                 curr_major = record.major_id
@@ -411,52 +338,7 @@ class Student(models.Model):
                     if record.graduation_status != 'ontrack' and record.graduation_status != 'ie':
                         record.write({'graduation_status':'ontrack'})
     
-#     @api.onchange('is_complete_major')
-#     def onchange_is_complete_major(self):
-#         if self.is_complete_major:
-#             if self.graduation_status == 'ontrack':
-#                 self.graduation_status = 'complete'
-                
-#     @api.onchange('student_course_ids')
-#     def onchange_student_course_ids(self):
-#         if self.student_course_ids:
-#             print '=====Missing Creds: ', self.major_incomplete_credits
-#             if self.major_incomplete_credits == 0:
-#                 print '=======Grad: ', self.graduation_status
-#                 if self.graduation_status == 'ontrack':
-#                     self.graduation_status = 'complete'
-#             else:
-#                 self.graduation_status = 'ontrack'
-    
-#     @api.model
-#     def create(self, vals):
-#         curr_student = super(Student, self).create(vals)
 
-    # Student Graduatino Status -> Check on following
-    # 1. Complete all Majors
-    # 2. Complete all required Programs
-    # 3. Complete Behavior Point -> Need Behavior Point Standard
-    # 4. Submit all Documents
-    # 5. No Debt 
-#     @api.depends('student_course_ids', 'major_course_not_complete_ids',
-#                  'major_course_complete_ids',
-#                  'academic_program_course_not_complete_ids',
-#                  'student_document_not_submit_ids')
-#     def get_graduation_status(self):
-#         for record in self:
-#             # 3 Stage for each Student
-#             # Complete major
-#             # 1. For each curriculum -> satisfied max credit ?
-#             # 2. If any elective not complete -> cant graduate
-#             
-#             if record.major_accumulated_credits == record.major_id.major_total_credits:
-#                 record.graduation_status = 'donemajor'
-#                 if not record.academic_program_course_not_complete_ids:
-#                     if not record.student_document_not_submit_ids:
-#                         if record.student_debt == 0.0:
-#                             record.graduation_status = 'complete'                
-#             else:
-#                 record.graduation_status = 'ontrack'
         
           
                         

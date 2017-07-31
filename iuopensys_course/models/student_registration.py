@@ -10,6 +10,7 @@ class StudentRegistration(models.Model):
     
     name = fields.Char(string='Name', default='Registration Form', readonly=True)
     crs_reg_id = fields.Many2one('course.registration', string='Registration', ondelete="cascade")
+    
     start_datetime = fields.Datetime(string='Start at',
                                      related='crs_reg_id.start_datetime')
     end_datetime = fields.Datetime(string='End at',
@@ -26,6 +27,7 @@ class StudentRegistration(models.Model):
     
     exam_status = fields.Boolean(string='Exam Status', related='student_id.exam_status')
     semester_id = fields.Many2one('semester', string='Semester')
+    
     dept_academic_sem = fields.Char('Dept-Semester', compute='get_dept_academic_semester',
                                     store=True,
                                     help='Search by Department-Year-Semester. e.g: IT1320131')
@@ -98,9 +100,9 @@ class StudentRegistration(models.Model):
     @api.depends('student_id','semester_id')
     def get_dept_academic_semester(self):
         for record in self:
-            record.dept_academic_sem = record.student_id.department_id.dept_academic_code or '' +\
-                                            str(int(record.student_id.year_batch_id.year or 0)%100) or '' +\
-                                            record.semester_id.semester_code or ''
+            record.dept_academic_sem = record.student_id.department_id.dept_academic_code +\
+                                            str(int(record.student_id.year_batch_id.year or 0)%100) +\
+                                            record.semester_id.semester_code
     
     @api.multi
     def deduct_from_student_balance(self):
@@ -173,7 +175,8 @@ class StudentRegistration(models.Model):
         now = datetime.now()
         start = datetime.strptime(self.start_datetime, '%Y-%m-%d %H:%M:%S')
         end = datetime.strptime(self.end_datetime,'%Y-%m-%d %H:%M:%S')
-        if (start <= now <= end):
+        deadline = datetime.strptime(self.drop_deadline, '%Y-%m-%d %H:%M:%S') # Check Deadline
+        if (start <= now <= end) or (now <= deadline): # While dropdeadline not passed
             self.in_period = True
         else:
             self.in_period = False
@@ -196,22 +199,7 @@ class StudentRegistration(models.Model):
                     tuition += 0.3*(course.crs_tuition)
                     
             # Check if student has Financial Aid
-#             if record.student_id.financial_aid_id:
-#                 financial_aid = record.student_id.financial_aid_id
-#                 start = datetime.strptime(financial_aid.start_date,"%Y-%m-%d")
-#                 end = datetime.strptime(financial_aid.end_date,"%Y-%m-%d")
-#                 
-#                 # Check if the financial aid is valid (is_active and in valid date range)
-#                 if financial_aid.is_active and (start <= datetime.now() <= end):
-#                     if financial_aid.finance_type == 'percent':
-#                         financial_aid_value = tuition * financial_aid.finance_value/100
-#                     elif financial_aid.finance_type == 'amount':
-#                         financial_aid_value = financial_aid.finance_value
-            
-            # Check student balance has money -> deduct from there:
-#             if record.student_id.student_balance > 0:
-#                 if record.student_id.tuition_discount:
-#                     tuition_disc_val = tuition * 0.1
+
             
 #             total_discount_amt = financial_aid_value + tuition_disc_val
                                   
@@ -227,25 +215,7 @@ class StudentRegistration(models.Model):
 #             record.amount_must_pay = 0 if total_discount_amt >= tuition else amount_must_pay
             record.amount_must_pay = tuition
             # Incase student's has financial aid cover 100% tuition no matter what
-#             if financial_aid_value == tuition:
-#                 record.amount_must_pay = tuition - financial_aid_value
-#             elif total_discount_amt >= tuition:
-#                 record.amount_must_pay = 
-#             
-#             if record.amount_must_pay == 0:
-#                 record.is_full_paid = True
-            
-            # Student debt is update
-#             student_debt = record.student_id.student_debt
-#             print '==== Before: ', student_debt
-#             student_debt += record.amount_must_pay
-#             print '==== After:', student_debt
-            
-#             student_id = self.env['student'].search([('id','=',record.student_id.id)])
-#             if student_id:
-#                 student_id.write({'student_debt':student_debt})
-                
-#             record.student_id.student_debt = student_debt
+
 #             print '========', record.student_id.student_debt
             
             record.stat_button_total_creds = cred
@@ -372,7 +342,6 @@ class StudentRegistration(models.Model):
                 
 #                 if check_avail == 1:
 #                         raise ValidationError('Some courses are not available (in Red).')
-
                              
                     
     @api.model
@@ -503,35 +472,9 @@ class StudentRegistration(models.Model):
                             if course.id in record.temporary_drop_crs_ids.ids:
                                 vals['temporary_drop_crs_ids'] = [(3, course.id)]
 
-#                             if course.study_session_ids:
-#                                 # Add student to calendar
-# #                                 event_ids = self.env['calendar.event'].search([('offer_course_id','=',course.id)], order='id asc', limit=1)
-# #                                 print '++++++', event_ids
-# #                                 if event_ids:
-# #                                     event_vals = {}
-# #                                     for event in event_ids:
-# #                                         event['partner_ids'] = [(4, record.student_id.user_id.partner_id.id)]
-#                                 for session in course.study_session_ids:
-#                                     event_ids = self.env['calendar.event'].search([('offer_course_id','=',course.id),
-#                                                                                    ('study_period_id', '=', session.id)],
-#                                                                                   order='id asc', limit=1)
-#                                     print '++++++++++', event_ids
-#                                     if event_ids:
-#                                         event_vals = {}
-#                                         for event in event_ids:
-#                                             event['partner_ids'] = [(4, record.student_id.user_id.partner_id.id)]
                         else:
                             # Delete a reg. course (use student_course model)
-#                             if course.study_session_ids:
-#                                 for session in course.study_session_ids:
-#                                     event_ids = self.env['calendar.event'].search([('offer_course_id','=',course.id),
-#                                                                                    ('study_period_id', '=', session.id)],
-#                                                                                   order='id asc', limit=1)
-#                                     print '======', event_ids
-#                                     if event_ids:
-#                                         for event in event_ids:
-#                                             event.partner_ids = [(3, std_crs_id.student_id.user_id.partner_id.id)]
-#                                             print '======Event Partner =====', event.partner_ids
+
 
                             if course.id in onchange_crs_ids_copy:
                                 drop_crs.append(course.id)

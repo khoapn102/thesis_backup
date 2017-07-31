@@ -33,16 +33,19 @@ class CourseRegistration(models.Model):
     def _onchange_year_batch_id(self):
         self.name += (self.year_batch_id.year_code or "")
         
-    @api.constrains('start_datetime','end_datetime')
+    @api.constrains('start_datetime','end_datetime','drop_deadline_datetime')
     def _check_valid_time(self):
         "End must be at least 1 hr away from start"
         format = '%Y-%m-%d %H:%M:%S'
         for record in self:
             start = datetime.strptime(record.start_datetime,format)
             end = datetime.strptime(record.end_datetime,format)
+            deadline = datetime.strptime(record.drop_deadline_datetime,format)
             diff = int((end-start).seconds)
-            if diff == 0:
-                raise ValidationError('End time must be different from Start time !')
+            if end <= start:
+                raise ValidationError('End time must be after Start time !')
+            if start > deadline or end > deadline:
+                raise ValidationError('Deadline must be after Start/End Date !')
         
     @api.model
     def create(self, vals):
@@ -65,7 +68,32 @@ class CourseRegistration(models.Model):
             
         return curr_reg
     
-        
-              
-    
+    @api.multi
+    def update_student_reg_form(self):
+        for record in self:
+            student_ids = self.env['student'].search([('year_batch_id','=',record.year_batch_id.id),
+                                                  ('graduation_status','in',['ie','ontrack','complete'])])
+            for student in student_ids:
+                #Check if student Registration is ok
+                student_reg_id = self.env['student.registration'].search([('student_id','=',student.id),
+                                                                          ('crs_reg_id','=',record.id),
+                                                                          ('semester_id','=',record.reg_semester_id.id)])
+                
+                #Check if Student Semester is Ok
+                student_sem_id = self.env['student.semester'].search([('student_id','=',student.id),
+                                                                      ('semester_id','=',record.reg_semester_id.id)])
+                
+                # Student form is not created -> create new one
+                if not student_reg_id:
+                    # No Student Form yet
+                    new_vals = {'crs_reg_id':record.id,
+                        'student_id':student.id,
+                        'semester_id':record.reg_semester_id.id,
+                        'is_created':True}
+                    self.env['student.registration'].create(new_vals)
+                if not student_sem_id:
+                    new_vals = {'student_id': student.id,
+                        'semester_id': record.reg_semester_id.id,}
+                    self.env['student.semester'].create(new_vals)
+                
     

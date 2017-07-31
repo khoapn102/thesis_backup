@@ -357,6 +357,7 @@ class OfferCourse(models.Model):
                         student_ids.append(student_course.student_id.id)
                 
                 remove_student_ids = self.env['student'].search([('id','in',student_ids)])
+                                
                 if remove_student_ids:
                     # Remove each crs registration for student
                     for student in remove_student_ids:
@@ -377,6 +378,12 @@ class OfferCourse(models.Model):
                             
                             new_vals = {'offer_course_ids': [(6,0,offer_crs_ids)]}
                             std_reg_id.write(new_vals)
+                    
+                        # Delete Student_course record -> Remove complete record from offer course ids
+                        student_crs_id = self.env['student.course'].search([('student_id','=',student.id),
+                                                                            ('offer_course_id','=',record.id)])
+                        if student_crs_id:
+                            student_crs_id.unlink()
                             
                 vals['student_course_ids'] = not_remove_ids # To avoid scenario when removing_ids cant be found 
                 # since std_regstration have removed it first
@@ -384,46 +391,6 @@ class OfferCourse(models.Model):
         return super(OfferCourse,self).write(vals)
                             
             
-#     @api.multi
-#     def call_student_course_addition_wizard(self):
-#         for record in self:
-#             wizard_form = self.env.ref('iuopensys_course.student_course_addition_wizard_form_view', False)
-#             view_id = self.env['student.course.addition.wizard']
-#             vals={'name':'Add Student Wizard'}
-#             new = view_id.create(vals)
-#             return{
-#                    'name': 'Add Students',
-#                    'type': 'ir.actions.act_window',
-#                    'res_model': 'student.course.addition.wizard',
-#                    'res_id': new.id,
-#                    'view_id': wizard_form.id,
-#                    'view_type': 'form',
-#                    'view_mode': 'form',
-#                    'context': {'offer_course_id': record.id},
-#                    'target': 'new',
-#                    }
-#                                  
-#     @api.model
-#     def create(self, vals):
-#         """
-#         1. When course is created, it will be assigned with study schedule
-#         2. After schedule is assigned, the module will automatically
-#         create calendar event that fit the schedule.
-#         """
-#         curr_course = super(OfferCourse, self).create(vals)
-#         print '+++++++', curr_course.study_period_ids
-#         if curr_course.study_period_ids:
-#             for session in curr_course.study_period_ids:
-#                 event_name = curr_course.name + '-' + session.name
-#                 print '------', session.start_date, ' ', session.start_datetime
-#                 new_vals = {'name': event_name,
-#                             'start_datetime': session.start_datetime,
-#                             'start': session.start_datetime,
-#                             'stop': session.end_datetime,
-#                             'duration': session.duration,                                          
-#                             }
-#                 print '+++++', new_vals
-# #                 self.env['calendar.event'].create(new_vals)
-#         return curr_course
+
         
         

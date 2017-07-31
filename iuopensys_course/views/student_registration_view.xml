@@ -40,8 +40,8 @@
 								icon="fa-plus"
 								type="action"
 								name="%(iuopensys_course.student_balance_update_wizard_action)d"
-								context="{'default_student_id':student_id}"
-								groups="iuopensys_core.group_staff"/>
+								context="{'default_student_id':student_id}"/>
+								<!-- groups="iuopensys_core.group_staff,iuopensy_core.group_financial_staff"/> -->
                         </div>
 						<group string="General Information">
 							<group>
@@ -127,7 +127,7 @@
 					<field name="crs_reg_id"/>
 					<field name="start_datetime"/>
 					<field name="end_datetime"/>
-					<field name="reg_state"/>
+					<field name="reg_state" invisible="1"/>
 					<field name="dept_academic_sem" string="Reg. Code" groups="iuopensys_core.group_staff"/>
 				</tree>
 			</field>
@@ -140,7 +140,7 @@
 			<field name="arch" type="xml">
 				<form create="false">
 					<header>						
-						<field name="reg_state" widget="statusbar" groups="iuopensys_core.group_staff"/>
+						<field name="reg_state" widget="statusbar" groups="iuopensys_core.group_staff" invisible="1"/>
 					</header>
 					<sheet>
 						<div class="oe_button_box" name="my_button_box">
@@ -229,7 +229,7 @@
 		                       			</tree>	
 		                       		</field>		                       				
 		                       	</group>
-		                       	<group string="Dropped Courses (Not Charge)" attrs="{'invisible':[('toggle_view_temp','=', False)]}">		                       		
+		                       	<!-- <group string="Dropped Courses (Not Charge)" attrs="{'invisible':[('toggle_view_temp','=', False)]}">		                       		
 		                       		<field name="temporary_drop_crs_ids" nolabel="1" options="{'no_create':True}" 
 		                       			domain="[('semester_id','=',semester_id),('has_lab','=',False)]">
 		                       			<tree edit="false" create="false" delete="false">
@@ -248,7 +248,7 @@
 											<field name="crs_tuition" sum="Total Tuition"/>
 		                       			</tree>	
 		                       		</field>		                       				
-		                       	</group>
+		                       	</group> -->
                         	</page>
                         	<page string="Tuition">
                         		<group string="Tuition Information">
